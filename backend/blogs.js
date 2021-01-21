@@ -22,7 +22,7 @@ const getBlogById = (request, response) => {
 }
 
 const createBlog = (request, response) => {
-    console.log(request.body)
+
     const { title } = request.body
     const id = uuidv4()
     const timestamp = new Date().toISOString()
@@ -37,21 +37,17 @@ const createBlog = (request, response) => {
 }
 
 const updateBlog = (request, response) => {
-
     const { title } = request.body
-
     pool.query('UPDATE blogs SET title = $1 WHERE id = $2', [title, request.params.id], (error, results) => {
         if (error) {
             throw error
         }
         response.status(200).json({ "id": request.params.id })
     })
-
 }
 
 
 const deleteBlog = (request, response) => {
-
     pool.query('DELETE FROM blogs WHERE id = $1', [request.params.id], (error, _) => {
         if (error) {
             throw error
