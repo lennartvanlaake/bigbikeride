@@ -10,13 +10,6 @@ const jsonParser = bodyParser.json()
 app.use(cors());
 app.use(express.static('public'));
 
-
-
-// Send SPA landing page
-app.get('/', (req, res) => {
-   res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
-});
-
 // Blog crud actions
 app.get('/api/blogs', blogs.getBlogs);
 app.get('/api/blogs/:id', blogs.getBlogById);
@@ -24,6 +17,10 @@ app.post('/api/blogs', jsonParser, blogs.createBlog)
 app.put('/api/blogs/:id', jsonParser, blogs.updateBlog)
 app.delete('/api/blogs/:id', blogs.deleteBlog)
 
+// Send SPA landing page
+app.get('*', (req, res) => {
+   res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
+});
 
 app.listen(port, () => {
    console.log(`Server is up at port ${port}`);
