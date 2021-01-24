@@ -1,5 +1,7 @@
 export function getBlogId() {
-    return localStorage.getItem("blogId")
+    const blogId = localStorage.getItem("blogId") 
+    if (blogId == "undefined") return null
+    return blogId
 }
 
 export function setBlogId(blogId) {

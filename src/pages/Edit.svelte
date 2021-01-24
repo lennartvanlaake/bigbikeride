@@ -1,16 +1,31 @@
+<svelte:head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js" on:load={initMd}></script>
+</svelte:head>
+
 <script>
-    import { blog } from "../javascript/blog.js";
     import { getBlogId, setBlogId } from "../javascript/storage.js";
     import axios from "axios";
+
+    let simplemde;
+
+    const initMd = () => {
+		simplemde = new SimpleMDE({ element: document.getElementById("content") });
+	}
+
+    let blog = {
+        title: "",
+        content: "",
+        longitude: 0.0,
+        latitude: 0.0,
+    };
 
     async function fillBlog(blogId) {
         try {
             const returnValue = await fetch("/api/blogs/" + blogId);
-            console.log("Blogid is " + blogId)
+            console.log("Blogid is " + blogId);
             const blogResponse = await returnValue.json();
             blog.title = blogResponse.title;
-            console.log(blogResponse)
-            console.log("Title is " + blogResponse)
         } catch (error) {
             console.error(error);
         }
@@ -18,10 +33,14 @@
 
     function submit() {
         if (getBlogId()) {
-            console.log("Putting...")
+            console.log("Putting...");
+            console.log(blog.content);
             axios
                 .put("/api/blogs/" + getBlogId(), {
-                    title: blog.title
+                    title: blog.title,
+                    content: simplemde.value(),
+                    latitude: blog.latitude,
+                    longitude: blog.longitude,
                 })
                 .then(function (response) {
                     alert("Blog updated!");
@@ -31,10 +50,13 @@
                     alert("Blog update failed!");
                 });
         } else {
-            console.log("Posting...")
+            console.log("Posting...");
             axios
                 .post("/api/blogs", {
-                    title: blog.title
+                    title: blog.title,
+                    content: simplemde.value(),
+                    latitude: blog.latitude,
+                    longitude: blog.longitude,
                 })
                 .then(function (response) {
                     alert("Blog posted!");
@@ -54,12 +76,27 @@
     if (getBlogId()) {
         fillBlog(getBlogId());
     }
-
 </script>
 
 <form>
     <label for="title">Title:</label><br />
-    <input type="text" id="title" name="title" bind:value={blog.title}/><br />
-    <p>{blog.title}</p>
+    <input type="text" id="title" name="title" bind:value={blog.title} /><br />
+    <label for="content">Content:</label><br />
+    <textarea id="content"></textarea>
+
+    <label for="longitude">Longitude:</label><br />
+    <input
+        type="text"
+        id="longitude"
+        name="longitude"
+        bind:value={blog.longitude}
+    /><br />
+    <label for="latitude">Latitude:</label><br />
+    <input
+        type="text"
+        id="latitude"
+        name="latitude"
+        bind:value={blog.latitude}
+    /><br />
 </form>
-<button id="submit" on:click|once={submit}>Click me</button>
+<button id="submit" on:click={submit}>Click me</button>
