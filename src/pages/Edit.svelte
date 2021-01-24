@@ -1,31 +1,23 @@
-<svelte:head>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
-    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js" on:load={initMd}></script>
-</svelte:head>
-
 <script>
-    import { getBlogId, setBlogId } from "../javascript/storage.js";
+    import { getBlogId, setBlogId, removeBlogId } from "../javascript/storage.js";
     import axios from "axios";
 
     let simplemde;
-
+    let blog;
+    
     const initMd = () => {
-		simplemde = new SimpleMDE({ element: document.getElementById("content") });
-	}
-
-    let blog = {
-        title: "",
-        content: "",
-        longitude: 0.0,
-        latitude: 0.0,
+        simplemde = new SimpleMDE({
+            element: document.getElementById("content"),
+        });
+        console.log(simplemde.value());
     };
+
 
     async function fillBlog(blogId) {
         try {
             const returnValue = await fetch("/api/blogs/" + blogId);
-            console.log("Blogid is " + blogId);
             const blogResponse = await returnValue.json();
-            blog.title = blogResponse.title;
+            simplemde.value(blogResponse.content)
         } catch (error) {
             console.error(error);
         }
@@ -73,16 +65,46 @@
         }
     }
 
-    if (getBlogId()) {
-        fillBlog(getBlogId());
+    function printcontent() {
+        console.log(simplemde.value());
     }
+
+    function fillIfId() {
+        if (getBlogId()) {
+            fillBlog(getBlogId());
+        } else {
+            blog = {
+                title: "",
+                content: "",
+                longitude: 0.0,
+                latitude: 0.0,
+            };
+            if (simplemde) {
+                simplemde.value("");
+            }
+        }
+    }
+
+    function newBlog() {
+        removeBlogId();
+        fillIfId();
+    }
+    fillIfId();
 </script>
 
+<svelte:head>
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css"
+    /><script
+        src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"
+        on:load={initMd}></script></svelte:head
+>
 <form>
     <label for="title">Title:</label><br />
     <input type="text" id="title" name="title" bind:value={blog.title} /><br />
     <label for="content">Content:</label><br />
-    <textarea id="content"></textarea>
+    <textarea id="content" />
 
     <label for="longitude">Longitude:</label><br />
     <input
@@ -99,4 +121,6 @@
         bind:value={blog.latitude}
     /><br />
 </form>
-<button id="submit" on:click={submit}>Click me</button>
+<button id="new" on:click={newBlog}>New blog</button>
+<button id="submit" on:click={submit}>Submit blog</button>
+<button id="printcontent" on:click={printcontent}>Click me</button>

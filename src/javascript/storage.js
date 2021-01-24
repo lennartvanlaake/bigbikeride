@@ -1,9 +1,13 @@
 export function getBlogId() {
-    const blogId = localStorage.getItem("blogId") 
-    if (blogId == "undefined") return null
-    return blogId
+    const blogId = localStorage.getItem("blogId"); 
+    if (blogId == "undefined") return null;
+    return blogId;
 }
 
 export function setBlogId(blogId) {
-    return localStorage.setItem("blogId", blogId)
+    return localStorage.setItem("blogId", blogId);
+}
+
+export function removeBlogId() {
+    return localStorage.removeItem("blogId");
 }

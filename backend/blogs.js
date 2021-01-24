@@ -48,9 +48,10 @@ const updateBlog = (request, response) => {
                 SET title = $1,
                 content = $2,
                 longitude = $3,
-                latitude = $4,
+                latitude = $4
                 WHERE id = $5`, [title, content, longitude, latitude, id], (error, results) => {
         if (error) {
+            console.log(error)
             response.status(400).json({ "error": error })
         } else {
             response.status(200).json({ "id": id })
