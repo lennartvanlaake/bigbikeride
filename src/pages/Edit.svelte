@@ -1,23 +1,26 @@
 <script>
-    import { getBlogId, setBlogId, removeBlogId } from "../javascript/storage.js";
+    import {
+        getBlogId,
+        setBlogId,
+        removeBlogId,
+    } from "../javascript/storage.js";
     import axios from "axios";
 
     let simplemde;
-    let blog;
-    
-    const initMd = () => {
-        simplemde = new SimpleMDE({
-            element: document.getElementById("content"),
-        });
-        console.log(simplemde.value());
-    };
-
+    let blog = {
+                title: "",
+                content: "",
+                longitude: 0.0,
+                latitude: 0.0,
+            };
+    let type = "text";
 
     async function fillBlog(blogId) {
         try {
             const returnValue = await fetch("/api/blogs/" + blogId);
             const blogResponse = await returnValue.json();
-            simplemde.value(blogResponse.content)
+            blog = blogResponse.post;
+            simplemde.value(blogResponse.additional_data.content);
         } catch (error) {
             console.error(error);
         }
@@ -31,6 +34,7 @@
                 .put("/api/blogs/" + getBlogId(), {
                     title: blog.title,
                     content: simplemde.value(),
+                    type: type,
                     latitude: blog.latitude,
                     longitude: blog.longitude,
                 })
@@ -47,6 +51,7 @@
                 .post("/api/blogs", {
                     title: blog.title,
                     content: simplemde.value(),
+                    type: type,
                     latitude: blog.latitude,
                     longitude: blog.longitude,
                 })
@@ -89,7 +94,14 @@
         removeBlogId();
         fillIfId();
     }
-    fillIfId();
+
+    const initMd = () => {
+        simplemde = new SimpleMDE({
+            element: document.getElementById("content"),
+        });
+        console.log(simplemde.value());
+        fillIfId();
+    };
 </script>
 
 <svelte:head>
@@ -123,4 +135,4 @@
 </form>
 <button id="new" on:click={newBlog}>New blog</button>
 <button id="submit" on:click={submit}>Submit blog</button>
-<button id="printcontent" on:click={printcontent}>Click me</button>
+<button id="printcontent" on:click={printcontent}>Click me</button>  
