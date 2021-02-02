@@ -5,15 +5,18 @@
         removeBlogId,
     } from "../javascript/storage.js";
     import axios from "axios";
+    import { afterUpdate } from 'svelte';
+
 
     let simplemde;
     let blog = {
-                title: "",
-                content: "",
-                longitude: 0.0,
-                latitude: 0.0,
-            };
-    let type = "text";
+        title: "",
+        content: "",
+        longitude: 0.0,
+        latitude: 0.0,
+        type: "text"
+    };
+    $: isText = blog.type == "text";
 
     async function fillBlog(blogId) {
         try {
@@ -34,7 +37,7 @@
                 .put("/api/blogs/" + getBlogId(), {
                     title: blog.title,
                     content: simplemde.value(),
-                    type: type,
+                    type: blog.type,
                     latitude: blog.latitude,
                     longitude: blog.longitude,
                 })
@@ -51,7 +54,7 @@
                 .post("/api/blogs", {
                     title: blog.title,
                     content: simplemde.value(),
-                    type: type,
+                    type: blog.type,
                     latitude: blog.latitude,
                     longitude: blog.longitude,
                 })
@@ -83,6 +86,7 @@
                 content: "",
                 longitude: 0.0,
                 latitude: 0.0,
+                type: blog.type
             };
             if (simplemde) {
                 simplemde.value("");
@@ -90,18 +94,41 @@
         }
     }
 
-    function newBlog() {
+    function newTextBlog() {
+        blog.type = "text";
         removeBlogId();
         fillIfId();
     }
 
-    const initMd = () => {
+    function newImageBlog() {
+        blog.type = "image"
+        if (simplemde) {
+            simplemde.toTextArea();
+            simplemde = null;
+        }
+        removeBlogId();
+        fillIfId();
+        console.log(blog.type);
+        console.log(blog);
+    }
+
+    function createMd() {
         simplemde = new SimpleMDE({
             element: document.getElementById("content"),
         });
+    }
+
+    const initMd = () => {
+        createMd();
         console.log(simplemde.value());
         fillIfId();
     };
+
+    afterUpdate(() => {
+        if (!simplemde && isText) {
+            createMd();
+        }
+    });
 </script>
 
 <svelte:head>
@@ -115,8 +142,10 @@
 <form>
     <label for="title">Title:</label><br />
     <input type="text" id="title" name="title" bind:value={blog.title} /><br />
-    <label for="content">Content:</label><br />
-    <textarea id="content" />
+    {#if isText}
+        <label for="content">Content {blog.type}:</label><br />
+        <textarea id="content" />
+    {/if}
 
     <label for="longitude">Longitude:</label><br />
     <input
@@ -133,6 +162,7 @@
         bind:value={blog.latitude}
     /><br />
 </form>
-<button id="new" on:click={newBlog}>New blog</button>
+<button id="newBlog" on:click={newTextBlog}>New text blog</button>
+<button id="newImage" on:click={newImageBlog}>New image blog</button>
 <button id="submit" on:click={submit}>Submit blog</button>
-<button id="printcontent" on:click={printcontent}>Click me</button>  
+<button id="printcontent" on:click={printcontent}>Click me</button>

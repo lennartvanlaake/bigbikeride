@@ -66,7 +66,8 @@ ALTER TABLE public.image_posts OWNER TO hubperdbuser;
 
 CREATE TABLE public.images (
     id uuid NOT NULL,
-    path text NOT NULL
+    path text NOT NULL,
+    description text,
 );
 
 

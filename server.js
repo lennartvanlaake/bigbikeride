@@ -4,6 +4,8 @@ const port = process.env.PORT || 5000;
 const cors = require('cors');
 const path = require('path');
 const blogs = require('./backend/blogs')
+const images = require('./backend/images')
+
 const bodyParser = require('body-parser')
 
 const jsonParser = bodyParser.json()
@@ -13,9 +15,10 @@ app.use(express.static('public'));
 // Blog crud actions
 app.get('/api/blogs', blogs.getBlogs);
 app.get('/api/blogs/:id', blogs.getBlogById);
-app.post('/api/blogs', jsonParser, blogs.createBlog)
-app.put('/api/blogs/:id', jsonParser, blogs.updateBlog)
-app.delete('/api/blogs/:id', blogs.deleteBlog)
+app.post('/api/blogs', jsonParser, blogs.createBlog);
+app.post('/api/images', jsonParser, images.createImage);
+app.put('/api/blogs/:id', jsonParser, blogs.updateBlog);
+app.delete('/api/blogs/:id', blogs.deleteBlog);
 
 // Send SPA landing page
 app.get('*', (req, res) => {

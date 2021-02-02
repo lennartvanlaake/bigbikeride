@@ -1,7 +1,7 @@
 const pool = require('./db').pool
 const { v4: uuidv4 } = require('uuid');
 
-const getBlogs = (_, response, next) => {
+const getBlogs = (_, response) => {
     pool.query('SELECT * FROM posts', (error, results) => {
         try {
             response.status(200).json(results.rows)
