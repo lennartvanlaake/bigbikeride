@@ -5,9 +5,7 @@
         removeBlogId,
     } from "../javascript/storage.js";
     import axios from "axios";
-    import { afterUpdate } from 'svelte';
-
-
+    import { tick } from 'svelte';
     let simplemde;
     let blog = {
         title: "",
@@ -94,9 +92,13 @@
         }
     }
 
-    function newTextBlog() {
+    async function newTextBlog() {
         blog.type = "text";
         removeBlogId();
+        await tick();
+        if (isText && !simplemde) {
+            createMd();
+        }
         fillIfId();
     }
 
@@ -124,11 +126,6 @@
         fillIfId();
     };
 
-    afterUpdate(() => {
-        if (!simplemde && isText) {
-            createMd();
-        }
-    });
 </script>
 
 <svelte:head>
