@@ -5,16 +5,28 @@
         removeBlogId,
     } from "../javascript/storage.js";
     import axios from "axios";
-    import { tick } from 'svelte';
+    import { tick } from "svelte";
+    import FilePond, { registerPlugin } from "svelte-filepond";
+    import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
+    import FilePondPluginImagePreview from "filepond-plugin-image-preview";
+    
     let simplemde;
     let blog = {
         title: "",
         content: "",
         longitude: 0.0,
         latitude: 0.0,
-        type: "text"
+        type: "text",
     };
     $: isText = blog.type == "text";
+    $: isPictures = blog.type == "images";
+    let upload;
+    let uploadName = 'images';
+
+    registerPlugin(
+        FilePondPluginImageExifOrientation,
+        FilePondPluginImagePreview
+    );
 
     async function fillBlog(blogId) {
         try {
@@ -84,12 +96,12 @@
                 content: "",
                 longitude: 0.0,
                 latitude: 0.0,
-                type: blog.type
+                type: blog.type,
             };
             if (simplemde) {
                 simplemde.value("");
             }
-        }
+        }isPictures
     }
 
     async function newTextBlog() {
@@ -103,7 +115,7 @@
     }
 
     function newImageBlog() {
-        blog.type = "image"
+        blog.type = "images";
         if (simplemde) {
             simplemde.toTextArea();
             simplemde = null;
@@ -125,7 +137,6 @@
         console.log(simplemde.value());
         fillIfId();
     };
-
 </script>
 
 <svelte:head>
@@ -136,12 +147,22 @@
         src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"
         on:load={initMd}></script></svelte:head
 >
+<link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet">
+
 <form>
     <label for="title">Title:</label><br />
     <input type="text" id="title" name="title" bind:value={blog.title} /><br />
     {#if isText}
         <label for="content">Content {blog.type}:</label><br />
         <textarea id="content" />
+    {/if}
+
+    {#if isPictures}
+        <FilePond
+            bind:this={upload} {uploadName}
+            server="/api/images"
+            allowMultiple={true}
+        />
     {/if}
 
     <label for="longitude">Longitude:</label><br />
