@@ -23,11 +23,12 @@ const createImage = (req, res) => {
                             console.log(e)
                             return res.status(400).json({ "message": e })
                         }
+                        res.type('text/plain')
+                        res.send(id);
                     })
             })
         //send response
-        res.type('text/plain')
-        res.send(id);
+
     }
 }
 

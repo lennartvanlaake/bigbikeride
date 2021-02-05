@@ -331,6 +331,11 @@ ci-info@^2.0.0:
   resolved "https://registry.yarnpkg.com/ci-info/-/ci-info-2.0.0.tgz#67a9e964be31a51e15e5010d58e6f12834002f46"
   integrity sha512-5tK7EtrZ0N+OLFMthtqOj4fI2Jeb88C4CAZPu25LDVUgXJ0A3Js4PMGqrn0JU1W0Mh1/Z8wZzYPxqUrXeBboCQ==
 
+classnames@^2.2.5:
+  version "2.2.6"
+  resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.2.6.tgz#43935bffdd291f326dad0a205309b38d00f650ce"
+  integrity sha512-JR/iSQOSt+LQIWwrwEzJ9uk0xfN3mTVYMwt1Ir5mUcSN6pU+V4zQFFaJsclJbPuAUQH+yfWef6tm7l1quW3C8Q==
+
 cli-boxes@^2.2.0:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/cli-boxes/-/cli-boxes-2.2.1.tgz#ddd5035d25094fce220e9cab40a45840a440318f"
@@ -503,6 +508,13 @@ dicer@0.2.5:
     readable-stream "1.1.x"
     streamsearch "0.1.2"
 
+doka@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/doka/-/doka-0.1.0.tgz#68a1941ec4a23526f2887c3e7e0eb5b0e6caaedb"
+  integrity sha1-aKGUHsSiNSbyiHw+fg61sObKrts=
+  dependencies:
+    classnames "^2.2.5"
+
 dot-prop@^5.2.0:
   version "5.3.0"
   resolved "https://registry.yarnpkg.com/dot-prop/-/dot-prop-5.3.0.tgz#90ccce708cd9cd82cc4dc8c3ddd9abdd55b20e88"
@@ -618,6 +630,11 @@ express@^4.17.1:
     utils-merge "1.0.1"
     vary "~1.1.2"
 
+filepond-plugin-image-edit@^1.6.2:
+  version "1.6.2"
+  resolved "https://registry.yarnpkg.com/filepond-plugin-image-edit/-/filepond-plugin-image-edit-1.6.2.tgz#39232ba210def6b5e6a74b59e27dce129f6841e1"
+  integrity sha512-ToQvIDEXr1kpkkEaYgz2Kqp/v4+m5xPL/PxQKw7RH4MFnK4QPk6tH49JmqrEbY3luolhdR+PyaEebbqgalrXag==
+
 filepond-plugin-image-exif-orientation@^1.0.9:
   version "1.0.9"
   resolved "https://registry.yarnpkg.com/filepond-plugin-image-exif-orientation/-/filepond-plugin-image-exif-orientation-1.0.9.tgz#bf1220d99c117a69859f3297d0618e7469705019"
@@ -627,6 +644,11 @@ filepond-plugin-image-preview@^4.6.5:
   version "4.6.5"
   resolved "https://registry.yarnpkg.com/filepond-plugin-image-preview/-/filepond-plugin-image-preview-4.6.5.tgz#18ecf011522d3d8c72438e9961eab39ad6beeec6"
   integrity sha512-NssyAoy7zo/bGnwPpDrKHU6g64gjavf4fvxja1wIFu2zq57Sneevg0r15e1WHkAHL4hs0SwbX1YUpEEgJZ4gSg==
+
+filepond-plugin-image-resize@^2.0.7:
+  version "2.0.7"
+  resolved "https://registry.yarnpkg.com/filepond-plugin-image-resize/-/filepond-plugin-image-resize-2.0.7.tgz#03264e288b1af68bef1ae046882f9712d5ba14c7"
+  integrity sha512-Ea2shQ8DFWyfbgqEuz8tp23F8v+kQLlHXNIDo+C7qxKHbflHoQ8Aol5ZrWLBImLx/J3Kbrzc+SrBem8RZOz9CA==
 
 filepond@^4.25.1:
   version "4.25.1"

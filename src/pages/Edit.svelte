@@ -9,7 +9,8 @@
     import FilePond, { registerPlugin } from "svelte-filepond";
     import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
     import FilePondPluginImagePreview from "filepond-plugin-image-preview";
-    
+    import FilePondPluginImageEdit from "filepond-plugin-image-edit";
+
     let simplemde;
     let blog = {
         title: "",
@@ -21,11 +22,13 @@
     $: isText = blog.type == "text";
     $: isPictures = blog.type == "images";
     let upload;
-    let uploadName = 'images';
+    let uploadName = "images";
+    let editor;
 
     registerPlugin(
         FilePondPluginImageExifOrientation,
-        FilePondPluginImagePreview
+        FilePondPluginImagePreview,
+        FilePondPluginImageEdit
     );
 
     async function fillBlog(blogId) {
@@ -101,12 +104,14 @@
             if (simplemde) {
                 simplemde.value("");
             }
-        }isPictures
+        }
+        isPictures;
     }
 
     async function newTextBlog() {
         blog.type = "text";
         removeBlogId();
+        editor.destroy();
         await tick();
         if (isText && !simplemde) {
             createMd();
@@ -114,12 +119,13 @@
         fillIfId();
     }
 
-    function newImageBlog() {
+    async function newImageBlog() {
         blog.type = "images";
         if (simplemde) {
             simplemde.toTextArea();
             simplemde = null;
         }
+
         removeBlogId();
         fillIfId();
         console.log(blog.type);
@@ -147,7 +153,8 @@
         src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"
         on:load={initMd}></script></svelte:head
 >
-<link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet">
+<link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet" />
+<link href="./doka.css" rel="stylesheet" type="text/css" />
 
 <form>
     <label for="title">Title:</label><br />
@@ -159,7 +166,8 @@
 
     {#if isPictures}
         <FilePond
-            bind:this={upload} {uploadName}
+            bind:this={upload}
+            {uploadName}
             server="/api/images"
             allowMultiple={true}
         />
