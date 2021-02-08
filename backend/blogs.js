@@ -4,7 +4,7 @@ const { v4: uuidv4 } = require('uuid');
 const selectQuery = `select p.*,
 (select json_agg(i) from image_posts 
 ip join images i on ip.image_id = i.id
-where ip.id = p.id) as images,
+where ip.post_id = p.id) as images,
 tp.content as content
 from posts p 
 left join text_posts tp on p.id = tp.id `

@@ -32,8 +32,10 @@ var storage = multer.diskStorage({
     } 
  })
 const upload = multer({ storage: storage })
-
 app.post('/api/images', upload.single('filepond'), images.createImage);
+app.post('/api/images/:id/post/:post', jsonParser, images.linkImageToPost);
+app.put('/api/images/:id/description', jsonParser, images.updateImageDescription);
+
 
 
 // Set upload dir

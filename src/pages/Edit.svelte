@@ -9,13 +9,7 @@
     import FilePond, { registerPlugin } from "svelte-filepond";
     import FilePondPluginImagePreview from "filepond-plugin-image-preview";
     let simplemde;
-    let blog = {
-        title: "",
-        content: "",
-        longitude: 0.0,
-        latitude: 0.0,
-        type: "text",
-    };
+    let blog;
     let upload;
     let uploadName = "images";
 
@@ -25,8 +19,7 @@
         try {
             const returnValue = await fetch("/api/blogs/" + blogId);
             blog = await returnValue.json();
-            console.log(blog);
-            if (isText) {
+            if (blog.type == "text") {
                 simplemde.value(blog.content);
             }
         } catch (error) {
@@ -34,12 +27,12 @@
         }
     }
 
-    function submit() {
+    async function submit() {
         if (getBlogId()) {
-            axios
+            await axios
                 .put("/api/blogs/" + getBlogId(), {
                     title: blog.title,
-                    content: simplemde.value(),
+                    content: simplemde ? simplemde.value() : null,
                     type: blog.type,
                     latitude: blog.latitude,
                     longitude: blog.longitude,
@@ -53,10 +46,10 @@
                 });
         } else {
             console.log("Posting...");
-            axios
+            await axios
                 .post("/api/blogs", {
                     title: blog.title,
-                    content: simplemde.value(),
+                    content: simplemde ? simplemde.value() : null,
                     type: blog.type,
                     latitude: blog.latitude,
                     longitude: blog.longitude,
@@ -76,43 +69,43 @@
         }
     }
 
-    function printcontent() {
-        console.log(simplemde.value());
-    }
-
     function fillIfId() {
         if (getBlogId()) {
             fillBlog(getBlogId());
-        } else {
-            blog = {
-                title: "",
-                content: "",
-                longitude: 0.0,
-                latitude: 0.0,
-                type: blog.type,
-            };
-            if (simplemde) {
-                simplemde.value("");
-            }
-        }
+        } 
     }
 
     async function newTextBlog() {
-        blog.type = "text";
-        removeBlogId();
+        blog = { type: "text" };
         await tick();
+        removeBlogId();
         createMd();
         fillIfId();
     }
 
     async function newImageBlog() {
-        blog.type = "images";
+        blog = { type: "images" };
         if (simplemde) {
             simplemde.toTextArea();
             simplemde = null;
         }
+        await tick();
         removeBlogId();
         fillIfId();
+    }
+
+    async function uploadCallback(err, upload) {
+        if (err) {
+            console.log(err);
+        }
+        console.debug(upload);
+        await submit();
+        axios
+            .post("/api/images/" + upload.serverId + "/post/" + getBlogId())
+            .catch(function (error) {
+                console.debug(error);
+                alert("Blog post failed!");
+            });
     }
 
     function createMd() {
@@ -121,23 +114,22 @@
         });
     }
 
-    const initMd = () => {
-        createMd();
-        fillIfId();
-    };
+    fillIfId();
 </script>
 
 <svelte:head>
-    <link rel="stylesheet" href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" />
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css"
+    />
     <link
         rel="stylesheet"
         href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css"
     /><script
-        src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"
-        on:load={initMd}></script>
-</svelte:head>
+        src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script></svelte:head
+>
 
-
+{#if blog }
 <form>
     <label for="title">Title:</label><br />
     <input type="text" id="title" name="title" bind:value={blog.title} /><br />
@@ -151,6 +143,7 @@
             bind:this={upload}
             {uploadName}
             server="/api/images"
+            onprocessfile={uploadCallback}
         />
     {/if}
 
@@ -169,9 +162,7 @@
         bind:value={blog.latitude}
     /><br />
 </form>
+{/if}
 <button id="newBlog" on:click={newTextBlog}>New text blog</button>
 <button id="newImage" on:click={newImageBlog}>New image blog</button>
 <button id="submit" on:click={submit}>Submit blog</button>
-<button id="printcontent" on:click={printcontent}>Click me</button>
-
-
