@@ -7,9 +7,7 @@
     import axios from "axios";
     import { tick } from "svelte";
     import FilePond, { registerPlugin } from "svelte-filepond";
-    import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
     import FilePondPluginImagePreview from "filepond-plugin-image-preview";
-    import FilePondPluginImageResize from 'filepond-plugin-image-resize';
     let simplemde;
     let blog = {
         title: "",
@@ -18,17 +16,10 @@
         latitude: 0.0,
         type: "text",
     };
-    $: isText = blog.type == "text";
-    $: isPictures = blog.type == "images";
     let upload;
     let uploadName = "images";
-    let editor;
 
-    registerPlugin(
-        FilePondPluginImageExifOrientation,
-        FilePondPluginImagePreview,
-        FilePondPluginImageResize
-    );
+    registerPlugin(FilePondPluginImagePreview);
 
     async function fillBlog(blogId) {
         try {
@@ -109,11 +100,8 @@
     async function newTextBlog() {
         blog.type = "text";
         removeBlogId();
-        editor.destroy();
         await tick();
-        if (isText && !simplemde) {
-            createMd();
-        }
+        createMd();
         fillIfId();
     }
 
@@ -123,7 +111,6 @@
             simplemde.toTextArea();
             simplemde = null;
         }
-
         removeBlogId();
         fillIfId();
     }
@@ -141,30 +128,29 @@
 </script>
 
 <svelte:head>
+    <link rel="stylesheet" href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" />
     <link
         rel="stylesheet"
         href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css"
     /><script
         src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"
         on:load={initMd}></script>
-        <link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet" />
 </svelte:head>
 
 
 <form>
     <label for="title">Title:</label><br />
     <input type="text" id="title" name="title" bind:value={blog.title} /><br />
-    {#if isText}
+    {#if blog.type == "text"}
         <label for="content">Content {blog.type}:</label><br />
         <textarea id="content" />
     {/if}
 
-    {#if isPictures}
+    {#if blog.type == "images"}
         <FilePond
             bind:this={upload}
             {uploadName}
             server="/api/images"
-            allowMultiple={true}
         />
     {/if}
 
@@ -187,3 +173,5 @@
 <button id="newImage" on:click={newImageBlog}>New image blog</button>
 <button id="submit" on:click={submit}>Submit blog</button>
 <button id="printcontent" on:click={printcontent}>Click me</button>
+
+
