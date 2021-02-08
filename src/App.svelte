@@ -5,7 +5,7 @@
 
 	let page
 	router('/', () => page = Index)
-	router('/edit', () => page = Edit)
+	router('/app/edit', () => page = Edit)
 	router.start()
 </script>
 

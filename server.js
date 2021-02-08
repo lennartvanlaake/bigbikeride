@@ -39,10 +39,13 @@ app.put('/api/images/:id/description', jsonParser, images.updateImageDescription
 
 
 // Set upload dir
-app.use(express.static(__dirname + '/public'));
+app.use('/public', express.static(__dirname + '/public'));
 
 // Send SPA landing page
-app.get('*', (req, res) => {
+app.get('/', (req, res) => {
+   res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
+});
+app.get('/app/*', (req, res) => {
    res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
 });
 

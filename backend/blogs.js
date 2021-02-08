@@ -2,9 +2,9 @@ const safeQuery = require('./db').safeQuery
 const { v4: uuidv4 } = require('uuid');
 
 const selectQuery = `select p.*,
-(select json_agg(i) from image_posts 
+(select json_agg(arr) from (select i.* from image_posts 
 ip join images i on ip.image_id = i.id
-where ip.post_id = p.id) as images,
+where ip.post_id = p.id order by i.timestamp desc) as arr) as images,
 tp.content as content
 from posts p 
 left join text_posts tp on p.id = tp.id `

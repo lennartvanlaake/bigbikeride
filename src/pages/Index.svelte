@@ -3,5 +3,5 @@
     <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
 </svelte:head>
 <main>
-	<a href="/edit">Edit stuff!</a>
+	<a href="/app/edit">Edit stuff!</a>
 </main>

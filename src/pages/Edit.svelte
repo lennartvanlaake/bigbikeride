@@ -67,6 +67,22 @@
                     alert("Blog post failed!");
                 });
         }
+        if (blog.images) {
+            for (let i = 0; i < blog.images.length; i ++) {
+                const image = blog.images[i]
+                await axios.put("/api/images/" + image.id + "/description", {
+                    description: image.description
+                })
+                .catch(function (error) {
+                    console.debug(error);
+                });
+            }
+        }
+    }
+
+    async function submitAndFill() {
+        await submit();
+        fillIfId();
     }
 
     function fillIfId() {
@@ -100,12 +116,14 @@
         }
         console.debug(upload);
         await submit();
-        axios
+        await axios
             .post("/api/images/" + upload.serverId + "/post/" + getBlogId())
             .catch(function (error) {
                 console.debug(error);
                 alert("Blog post failed!");
             });
+        fillIfId();
+        upload.removeFiles([upload.id]);
     }
 
     function createMd() {
@@ -130,6 +148,24 @@
 >
 
 {#if blog }
+    {#if blog.type == "images"}
+    <FilePond
+        bind:this={upload}
+        {uploadName}
+        server="/api/images"
+        onprocessfile={uploadCallback}
+    />
+    {/if}
+    {#if blog.images }
+        {#each blog.images as image}
+            <span>
+                <p>Image: <a href="{"/"+ image.path}">{"/"+ image.path}</a></p>
+                <img src={"/"+ image.path} alt={image.description}/><br>
+                <label for={"content_" + image.id}>Description:</label><br />
+                <textarea bind:value={image.description} id={"content_" + image.id}></textarea>
+            </span>
+        {/each}
+    {/if}
 <form>
     <label for="title">Title:</label><br />
     <input type="text" id="title" name="title" bind:value={blog.title} /><br />
@@ -138,14 +174,6 @@
         <textarea id="content" />
     {/if}
 
-    {#if blog.type == "images"}
-        <FilePond
-            bind:this={upload}
-            {uploadName}
-            server="/api/images"
-            onprocessfile={uploadCallback}
-        />
-    {/if}
 
     <label for="longitude">Longitude:</label><br />
     <input
@@ -165,4 +193,4 @@
 {/if}
 <button id="newBlog" on:click={newTextBlog}>New text blog</button>
 <button id="newImage" on:click={newImageBlog}>New image blog</button>
-<button id="submit" on:click={submit}>Submit blog</button>
+<button id="submit" on:click={submitAndFill}>Submit blog</button>
