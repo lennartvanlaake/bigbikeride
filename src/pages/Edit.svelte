@@ -9,8 +9,7 @@
     import FilePond, { registerPlugin } from "svelte-filepond";
     import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
     import FilePondPluginImagePreview from "filepond-plugin-image-preview";
-    import FilePondPluginImageEdit from "filepond-plugin-image-edit";
-
+    import FilePondPluginImageResize from 'filepond-plugin-image-resize';
     let simplemde;
     let blog = {
         title: "",
@@ -28,15 +27,17 @@
     registerPlugin(
         FilePondPluginImageExifOrientation,
         FilePondPluginImagePreview,
-        FilePondPluginImageEdit
+        FilePondPluginImageResize
     );
 
     async function fillBlog(blogId) {
         try {
             const returnValue = await fetch("/api/blogs/" + blogId);
-            const blogResponse = await returnValue.json();
-            blog = blogResponse.post;
-            simplemde.value(blogResponse.additional_data.content);
+            blog = await returnValue.json();
+            console.log(blog);
+            if (isText) {
+                simplemde.value(blog.content);
+            }
         } catch (error) {
             console.error(error);
         }
@@ -44,8 +45,6 @@
 
     function submit() {
         if (getBlogId()) {
-            console.log("Putting...");
-            console.log(blog.content);
             axios
                 .put("/api/blogs/" + getBlogId(), {
                     title: blog.title,
@@ -105,7 +104,6 @@
                 simplemde.value("");
             }
         }
-        isPictures;
     }
 
     async function newTextBlog() {
@@ -128,8 +126,6 @@
 
         removeBlogId();
         fillIfId();
-        console.log(blog.type);
-        console.log(blog);
     }
 
     function createMd() {
@@ -140,7 +136,6 @@
 
     const initMd = () => {
         createMd();
-        console.log(simplemde.value());
         fillIfId();
     };
 </script>
@@ -151,10 +146,10 @@
         href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css"
     /><script
         src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"
-        on:load={initMd}></script></svelte:head
->
-<link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet" />
-<link href="./doka.css" rel="stylesheet" type="text/css" />
+        on:load={initMd}></script>
+        <link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet" />
+</svelte:head>
+
 
 <form>
     <label for="title">Title:</label><br />

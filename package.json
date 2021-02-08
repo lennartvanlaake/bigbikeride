@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "build": "rollup -c",
-    "dev": "rollup -c -w",
+    "dev": "sudo docker-compose up -d && rollup -c -w",
     "start": "nodemon server.js"
   },
   "devDependencies": {

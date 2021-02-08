@@ -4,12 +4,16 @@ require('dotenv').config()
 
 const pool = new Pool();
 
-function doIdQuery(sql, id, lamda) {
-
-    pool.query(sql, [id], )
-
+function safeQuery(res, sql, params, lamda) {
+    pool.query(sql, params, (error, results) =>  {
+        if (error) {
+            console.log(error);
+            return res.status(400).json({ "exception": error });
+        }
+        return lamda(results);
+    })
 };
 
 module.exports = {
-    pool, doIdQuery
+    safeQuery
 }
