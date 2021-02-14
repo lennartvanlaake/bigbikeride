@@ -4,6 +4,7 @@
         setBlogId,
         removeBlogId,
     } from "../javascript/storage.js";
+    import PlacePicker from "../components/PlacePicker.svelte"
     import axios from "axios";
     import { tick } from "svelte";
     import FilePond, { registerPlugin } from "svelte-filepond";
@@ -68,14 +69,15 @@
                 });
         }
         if (blog.images) {
-            for (let i = 0; i < blog.images.length; i ++) {
-                const image = blog.images[i]
-                await axios.put("/api/images/" + image.id + "/description", {
-                    description: image.description
-                })
-                .catch(function (error) {
-                    console.debug(error);
-                });
+            for (let i = 0; i < blog.images.length; i++) {
+                const image = blog.images[i];
+                await axios
+                    .put("/api/images/" + image.id + "/description", {
+                        description: image.description,
+                    })
+                    .catch(function (error) {
+                        console.debug(error);
+                    });
             }
         }
     }
@@ -88,7 +90,17 @@
     function fillIfId() {
         if (getBlogId()) {
             fillBlog(getBlogId());
-        } 
+        }
+    }
+
+    function fillLocation() {
+        navigator.geolocation.getCurrentPosition((pos) => {
+            if (!blog) {
+                return;
+            }
+            blog.longitude = pos.coords.longitude;
+            blog.latitude = pos.coords.latitude;
+        });
     }
 
     async function newTextBlog() {
@@ -97,6 +109,7 @@
         removeBlogId();
         createMd();
         fillIfId();
+        fillLocation();
     }
 
     async function newImageBlog() {
@@ -108,6 +121,7 @@
         await tick();
         removeBlogId();
         fillIfId();
+        fillLocation();
     }
 
     async function uploadCallback(err, upload) {
@@ -132,10 +146,19 @@
         });
     }
 
+    function printLocation(loc) {
+        blog.longitude = loc.detail.location.lng;
+        blog.latitude = loc.detail.location.lat;
+    }
+
     fillIfId();
 </script>
 
 <svelte:head>
+    <link
+        href="https://unpkg.com/filepond/dist/filepond.css"
+        rel="stylesheet"
+    />
     <link
         rel="stylesheet"
         href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css"
@@ -147,50 +170,56 @@
         src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script></svelte:head
 >
 
-{#if blog }
+{#if blog}
     {#if blog.type == "images"}
-    <FilePond
-        bind:this={upload}
-        {uploadName}
-        server="/api/images"
-        onprocessfile={uploadCallback}
-    />
+        <FilePond
+            bind:this={upload}
+            {uploadName}
+            server="/api/images"
+            onprocessfile={uploadCallback}
+        />
     {/if}
-    {#if blog.images }
+    {#if blog.images}
         {#each blog.images as image}
             <span>
-                <p>Image: <a href="{"/"+ image.path}">{"/"+ image.path}</a></p>
-                <img src={"/"+ image.path} alt={image.description}/><br>
+                <p>Image: <a href={"/" + image.path}>{"/" + image.path}</a></p>
+                <img src={"/" + image.path} alt={image.description} /><br />
                 <label for={"content_" + image.id}>Description:</label><br />
-                <textarea bind:value={image.description} id={"content_" + image.id}></textarea>
+                <textarea
+                    bind:value={image.description}
+                    id={"content_" + image.id}
+                />
             </span>
         {/each}
     {/if}
-<form>
-    <label for="title">Title:</label><br />
-    <input type="text" id="title" name="title" bind:value={blog.title} /><br />
-    {#if blog.type == "text"}
-        <label for="content">Content {blog.type}:</label><br />
-        <textarea id="content" />
-    {/if}
+    <form>
+        <label for="title">Title:</label><br />
+        <input type="text" id="title" name="title" bind:value={blog.title} /><br
+        />
+        {#if blog.type == "text"}
+            <label for="content">Content {blog.type}:</label><br />
+            <textarea id="content" />
+        {/if}
 
+        <label for="longitude">Longitude:</label><br />
+        <input
+            type="text"
+            id="longitude"
+            name="longitude"
+            bind:value={blog.longitude}
+        /><br />
+        <label for="latitude">Latitude:</label><br />
+        <input
+            type="text"
+            id="latitude"
+            name="latitude"
+            bind:value={blog.latitude}
+        /><br />
+    </form>
+    <PlacePicker latitude={blog.latitude} longitude={blog.longitude} on:selectLocation={printLocation}/>
 
-    <label for="longitude">Longitude:</label><br />
-    <input
-        type="text"
-        id="longitude"
-        name="longitude"
-        bind:value={blog.longitude}
-    /><br />
-    <label for="latitude">Latitude:</label><br />
-    <input
-        type="text"
-        id="latitude"
-        name="latitude"
-        bind:value={blog.latitude}
-    /><br />
-</form>
 {/if}
 <button id="newBlog" on:click={newTextBlog}>New text blog</button>
 <button id="newImage" on:click={newImageBlog}>New image blog</button>
 <button id="submit" on:click={submitAndFill}>Submit blog</button>
+

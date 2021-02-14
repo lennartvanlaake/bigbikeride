@@ -3,6 +3,7 @@ import commonjs from '@rollup/plugin-commonjs';
 import resolve from '@rollup/plugin-node-resolve';
 import livereload from 'rollup-plugin-livereload';
 import { terser } from 'rollup-plugin-terser';
+import copy from 'rollup-plugin-copy-assets-to';
 import css from 'rollup-plugin-css-only';
 
 const production = !process.env.ROLLUP_WATCH;
@@ -37,6 +38,12 @@ export default {
 		file: 'public/build/bundle.js'
 	},
 	plugins: [
+		copy({
+			assets: [
+			  "node_modules/leaflet/dist/images",
+			],
+			outputDir: "public/build"
+		  }),
 		svelte({
 			compilerOptions: {
 				// enable run-time checks when not in production

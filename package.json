@@ -10,6 +10,7 @@
     "@rollup/plugin-commonjs": "^16.0.0",
     "@rollup/plugin-node-resolve": "^10.0.0",
     "rollup": "^2.3.4",
+    "rollup-plugin-copy-assets-to": "^1.0.0",
     "rollup-plugin-css-only": "^3.1.0",
     "rollup-plugin-livereload": "^2.0.0",
     "rollup-plugin-svelte": "^7.0.0",
@@ -17,6 +18,7 @@
     "svelte": "^3.0.0"
   },
   "dependencies": {
+    "@rollup/plugin-image": "^2.0.6",
     "axios": "^0.21.1",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
@@ -28,6 +30,7 @@
     "filepond-plugin-image-exif-orientation": "^1.0.9",
     "filepond-plugin-image-preview": "^4.6.5",
     "filepond-plugin-image-resize": "^2.0.7",
+    "leaflet": "^1.7.1",
     "multer": "^1.4.2",
     "nodemon": "^2.0.7",
     "page": "^1.11.6",
