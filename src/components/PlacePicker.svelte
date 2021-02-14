@@ -10,6 +10,18 @@ export let latitude = 52.1326;
 let map;
 let marker;
 const dispatch = createEventDispatcher();
+
+$: {
+    if (marker) {
+        marker.remove();
+    }
+    if (map) {
+        marker = L.marker([latitude, longitude]);
+        marker.addTo(map);
+        map.setView([latitude, longitude], 8);
+    }
+}
+
 function initPlacePicker(container) {
     map = createMap(container, latitude, longitude, 8);
     marker = L.marker([latitude, longitude]);

@@ -146,7 +146,7 @@
         });
     }
 
-    function printLocation(loc) {
+    function selectLocation(loc) {
         blog.longitude = loc.detail.location.lng;
         blog.latitude = loc.detail.location.lat;
     }
@@ -216,7 +216,7 @@
             bind:value={blog.latitude}
         /><br />
     </form>
-    <PlacePicker latitude={blog.latitude} longitude={blog.longitude} on:selectLocation={printLocation}/>
+    <PlacePicker latitude={blog.latitude} longitude={blog.longitude} on:selectLocation={selectLocation}/>
 
 {/if}
 <button id="newBlog" on:click={newTextBlog}>New text blog</button>
