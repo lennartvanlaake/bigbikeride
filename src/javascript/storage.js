@@ -1,3 +1,4 @@
+
 export function getBlogId() {
     const blogId = localStorage.getItem("blogId"); 
     if (blogId == "undefined") return null;
@@ -11,3 +12,5 @@ export function setBlogId(blogId) {
 export function removeBlogId() {
     return localStorage.removeItem("blogId");
 }
+
+

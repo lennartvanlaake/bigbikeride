@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@rollup/plugin-image": "^2.0.6",
+    "@sveltejs/svelte-virtual-list": "^3.0.1",
     "axios": "^0.21.1",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",

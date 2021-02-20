@@ -10,7 +10,7 @@ from posts p
 left join text_posts tp on p.id = tp.id `
 
 const getBlogs = (_, response) => {
-    return safeQuery(response, selectQuery, (results) => {
+    return safeQuery(response, selectQuery, [], (results) => {
         return response.status(200).json(results.rows)
     })
 }
