@@ -11,6 +11,7 @@
     import FilePondPluginImagePreview from "filepond-plugin-image-preview";
     let simplemde;
     let blog;
+    let location = {};
     let upload;
     let uploadName = "images";
 
@@ -35,8 +36,8 @@
                     title: blog.title,
                     content: simplemde ? simplemde.value() : null,
                     type: blog.type,
-                    latitude: blog.latitude,
-                    longitude: blog.longitude,
+                    latitude: location.latitude,
+                    longitude: location.longitude,
                 })
                 .then(function (response) {
                     alert("Blog updated!");
@@ -52,8 +53,8 @@
                     title: blog.title,
                     content: simplemde ? simplemde.value() : null,
                     type: blog.type,
-                    latitude: blog.latitude,
-                    longitude: blog.longitude,
+                    latitude: location.latitude,
+                    longitude: location.longitude,
                 })
                 .then(function (response) {
                     alert("Blog posted!");
@@ -98,8 +99,8 @@
             if (!blog) {
                 return;
             }
-            blog.longitude = pos.coords.longitude;
-            blog.latitude = pos.coords.latitude;
+            location.longitude = pos.coords.longitude;
+            location.latitude = pos.coords.latitude;
         });
     }
 
@@ -124,11 +125,10 @@
         fillLocation();
     }
 
-    async function uploadCallback(err, upload) {
+    async function uploadCallback(err, upload) { 
         if (err) {
             console.log(err);
         }
-        console.debug(upload);
         await submit();
         await axios
             .post("/api/images/" + upload.serverId + "/post/" + getBlogId())
@@ -147,8 +147,8 @@
     }
 
     function selectLocation(loc) {
-        blog.longitude = loc.detail.location.lng;
-        blog.latitude = loc.detail.location.lat;
+        location.longitude = loc.detail.location.lng;
+        location.latitude = loc.detail.location.lat;
     }
 
     fillIfId();
@@ -206,17 +206,17 @@
             type="text"
             id="longitude"
             name="longitude"
-            bind:value={blog.longitude}
+            bind:value={location.longitude}
         /><br />
         <label for="latitude">Latitude:</label><br />
         <input
             type="text"
             id="latitude"
             name="latitude"
-            bind:value={blog.latitude}
+            bind:value={location.latitude}
         /><br />
     </form>
-    <PlacePicker latitude={blog.latitude} longitude={blog.longitude} on:selectLocation={selectLocation}/>
+    <PlacePicker latitude={location.latitude} longitude={location.longitude} on:selectLocation={selectLocation}/>
 
 {/if}
 <button id="newBlog" on:click={newTextBlog}>New text blog</button>
