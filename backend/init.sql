@@ -14,19 +14,19 @@ ALTER TABLE ONLY public.posts
 CREATE TABLE public.images (
     id uuid NOT NULL,
     path text NOT NULL,
-    description text
+    description text,
+    "timestamp" timestamp without time zone
 );
 
 
 CREATE TABLE public.image_posts (
-    id uuid NOT NULL,
+    post_id uuid NOT NULL,
     description text,
     image_id uuid NOT NULL
 );
 
 ALTER TABLE ONLY public.image_posts
-    ADD CONSTRAINT image_posts_pkey PRIMARY KEY (id);
-
+    ADD CONSTRAINT image_posts_pkey PRIMARY KEY (post_id);
 
 
 CREATE TABLE public.text_posts (
