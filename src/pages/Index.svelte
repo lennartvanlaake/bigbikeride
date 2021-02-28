@@ -9,11 +9,14 @@
     getBlogs();
 </script>
 <main>
-	<a href="/app/edit">Edit stuff!</a>
-
-    <VirtualList items={list} height="1000px" let:item>
-        { #if item.type == "text" }  
-        <TextBlog data = {item}/>
-        { /if }
-    </VirtualList>
+    <body class="bg-gray-100">
+        <a href="/app/edit">Edit stuff!</a>
+        <div class="container mx-auto max-w-5xl	w-full h-screen">
+            <VirtualList items={list} itemHeight={100} let:item>
+                { #if item.type == "text" }  
+                <TextBlog data = {item}/>
+                { /if }
+            </VirtualList>
+        </div>
+    </body>
 </main>
