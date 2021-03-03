@@ -14,6 +14,21 @@
 	/* only apply purgecss on utilities, per Tailwind docs */
 	/* purgecss start ignore */
 	@tailwind base;
+
+	@layer base {
+  h1 {
+    @apply text-2xl;
+  }
+  h2 {
+    @apply text-xl;
+  }
+  h3 {
+    @apply text-lg;
+  }
+  a {
+    @apply text-blue-600 underline;
+  }
+}
 	@tailwind components;
 	/* purgecss end ignore */
   

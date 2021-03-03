@@ -4,7 +4,7 @@
         setBlogId,
         removeBlogId,
     } from "../javascript/storage.js";
-    import PlacePicker from "../components/PlacePicker.svelte"
+    import PlacePicker from "../components/PlacePicker.svelte";
     import axios from "axios";
     import { tick } from "svelte";
     import FilePond, { registerPlugin } from "svelte-filepond";
@@ -125,7 +125,7 @@
         fillLocation();
     }
 
-    async function uploadCallback(err, upload) { 
+    async function uploadCallback(err, upload) {
         if (err) {
             console.log(err);
         }
@@ -169,57 +169,67 @@
     /><script
         src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script></svelte:head
 >
-
-{#if blog}
-    {#if blog.type == "images"}
-        <FilePond
-            bind:this={upload}
-            {uploadName}
-            server="/api/images"
-            onprocessfile={uploadCallback}
-        />
-    {/if}
-    {#if blog.images}
-        {#each blog.images as image}
-            <span>
-                <p>Image: <a href={"/" + image.path}>{"/" + image.path}</a></p>
-                <img src={"/" + image.path} alt={image.description} /><br />
-                <label for={"content_" + image.id}>Description:</label><br />
-                <textarea
-                    bind:value={image.description}
-                    id={"content_" + image.id}
-                />
-            </span>
-        {/each}
-    {/if}
-    <form>
-        <label for="title">Title:</label><br />
-        <input type="text" id="title" name="title" bind:value={blog.title} /><br
-        />
-        {#if blog.type == "text"}
-            <label for="content">Content {blog.type}:</label><br />
-            <textarea id="content" />
+<div class="container" p-2 m-2>
+    {#if blog}
+        {#if blog.type == "images"}
+            <FilePond
+                bind:this={upload}
+                {uploadName}
+                server="/api/images"
+                onprocessfile={uploadCallback}
+            />
         {/if}
+        {#if blog.images}
+            {#each blog.images as image}
+                <span>
+                    <p>
+                        Image: <a href={"/" + image.path}>{"/" + image.path}</a>
+                    </p>
+                    <img src={"/" + image.path} alt={image.description} /><br />
+                    <label for={"content_" + image.id}>Description:</label><br
+                    />
+                    <textarea
+                        bind:value={image.description}
+                        id={"content_" + image.id}
+                    />
+                </span>
+            {/each}
+        {/if}
+        <form>
+            <label for="title">Title:</label><br />
+            <input
+                type="text"
+                id="title"
+                name="title"
+                bind:value={blog.title}
+            /><br />
+            {#if blog.type == "text"}
+                <label for="content">Content {blog.type}:</label><br />
+                <textarea id="content" />
+            {/if}
 
-        <label for="longitude">Longitude:</label><br />
-        <input
-            type="text"
-            id="longitude"
-            name="longitude"
-            bind:value={location.longitude}
-        /><br />
-        <label for="latitude">Latitude:</label><br />
-        <input
-            type="text"
-            id="latitude"
-            name="latitude"
-            bind:value={location.latitude}
-        /><br />
-    </form>
-    <PlacePicker latitude={location.latitude} longitude={location.longitude} on:selectLocation={selectLocation}/>
-
-{/if}
-<button id="newBlog" on:click={newTextBlog}>New text blog</button>
-<button id="newImage" on:click={newImageBlog}>New image blog</button>
-<button id="submit" on:click={submitAndFill}>Submit blog</button>
-
+            <label for="longitude">Longitude:</label><br />
+            <input
+                type="text"
+                id="longitude"
+                name="longitude"
+                bind:value={location.longitude}
+            /><br />
+            <label for="latitude">Latitude:</label><br />
+            <input
+                type="text"
+                id="latitude"
+                name="latitude"
+                bind:value={location.latitude}
+            /><br />
+        </form>
+        <PlacePicker
+            latitude={location.latitude}
+            longitude={location.longitude}
+            on:selectLocation={selectLocation}
+        />
+    {/if}
+    <button id="newBlog" on:click={newTextBlog}>New text blog</button>
+    <button id="newImage" on:click={newImageBlog}>New image blog</button>
+    <button id="submit" on:click={submitAndFill}>Submit blog</button>
+</div>
