@@ -28,6 +28,9 @@
   a {
     @apply text-blue-600 underline;
   }
+  button {
+    @apply m-2 p-2 rounded;
+  }
 }
 	@tailwind components;
 	/* purgecss end ignore */

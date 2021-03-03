@@ -5,6 +5,7 @@
         removeBlogId,
     } from "../javascript/storage.js";
     import PlacePicker from "../components/PlacePicker.svelte";
+    import NavBar from "../components/Navbar.svelte";
     import axios from "axios";
     import { tick } from "svelte";
     import FilePond, { registerPlugin } from "svelte-filepond";
@@ -169,7 +170,8 @@
     /><script
         src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script></svelte:head
 >
-<div class="container" p-2 m-2>
+<NavBar></NavBar>
+<div class="container pt-20 pb-2 m-2 block">
     {#if blog}
         {#if blog.type == "images"}
             <FilePond
@@ -229,7 +231,7 @@
             on:selectLocation={selectLocation}
         />
     {/if}
-    <button id="newBlog" on:click={newTextBlog}>New text blog</button>
-    <button id="newImage" on:click={newImageBlog}>New image blog</button>
-    <button id="submit" on:click={submitAndFill}>Submit blog</button>
+    <button id="newBlog" class="bg-gray-100 hover:bg-gray-300" on:click={newTextBlog}>New text blog</button>
+    <button id="newImage" class="bg-gray-100 hover:bg-gray-300" on:click={newImageBlog}>New image blog</button>
+    <button id="submit" class="bg-gray-100 hover:bg-gray-300" on:click={submitAndFill}>Submit blog</button>
 </div>
