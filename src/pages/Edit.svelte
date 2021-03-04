@@ -19,14 +19,12 @@
     registerPlugin(FilePondPluginImagePreview);
 
     async function fillBlog(blogId) {
-        try {
-            const returnValue = await fetch("/api/blogs/" + blogId);
-            blog = await returnValue.json();
-            if (blog.type == "text") {
-                simplemde.value(blog.content);
-            }
-        } catch (error) {
-            console.error(error);
+        const returnValue = await fetch("/api/blogs/" + blogId);
+        blog = await returnValue.json();
+        if (blog.type == "text") {
+            await tick();
+            createMd();
+            simplemde.value(blog.content);
         }
     }
 
@@ -142,17 +140,17 @@
     }
 
     function createMd() {
-        simplemde = new SimpleMDE({
-            element: document.getElementById("content"),
-        });
+        if (!simplemde) {
+            simplemde = new SimpleMDE({
+                element: document.getElementById("content"),
+            });
+        }
     }
 
     function selectLocation(loc) {
         location.longitude = loc.detail.location.lng;
         location.latitude = loc.detail.location.lat;
     }
-
-    fillIfId();
 </script>
 
 <svelte:head>
@@ -168,9 +166,10 @@
         rel="stylesheet"
         href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css"
     /><script
-        src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script></svelte:head
+        src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"
+        on:load={fillIfId}></script></svelte:head
 >
-<NavBar></NavBar>
+<NavBar />
 <div class="container pt-20 pb-2 m-2 block">
     {#if blog}
         {#if blog.type == "images"}
@@ -231,7 +230,19 @@
             on:selectLocation={selectLocation}
         />
     {/if}
-    <button id="newBlog" class="bg-gray-100 hover:bg-gray-300" on:click={newTextBlog}>New text blog</button>
-    <button id="newImage" class="bg-gray-100 hover:bg-gray-300" on:click={newImageBlog}>New image blog</button>
-    <button id="submit" class="bg-gray-100 hover:bg-gray-300" on:click={submitAndFill}>Submit blog</button>
+    <button
+        id="newBlog"
+        class="bg-gray-100 hover:bg-gray-300"
+        on:click={newTextBlog}>New text blog</button
+    >
+    <button
+        id="newImage"
+        class="bg-gray-100 hover:bg-gray-300"
+        on:click={newImageBlog}>New image blog</button
+    >
+    <button
+        id="submit"
+        class="bg-gray-100 hover:bg-gray-300"
+        on:click={submitAndFill}>Submit blog</button
+    >
 </div>
