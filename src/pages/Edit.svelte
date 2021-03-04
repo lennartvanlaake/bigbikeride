@@ -21,6 +21,8 @@
     async function fillBlog(blogId) {
         const returnValue = await fetch("/api/blogs/" + blogId);
         blog = await returnValue.json();
+        location.longitude = blog.longitude
+        location.latitude = blog.latitude
         if (blog.type == "text") {
             await tick();
             createMd();
