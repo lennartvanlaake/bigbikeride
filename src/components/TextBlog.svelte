@@ -1,27 +1,30 @@
 <script>
     import marked from "marked";
     import { afterUpdate } from "svelte";
-
+	import { fade } from 'svelte/transition';
     export let data;
 
     let overflows = false;
+    let hideOverflow = true;
     let blogContent;
 
     afterUpdate(() => {
+        if (overflows) return;
         overflows = contentOverflows();
     });
 
     function contentOverflows() {
-        console.log("Checking overflow of" + blogContent)
         if (!blogContent) return false;
-        console.log("Client height: " + blogContent.clientHeight)
-        console.log("Scroll height: " + blogContent.scrollHeight)
         if ((blogContent.scrollHeight - blogContent.clientHeight) > 20) {
             return true;
         } else {
             return false;
         }
-    }
+    };
+
+    function toggleShowContent() {
+        hideOverflow = !hideOverflow;
+    };
 
 </script>
 
@@ -29,24 +32,33 @@
     <h1 class="text-lg font-medium mb-4">{data.title}</h1>
     <div
         class="text-sm max-h-36 overflow-hidden blog-content p-2"
-        bind:this={blogContent}
-    >
-        {#if overflows}
-            <div class="fadeout-overlay transition-all ease-in-out" />
-            <strong
-                class="bg-white
-        text-gray-400
-        absolute
-        bottom-0
-        z-40
-        font-semibold
-        hover:text-gray-600
-        left-1/2
-        -ml-10"
-            >
+        class:max-h-36="{hideOverflow}"
+        class:h-auto="{!hideOverflow}"
+        bind:this={blogContent}  >
+        { #if overflows && hideOverflow }
+            <div class="fadeout-overlay" transition:fade/>
+        { /if }
+
+        { #if overflows  }
+            <strong class="bg-white
+                text-gray-400
+                absolute
+                bottom-0
+                z-40
+                font-semibold
+                hover:text-gray-600
+                left-1/2
+                -ml-10"
+            on:click={toggleShowContent}>
+            { #if hideOverflow }
                 Show content
+            { :else }
+                Hide content
+            { /if }
             </strong>
-        {/if}
+        { /if }
+
+            
         {@html marked(data.content)}
     </div>
 </div>
