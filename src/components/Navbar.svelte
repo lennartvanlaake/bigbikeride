@@ -1,5 +1,5 @@
 <!-- This example requires Tailwind CSS v2.0+ -->
-<nav class="bg-gray-800 fixed z-1 w-full m-0 p-0">
+<nav class="bg-gray-800 bg-opacity-100 fixed z-50 w-full m-0 p-0">
   <div class="px-2 sm:px-6 lg:px-8">
       <div class="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start h-16">
         <div class="flex-shrink-0 flex items-center">          

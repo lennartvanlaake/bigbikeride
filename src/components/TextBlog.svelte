@@ -31,9 +31,9 @@
 <div class="w-full rounded border p-5 my-2 bg-white text-container">
     <h1 class="text-lg font-medium mb-4">{data.title}</h1>
     <div
-        class="text-sm max-h-36 overflow-hidden blog-content p-2"
-        class:max-h-36="{hideOverflow}"
-        class:h-auto="{!hideOverflow}"
+        class="text-sm overflow-hidden blog-content p-2"
+        class:hide-overflow="{hideOverflow}"
+        class:display-overflow="{!hideOverflow}"
         bind:this={blogContent}  >
         { #if overflows && hideOverflow }
             <div class="fadeout-overlay" transition:fade/>
@@ -63,9 +63,15 @@
     </div>
 </div>
 
-<!--         class:invisible="{fadeOut}"
-        on:click="{fadeOut = !fadeOut}" -->
 <style>
+    .hide-overflow {
+        max-height: 9rem;
+        transition: max-height 1s ease-out;
+    }
+    .display-overflow {
+        max-height: 1000rem;
+        transition: max-height 2s ease-in;
+    }
     .blog-content {
         position: relative;
     }
