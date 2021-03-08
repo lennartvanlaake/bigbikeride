@@ -31,7 +31,7 @@
 <div class="w-full rounded border p-5 my-2 bg-white text-container">
     <h1 class="text-lg font-medium mb-4">{data.title}</h1>
     <div
-        class="text-sm overflow-hidden blog-content p-2"
+        class="text-sm overflow-hidden blog-content p-2 pb-4"
         class:hide-overflow="{hideOverflow}"
         class:display-overflow="{!hideOverflow}"
         bind:this={blogContent}  >
