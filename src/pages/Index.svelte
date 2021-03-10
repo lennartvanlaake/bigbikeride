@@ -3,9 +3,8 @@
         getBlogs, blogList
     } from "../javascript/bloglist.js";
     let list = [];
-    import TextBlog from "../components/TextBlog.svelte";
+    import Post from "../components/Post.svelte";
     import NavBar from "../components/Navbar.svelte";
-    import VirtualList from '@sveltejs/svelte-virtual-list';
     blogList.subscribe(foundList => { console.log(foundList); list = foundList} );
     getBlogs();
 </script>
@@ -14,9 +13,8 @@
         <NavBar></NavBar>
         <div class="container mx-auto max-w-5xl	w-full h-full pt-20 pb-2 px-2 flex-auto">
             {#each list as blog }
-                { #if blog.type == "text" }  
-                <TextBlog data = {blog}/>
-                { /if }
+                <Post data = {blog}/>
             {/each}
         </div>
+    </div>
 </main>

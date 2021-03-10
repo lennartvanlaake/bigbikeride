@@ -26,7 +26,7 @@ CREATE TABLE public.image_posts (
 );
 
 ALTER TABLE ONLY public.image_posts
-    ADD CONSTRAINT image_posts_pkey PRIMARY KEY (post_id);
+    ADD CONSTRAINT image_posts_pkey PRIMARY KEY (post_id, image_id);
 
 
 CREATE TABLE public.text_posts (

@@ -2,6 +2,8 @@
     import marked from "marked";
     import { afterUpdate } from "svelte";
 	import { fade } from 'svelte/transition';
+    import Carousel from "../components/Carousel.svelte";
+
     export let data;
 
     let overflows = false;
@@ -14,6 +16,7 @@
     });
 
     function contentOverflows() {
+        if (data && data.type != "text") return false;
         if (!blogContent) return false;
         if ((blogContent.scrollHeight - blogContent.clientHeight) > 20) {
             return true;
@@ -28,10 +31,13 @@
 
 </script>
 
-<div class="w-full rounded border p-5 my-2 bg-white text-container">
-    <h1 class="text-lg font-medium mb-4">{data.title}</h1>
+<div class="w-full rounded border my-2 bg-white text-container">
+    <h1 class="text-lg font-medium mb-4 p-2">{data.title}</h1>
+
+    { #if data.type == "text"}
+
     <div
-        class="text-sm overflow-hidden blog-content p-2 pb-4"
+        class="text-sm overflow-hidden blog-content pb-4 px-2"
         class:hide-overflow="{hideOverflow}"
         class:display-overflow="{!hideOverflow}"
         bind:this={blogContent}  >
@@ -39,6 +45,7 @@
             <div class="fadeout-overlay" transition:fade/>
         { /if }
 
+        {@html marked(data.content)}
         { #if overflows  }
             <strong class="bg-white
                 text-gray-400
@@ -56,11 +63,13 @@
                 Hide content
             { /if }
             </strong>
-        { /if }
-
-            
-        {@html marked(data.content)}
+        { /if }            
     </div>
+    { /if }
+
+    { #if data.type == "images" }
+    <Carousel images={data.images}></Carousel>
+    { /if }
 </div>
 
 <style>
