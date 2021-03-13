@@ -3,7 +3,10 @@ const app = express();
 const port = process.env.PORT || 5000;
 const cors = require('cors');
 const path = require('path');
+const session = require('express-session');
 const blogs = require('./backend/blogs');
+const login = require('./backend/login');
+
 const images = require('./backend/images');
 const multer = require('multer');
 
@@ -13,6 +16,7 @@ const bodyParser = require('body-parser')
 const jsonParser = bodyParser.json()
 app.use(cors());
 app.use(express.static('public'));
+app.use(session({secret: process.env.SESSION_SECRET, cookie: { maxAge: 9000000000000 }}))
 
 // Blog crud actions
 app.get('/api/blogs', blogs.getBlogs);
@@ -36,6 +40,9 @@ app.post('/api/images', upload.single('filepond'), images.createImage);
 app.post('/api/images/:id/post/:post', jsonParser, images.linkImageToPost);
 app.put('/api/images/:id/description', jsonParser, images.updateImageDescription);
 
+// login
+app.post('/api/login', jsonParser, login.processLogin);
+app.get('/api/login', login.isLoggedIn);
 
 
 // Set upload dir

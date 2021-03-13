@@ -3,6 +3,11 @@ const { v4: uuidv4 } = require('uuid');
 
 
 const createImage = (request, response) => {
+    if (!request.session.loggedIn) {
+        return response.status(401).send({
+            message: 'Not logged in'
+        })
+    }
     if (!request.file) {
         response.status(400).send({
             message: 'No file uploaded'

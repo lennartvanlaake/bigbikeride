@@ -1,3 +1,4 @@
+import { writable } from 'svelte/store';
 
 export function getBlogId() {
     const blogId = localStorage.getItem("blogId"); 
@@ -13,4 +14,5 @@ export function removeBlogId() {
     return localStorage.removeItem("blogId");
 }
 
+export const loggedIn = writable(false);
 

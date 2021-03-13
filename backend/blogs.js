@@ -23,7 +23,11 @@ const getBlogById = (request, response) => {
 }
 
 const createBlog = (request, response) => {
-
+    if (!request.session.loggedIn) {
+        return response.status(401).send({
+            message: 'Not logged in'
+        })
+    }
     const { title, content, longitude, latitude, type } = request.body
     const id = uuidv4()
     const timestamp = new Date().toISOString()
@@ -43,6 +47,11 @@ const createBlog = (request, response) => {
 }
 
 const updateBlog = (request, response) => {
+    if (!request.session.loggedIn) {
+        return response.status(401).send({
+            message: 'Not logged in'
+        })
+    }
     const { title, content, longitude, latitude, type } = request.body
     const id = request.params.id
     return safeQuery(response, `UPDATE posts 
@@ -63,6 +72,11 @@ const updateBlog = (request, response) => {
 
 
 const deleteBlog = (request, response) => {
+    if (!request.session.loggedIn) {
+        return response.status(401).send({
+            message: 'Not logged in'
+        })
+    }
     return safeQuery(response, 'DELETE FROM posts WHERE id = $1', [request.params.id], (_) => {
         response.status(200).json({ "id": request.params.id })
     })

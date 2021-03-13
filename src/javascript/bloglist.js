@@ -1,5 +1,4 @@
 import { writable } from 'svelte/store';
-import axios from "axios";
 
 export const blogList = writable([]);
 
