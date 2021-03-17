@@ -2,37 +2,26 @@
   "name": "svelte-app",
   "version": "1.0.0",
   "scripts": {
-    "build": "rollup -c",
-    "dev": "sudo docker-compose up -d && rollup -c -w",
+    "build": "snowpack build",
+    "dev": "sudo docker-compose up -d && snowpack dev",
     "start": "nodemon server.js"
   },
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^16.0.0",
-    "@rollup/plugin-node-resolve": "^10.0.0",
-    "rollup": "^2.3.4",
-    "rollup-plugin-copy-assets-to": "^1.0.0",
-    "rollup-plugin-css-only": "^3.1.0",
-    "rollup-plugin-livereload": "^2.0.0",
-    "rollup-plugin-svelte": "^7.0.0",
-    "rollup-plugin-terser": "^7.0.0",
+    "@snowpack/app-scripts-svelte": "^1.9.1",
+    "@snowpack/plugin-svelte": "^3.5.2",
+    "@snowpack/plugin-webpack": "^2.0.17",
     "svelte": "^3.0.0"
   },
   "dependencies": {
-    "@rollup/plugin-image": "^2.0.6",
-    "@sveltejs/svelte-virtual-list": "^3.0.1",
     "autoprefixer": "^10.2.4",
     "axios": "^0.21.1",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
-    "doka": "^0.1.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
     "filepond": "^4.25.1",
-    "filepond-plugin-image-edit": "^1.6.2",
-    "filepond-plugin-image-exif-orientation": "^1.0.9",
     "filepond-plugin-image-preview": "^4.6.5",
-    "filepond-plugin-image-resize": "^2.0.7",
     "leaflet": "^1.7.1",
     "marked": "^2.0.1",
     "multer": "^1.4.2",
@@ -40,9 +29,9 @@
     "page": "^1.11.6",
     "pg": "^8.5.1",
     "sirv-cli": "^1.0.0",
+    "snowpack": "^3.0.13",
     "svelte-filepond": "^0.0.1",
     "svelte-preprocess": "^4.6.9",
-    "tailwindcss": "^2.0.3",
     "uuid": "^8.3.2"
   }
 }
