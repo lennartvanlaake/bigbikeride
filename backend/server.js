@@ -4,12 +4,10 @@ const port = process.env.PORT || 5000;
 const cors = require('cors');
 const path = require('path');
 const session = require('express-session');
-const blogs = require('./backend/blogs');
-const login = require('./backend/login');
-
-const images = require('./backend/images');
+const blogs = require('./blogs');
+const login = require('./login');
+const images = require('./images');
 const multer = require('multer');
-
 
 const bodyParser = require('body-parser')
 
@@ -44,17 +42,8 @@ app.put('/api/images/:id/description', jsonParser, images.updateImageDescription
 app.post('/api/login', jsonParser, login.processLogin);
 app.get('/api/login', login.isLoggedIn);
 
-
 // Set upload dir
 app.use('/public', express.static(__dirname + '/public'));
-
-// Send SPA landing page
-app.get('/', (req, res) => {
-   res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
-});
-app.get('/app/*', (req, res) => {
-   res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
-});
 
 app.listen(port, () => {
    console.log(`Server is up at port ${port}`);

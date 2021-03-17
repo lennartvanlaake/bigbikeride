@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "scripts": {
     "build": "snowpack build",
-    "dev": "sudo docker-compose up -d && snowpack dev",
-    "start": "nodemon server.js"
+    "start-fe": "snowpack dev",
+    "start-be": "sudo docker-compose up -d && nodemon backend/server.js"
   },
   "devDependencies": {
     "@snowpack/app-scripts-svelte": "^1.9.1",
@@ -13,6 +13,7 @@
     "svelte": "^3.0.0"
   },
   "dependencies": {
+    "@snowpack/plugin-dotenv": "^2.0.5",
     "autoprefixer": "^10.2.4",
     "axios": "^0.21.1",
     "body-parser": "^1.19.0",
