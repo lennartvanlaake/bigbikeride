@@ -4,7 +4,7 @@
   "scripts": {
     "build": "snowpack build",
     "start-fe": "snowpack dev",
-    "start-be": "sudo docker-compose up -d && nodemon backend/server.js"
+    "start-be": "sudo docker-compose up -d && nodemon --watch backend backend/server.js"
   },
   "devDependencies": {
     "@snowpack/app-scripts-svelte": "^1.9.1",
