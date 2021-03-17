@@ -1,7 +1,6 @@
 const Pool = require('pg').Pool
 require('dotenv').config()
 
-
 const pool = new Pool();
 
 function safeQuery(res, sql, params, lamda) {

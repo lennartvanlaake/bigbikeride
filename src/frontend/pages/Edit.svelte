@@ -1,18 +1,15 @@
-<script>
-    import {
-        getBlogId,
-        setBlogId,
-        removeBlogId,
-    } from "../javascript/storage.js";
+<script lang="ts">
+    import { blogId } from "../javascript/storage.js";
     import PlacePicker from "../components/PlacePicker.svelte";
     import NavBar from "../components/Navbar.svelte";
     import axios from "axios";
     import { tick } from "svelte";
+    // @ts-ignore
     import FilePond, { registerPlugin } from "svelte-filepond";
     import FilePondPluginImagePreview from "filepond-plugin-image-preview";
     let simplemde;
-    let blog;
-    let location = {};
+    let blog: Blog;
+    let location: Coordinates;
     let upload;
     let uploadName = "images";
 

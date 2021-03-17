@@ -1,10 +1,8 @@
-<script>
+<script lang="ts">
     import axios from "axios";
     import { loggedIn } from "../javascript/storage.js";
     import NavBar from "../components/Navbar.svelte";
-
-
-    let password;
+    let password: string;
 
     function login() {
         axios
@@ -20,6 +18,7 @@
             });
     }
 </script>
+
 <NavBar></NavBar>
 <div class="container mx-auto max-w-5xl	w-full h-full pt-20 pb-2 px-2 flex-auto">
 <input type="password" bind:value={password} />

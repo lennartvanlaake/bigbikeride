@@ -1,8 +1,8 @@
-<script>
+<script lang="ts">
     import {
         getBlogs, blogList
     } from "../javascript/bloglist.js";
-    let list = [];
+    let list: Array<Blog> = [];
     import Post from "../components/Post.svelte";
     import NavBar from "../components/Navbar.svelte";
     blogList.subscribe(foundList => { console.log(foundList); list = foundList} );

@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { loggedIn } from "../javascript/storage.js";
   import axios from "axios";
   let isLoggedIn = false;

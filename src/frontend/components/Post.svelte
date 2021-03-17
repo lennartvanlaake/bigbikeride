@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
     import marked from "marked";
     import { afterUpdate } from "svelte";
 	import { fade } from 'svelte/transition';
