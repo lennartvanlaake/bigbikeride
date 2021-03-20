@@ -1,0 +1,17 @@
+{
+    "extends": "../tsconfig-base.json",
+    "include": ["./*.ts", "../types/*.ts"],
+    "compilerOptions": {
+        "module": "commonjs",
+        "esModuleInterop": true,
+        "target": "es6",
+        "moduleResolution": "node",
+        "sourceMap": true,
+        "outDir": "dist"
+    },
+    "references": [
+        {
+            "path": "../types",
+        }
+    ]
+}

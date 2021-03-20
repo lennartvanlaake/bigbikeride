@@ -2,6 +2,7 @@ import { writable } from 'svelte/store';
 // @ts-ignore
 const { SNOWPACK_PUBLIC_BASE_URL } = import.meta.env
 
+
 export const blogList = writable([]);
 
 export async function getBlogs() {

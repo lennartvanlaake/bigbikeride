@@ -17,5 +17,5 @@ const isLoggedIn = (request, response) => {
 
 module.exports = {
     processLogin,
-    isLoggedIn
+    isLoggedIn 
 }

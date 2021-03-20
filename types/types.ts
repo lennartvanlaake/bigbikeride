@@ -1,6 +1,6 @@
-type BlogType = "images" | "text";
+export type BlogType = "images" | "text";
 
-interface Blog {
+export interface Blog {
     id: string;
     title: string;
     type: BlogType;
@@ -9,12 +9,12 @@ interface Blog {
     timestamp: Date;
 }
 
-interface Coordinates {
+export interface Coordinates {
     long: string;
     lat: string;
 }
 
-interface Image {
+export interface Image {
     id: Number;
     path: string;
     description: string;
