@@ -1,15 +1,15 @@
-const express = require('express');
+import express from "express";
 const app = express();
 const port = process.env.PORT || 5000;
-const cors = require('cors');
-const path = require('path');
-const session = require('express-session'); 
-const blogs = require('./blogs');
-const login = require('./login');
-const images = require('./images');
-const multer = require('multer');
+import cors from 'cors';
+import path from 'path';
+import session from 'express-session'; 
+import blogs from './blogs';
+import login from './login';
+import images from './images';
+import multer from 'multer';
 
-const bodyParser = require('body-parser')
+import bodyParser from 'body-parser';
 
 const jsonParser = bodyParser.json()
 app.use(cors());

@@ -1,4 +1,7 @@
-const safeQuery = require('./db').safeQuery
+import { sequelize } from "./db"
+import { Blog } from "../types/types";
+import { Request, Response } from 'express';
+import { QueryTypes } from "sequelize";
 const { v4: uuidv4 } = require('uuid');
 
 const selectQuery = `select p.*,
@@ -9,20 +12,23 @@ tp.content as content
 from posts p 
 left join text_posts tp on p.id = tp.id `
 
-const getBlogs = (_, response) => {
-    return safeQuery(response, selectQuery, [], (results) => {
-        return response.status(200).json(results.rows)
+export async function getBlogs(_: Request, response: Response) {
+    const results: Array<Blog> = await sequelize.query(selectQuery, {
+        type: QueryTypes.SELECT
     })
+    return response.status(200).json(results);
 }
 
-const getBlogById = (request, response) => {
-    return safeQuery(response, selectQuery + 'where p.id = $1',
-        [request.params.id], (results) => {
-        return response.status(200).json(results.rows[0]);
+export async function getBlogById(request: Request, response: Response) {
+    const result: Blog = await sequelize.query(selectQuery + 'where p.id = $postId', {
+        bind: { postId: request.body.id },
+        type: QueryTypes.SELECT,
+
     })
+    return response.status(200).json(result);
 }
 
-const createBlog = (request, response) => {
+export const createBlog = (request, response) => {
     if (!request.session.loggedIn) {
         return response.status(401).send({
             message: 'Not logged in'
@@ -46,7 +52,7 @@ const createBlog = (request, response) => {
         })
 }
 
-const updateBlog = (request, response) => {
+export const updateBlog = (request, response) => {
     if (!request.session.loggedIn) {
         return response.status(401).send({
             message: 'Not logged in'
@@ -71,7 +77,7 @@ const updateBlog = (request, response) => {
 }
 
 
-const deleteBlog = (request, response) => {
+export const deleteBlog = (request, response) => {
     if (!request.session.loggedIn) {
         return response.status(401).send({
             message: 'Not logged in'
@@ -80,12 +86,4 @@ const deleteBlog = (request, response) => {
     return safeQuery(response, 'DELETE FROM posts WHERE id = $1', [request.params.id], (_) => {
         response.status(200).json({ "id": request.params.id })
     })
-}
-
-module.exports = {
-    getBlogs,
-    getBlogById,
-    createBlog,
-    updateBlog,
-    deleteBlog
 }
