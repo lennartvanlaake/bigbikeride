@@ -34,6 +34,6 @@ export interface CreateBlogRequest {
 // @ts-ignore
 declare module 'express-session' {
     export interface SessionData {
-      loggedIn: { [key: string]: boolean };
+      loggedIn: boolean;
     }
   }

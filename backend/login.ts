@@ -1,21 +1,35 @@
+import { Request, Response, NextFunction } from 'express';
 
-const processLogin = (request, response) => {
+const token: string = process.env.LOGIN_TOKEN!;
+
+export const processLogin = (request: Request, response: Response) => {
     if (request.body.password != process.env.PASSWORD) {
-        return response.status(401).json({ "exception": "wrong password" });
+        response.status(401).json({ "exception": "wrong password" });
     }
-    request.session.loggedIn = true
-    return response.status(200).json({ "message": "login success" })
+    response.cookie('token', token)
+    response.status(200).json({ "message": "login success" })
 }
 
-const isLoggedIn = (request, response) => {
+export const isLoggedIn = (request: Request, response: Response) => {
     if (request.session.loggedIn) {
-        return response.status(200).json({ "message": "is logged in" })
+        response.status(200).json({ "message": "is logged in" })
     } else {
-        return response.status(401).json({ "message": "is not loged in" })
+        response.status(401).json({ "message": "is not loged in" })
     }
 }
 
-module.exports = {
-    processLogin,
-    isLoggedIn 
+export function checkLogin(req: Request, res: Response, next: NextFunction) {
+    if (req.method == 'GET' || req.url.includes('login')) {
+        next()
+    } else {
+        const sentCookie: string | undefined = req.headers['cookie']
+        if (sentCookie?.includes(token)) {
+            next()
+        } else {
+            res.status(401).send({
+                message: 'Not logged in'
+            })
+        }
+    }
 }
+

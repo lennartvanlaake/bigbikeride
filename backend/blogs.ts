@@ -1,6 +1,6 @@
 import { sequelize, BlogEntity } from "./db"
 import { Blog, CreateBlogRequest } from "../types/types";
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
 const selectQuery = `select p.*,
 (select json_agg(arr) from (select i.* from image_posts 
@@ -23,21 +23,19 @@ export async function getBlogById(request: Request, response: Response) {
     response.status(200).json(blog);
 }
 
-export async function createBlog(request: Request, response: Response) {
-    if (!request.session.loggedIn) {
-        response.status(401).send({
-            message: 'Not logged in'
-        })
-    } else {
-        const blogRequest: CreateBlogRequest = request.body
-        const blog = await BlogEntity.create({
-            title: blogRequest.title,
-            type: blogRequest.type,
-            long: blogRequest.coordinates.long,
-            lat: blogRequest.coordinates.lat
-        })
-    
-        response.status(200).json({ id: blog.id })
+export async function createBlog(request: Request, response: Response, next: NextFunction) {
+        try {
+            const blogRequest: CreateBlogRequest = request.body
+            const blog = await BlogEntity.create({
+                title: blogRequest.title,
+                type: blogRequest.type,
+                long: blogRequest.coordinates.long,
+                lat: blogRequest.coordinates.lat
+            })
+            response.status(200).json({ id: blog.id }).send()
+        } catch (e) {
+            next(e)
+        }   
     }
 
 
@@ -53,7 +51,6 @@ export async function createBlog(request: Request, response: Response) {
     //             return response.status(200).json({ "id": id })
     //         }
     //     })
-}
 
 // export const updateBlog = (request, response) => {
 //     if (!request.session.loggedIn) {

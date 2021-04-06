@@ -1,4 +1,4 @@
-import { DataTypes, Sequelize, UUIDV4, NOW, Model } from 'sequelize';
+import { DataTypes, Sequelize, UUIDV4, Model } from 'sequelize';
 import { BlogType } from '../types/types';
 
 require('dotenv').config()
