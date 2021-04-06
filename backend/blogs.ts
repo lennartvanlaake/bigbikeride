@@ -1,6 +1,6 @@
 import { sequelize, BlogEntity } from "./db"
 import { Blog, CreateBlogRequest } from "../types/types";
-import { NextFunction, Request, Response } from 'express';
+import { RequestHandler } from 'express';
 
 const selectQuery = `select p.*,
 (select json_agg(arr) from (select i.* from image_posts 
@@ -10,33 +10,41 @@ tp.content as content
 from posts p 
 left join text_posts tp on p.id = tp.id `
 
-export async function getBlogs(_: Request, response: Response) {
-    const results = await sequelize.query(selectQuery) as [Array<Blog>, number]
-    response.status(200).json(results[0]);
-}
-
-export async function getBlogById(request: Request, response: Response) {
-    const result = await sequelize.query(selectQuery + 'where p.id = $postId', {
-        bind: { postId: request.body.id },
-    }) as [Array<Blog>, number]
-    const blog = result[0][0]
-    response.status(200).json(blog);
-}
-
-export async function createBlog(request: Request, response: Response, next: NextFunction) {
-        try {
-            const blogRequest: CreateBlogRequest = request.body
-            const blog = await BlogEntity.create({
-                title: blogRequest.title,
-                type: blogRequest.type,
-                long: blogRequest.coordinates.long,
-                lat: blogRequest.coordinates.lat
-            })
-            response.status(200).json({ id: blog.id }).send()
-        } catch (e) {
-            next(e)
-        }   
+export const getBlogs: RequestHandler = async (_, res, next) => {
+    try {
+        const results = await sequelize.query(selectQuery) as [Array<Blog>, number]
+        res.status(200).json(results[0]);
+    } catch (e) {
+        next(e)
     }
+}
+
+export const getBlogById: RequestHandler = async (req, res, next) => {
+    try {
+        const result = await sequelize.query(selectQuery + 'where p.id = $postId', {
+            bind: { postId: req.body.id },
+        }) as [Array<Blog>, number]
+        const blog = result[0][0]
+        res.status(200).json(blog);
+    } catch (e) {
+        next(e)
+    }
+}
+
+export const createBlog: RequestHandler = async (req, res, next) => {
+    try {
+        const blogRequest: CreateBlogRequest = req.body
+        const blog = await BlogEntity.create({
+            title: blogRequest.title,
+            type: blogRequest.type,
+            long: blogRequest.coordinates.long,
+            lat: blogRequest.coordinates.lat
+        })
+        res.status(200).json({ id: blog.id }).send()
+    } catch (e) {
+        next(e)
+    }
+}
 
 
     // return safeQuery(response, `INSERT INTO posts(id, title, type, longitude, latitude, "timestamp")
