@@ -1,17 +1,18 @@
 import { sequelize } from './db';
 import { blogsRouter } from './blogs';
 import { checkLogin, loginRouter } from './login';
-import { DefaultState, Context } from "koa";
+import { DefaultState, Context, DefaultContext } from "koa";
 import Koa from "koa";
 import Router from "koa-router"
 import json from "koa-json"
 import bodyParser from 'koa-bodyparser';
-import { AppContext, AppState } from '../types/types';
-const session = require('koa-session');
+import logger from 'koa-logger';
+import session from 'koa-session';
 const serve = require("koa-static")
 
 // base config
-const app = new Koa<AppState, AppContext>();
+export const app = new Koa<DefaultState, DefaultContext>();
+app.keys = [ process.env.SECRET || "fake_key" ]
 const router = new Router<DefaultState, Context>();
 const port = process.env.PORT || 5000;
 
@@ -21,15 +22,16 @@ sequelize.sync();
 // middleware
 app.use(json());
 app.use(bodyParser());
+app.use(checkLogin)
+app.use(session({key: process.env.SECRET}, app))
+app.use(serve(__dirname + 'public'));
+app.use(logger())
+
+router.use("/api/blogs", blogsRouter.routes(), blogsRouter.allowedMethods());
+router.use("/api/login", loginRouter.routes(), loginRouter.allowedMethods());
+
 app.use(router.routes());
 app.use(router.allowedMethods());
-app.use(session({key: process.env.SECRET}, app))
-app.use(checkLogin)
-app.use(serve(__dirname + 'public'));
-
-router.use("/blogs", blogsRouter.routes(), blogsRouter.allowedMethods());
-router.use("/login", loginRouter.routes(), loginRouter.allowedMethods());
-
 // Blog crud actions
 // app.put('/api/blogs/:id', jsonParser, blogs.updateBlog);
 // app.delete('/api/blogs/:id', blogs.deleteBlog);

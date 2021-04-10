@@ -1,6 +1,6 @@
 import { sequelize, BlogEntity } from "./db"
 import { Blog, CreateBlogRequest } from "../types/types";
-const Router = require("koa-router")
+import Router from "koa-router"
 
 const selectQuery = `select p.*,
 (select json_agg(arr) from (select i.* from image_posts 

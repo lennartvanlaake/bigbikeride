@@ -1,5 +1,3 @@
-import Koa from "koa";
-
 // enums
 export type BlogType = "images" | "text";
 
@@ -36,16 +34,13 @@ export interface LoginRequest {
     password: string;
 }
 
-// koa extensions to make typescript happy
-export interface AppState extends Koa.DefaultState {}
-export interface AppContext extends Koa.DefaultContext {
-    session: any
-}
-
 export interface MySession {
     loggedIn: boolean
 }
 declare module 'koa' {
+    export interface DefaultContext {
+        session: any
+    }
     export interface Request {
       params: any;
     }
