@@ -5,11 +5,12 @@ import { LoginRequest } from "../types/types";
 export const loginRouter = new Router<DefaultState, Context>();
 
 loginRouter.post("/", async(ctx, next) => {
-    const loginRequest = <LoginRequest>ctx.request.body 
+    const loginRequest = ctx.request.body as LoginRequest 
     if (loginRequest.password != process.env.PASSWORD) {
         ctx.throw(401, "wrong password")
     }
     ctx.session.loggedIn = true;
+    ctx.body = "login success"
     await next();
 })
 

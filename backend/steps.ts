@@ -10,7 +10,6 @@ let server = app.listen();
 let request = supertest(server);
 
 Given('I am logged in', async () => {
-
     const result = await request
         .post('/api/login')
         .send({ password: "password" })
@@ -30,6 +29,3 @@ Given('I POST a blog with body', async (body: any) => {
     // expect(result.status).to.equal(200)
 })
 
-AfterAll( () => {
-    server.close();
-})
