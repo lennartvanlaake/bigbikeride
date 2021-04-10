@@ -3,5 +3,5 @@
         "backend/*.ts"
     ],
     "ext": "ts,json",
-    "exec": "ts-node backend/server.ts"
+    "exec": "ts-node --project backend/tsconfig.json backend/server.ts "
 }

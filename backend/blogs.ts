@@ -1,6 +1,6 @@
 import { sequelize, BlogEntity } from "./db"
 import { Blog, CreateBlogRequest } from "../types/types";
-import { RequestHandler } from 'express';
+const Router = require("koa-router")
 
 const selectQuery = `select p.*,
 (select json_agg(arr) from (select i.* from image_posts 
@@ -10,42 +10,33 @@ tp.content as content
 from posts p 
 left join text_posts tp on p.id = tp.id `
 
-export const getBlogs: RequestHandler = async (_, res, next) => {
-    try {
-        const results = await sequelize.query(selectQuery) as [Array<Blog>, number]
-        res.status(200).json(results[0]);
-    } catch (e) {
-        next(e)
-    }
-}
+export const blogsRouter = new Router();
 
-export const getBlogById: RequestHandler = async (req, res, next) => {
-    try {
-        const result = await sequelize.query(selectQuery + 'where p.id = $postId', {
-            bind: { postId: req.body.id },
-        }) as [Array<Blog>, number]
-        const blog = result[0][0]
-        res.status(200).json(blog);
-    } catch (e) {
-        next(e)
-    }
-}
+blogsRouter.get("/", async(ctx, next) => {
+    const results = await sequelize.query(selectQuery) as [Array<Blog>, number];
+    ctx.body = results;
+    await next();
+})
 
-export const createBlog: RequestHandler = async (req, res, next) => {
-    try {
-        const blogRequest: CreateBlogRequest = req.body
-        const blog = await BlogEntity.create({
-            title: blogRequest.title,
-            type: blogRequest.type,
-            long: blogRequest.coordinates.long,
-            lat: blogRequest.coordinates.lat
-        })
-        res.status(200).json({ id: blog.id }).send()
-    } catch (e) {
-        next(e)
-    }
-}
+blogsRouter.get("/:id", async(ctx, next) => {
+    const result = await sequelize.query(selectQuery + 'where p.id = $postId', {
+        bind: { postId: ctx.request.params.id },
+    }) as [Array<Blog>, number]
+    ctx.body.json(result[0][0]);
+    await next();
+})
 
+blogsRouter.post("/", async(ctx, next) => {
+    const blogRequest = <CreateBlogRequest>ctx.request.body()
+    const blog = await BlogEntity.create({
+        title: blogRequest.title,
+        type: blogRequest.type,
+        long: blogRequest.coordinates.long,
+        lat: blogRequest.coordinates.lat
+    })
+    ctx.body({"id": blog.id })
+    await next()
+})
 
     // return safeQuery(response, `INSERT INTO posts(id, title, type, longitude, latitude, "timestamp")
     //         VALUES ($1, $2, $3, $4, $5, $6)`, [id, title, type, longitude, latitude, timestamp],

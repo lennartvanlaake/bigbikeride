@@ -1,35 +1,34 @@
-import { Request, Response, NextFunction } from 'express';
+import { DefaultState, Context, Middleware } from "koa";
+import Router from "koa-router"
+import { LoginRequest } from "../types/types";
 
-const token: string = process.env.LOGIN_TOKEN!;
+export const loginRouter = new Router<DefaultState, Context>();
 
-export const processLogin = (request: Request, response: Response) => {
-    if (request.body.password != process.env.PASSWORD) {
-        response.status(401).json({ "exception": "wrong password" });
+loginRouter.post("/", async(ctx, next) => {
+    const loginRequest = <LoginRequest>ctx.request.body 
+    if (loginRequest.password != process.env.PASSWORD) {
+        ctx.throw(401, "wrong password")
     }
-    response.cookie('token', token)
-    response.status(200).json({ "message": "login success" })
-}
+    ctx.session.loggedIn = true;
+    await next();
+})
 
-export const isLoggedIn = (request: Request, response: Response) => {
-    if (request.session.loggedIn) {
-        response.status(200).json({ "message": "is logged in" })
-    } else {
-        response.status(401).json({ "message": "is not loged in" })
+loginRouter.get("/", async(ctx, next) => {
+    if (!ctx?.session?.loggedIn) {
+        ctx.throw(403, "not logged in")
     }
-}
+    await next();
+})
 
-export function checkLogin(req: Request, res: Response, next: NextFunction) {
-    if (req.method == 'GET' || req.url.includes('login')) {
-        next()
+
+export const checkLogin: Middleware = async (ctx, next) => {
+    if (ctx.method == 'GET' || ctx.request.url.includes('login')) {
+        await next()
     } else {
-        const sentCookie: string | undefined = req.headers['cookie']
-        if (sentCookie?.includes(token)) {
-            next()
-        } else {
-            res.status(401).send({
-                message: 'Not logged in'
-            })
+        if (!ctx?.session?.loggedIn) {
+            ctx.throw(403, "not logged in")
         }
+        await next()
     }
 }
 
