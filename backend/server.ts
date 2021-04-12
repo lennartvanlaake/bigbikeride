@@ -1,4 +1,3 @@
-import { sequelize } from './db';
 import { blogsRouter } from './blogs';
 import { checkLogin, loginRouter } from './login';
 import { DefaultState, Context, DefaultContext } from "koa";
@@ -15,9 +14,6 @@ export const app = new Koa<DefaultState, DefaultContext>();
 app.keys = [ process.env.SECRET || "fake_key" ]
 const router = new Router<DefaultState, Context>();
 const port = process.env.PORT || 5000;
-
-// db init
-sequelize.sync();
 
 // middleware
 app.use(json());

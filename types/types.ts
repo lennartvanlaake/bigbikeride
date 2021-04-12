@@ -12,8 +12,8 @@ export interface Blog {
 }
 
 export interface Coordinates {
-    long: string;
-    lat: string;
+    long: number;
+    lat: number;
 }
 
 export interface Image {

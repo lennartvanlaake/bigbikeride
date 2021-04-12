@@ -3,6 +3,7 @@
     "include": ["./*.ts", "../types/*.ts"],
     "compilerOptions": {
         "module": "commonjs",
+        "noUnusedLocals": false,
         "esModuleInterop": true,
         "target": "es6",
         "moduleResolution": "node",

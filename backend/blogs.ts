@@ -1,6 +1,7 @@
-import { sequelize, BlogEntity } from "./db"
-import { Blog, CreateBlogRequest } from "../types/types";
+import { connection } from './db'
+import { Blog, CreateBlogRequest } from "../types/types"
 import Router from "koa-router"
+import { v4 } from 'uuid';
 
 const selectQuery = `select p.*,
 (select json_agg(arr) from (select i.* from image_posts 
@@ -12,29 +13,37 @@ left join text_posts tp on p.id = tp.id `
 
 export const blogsRouter = new Router();
 
-blogsRouter.get("/", async(ctx, next) => {
-    const results = await sequelize.query(selectQuery) as [Array<Blog>, number];
-    ctx.body = results;
-    await next();
+blogsRouter.get("/", async (ctx, next) => {
+    console.log(ctx);
+    console.log(next);
+    // const results = await sequelize.query(selectQuery) as [Array<Blog>, number];
+    // ctx.body = results;
+    // await next();
 })
 
-blogsRouter.get("/:id", async(ctx, next) => {
-    const result = await sequelize.query(selectQuery + 'where p.id = $postId', {
-        bind: { postId: ctx.request.params.id },
-    }) as [Array<Blog>, number]
-    ctx.body.json(result[0][0]);
-    await next();
+blogsRouter.get("/:id", async (ctx, next) => {
+    console.log(ctx);
+    console.log(next);
+    // const result = await sequelize.query(selectQuery + 'where p.id = $postId', {
+    //     bind: { postId: ctx.request.params.id },
+    // }) as [Array<Blog>, number]
+    // ctx.body = result[0][0];
+    // await next();
 })
 
-blogsRouter.post("/", async(ctx, next) => {
-    const blogRequest = <CreateBlogRequest>ctx.request.body()
-    const blog = await BlogEntity.create({
-        title: blogRequest.title,
-        type: blogRequest.type,
-        long: blogRequest.coordinates.long,
-        lat: blogRequest.coordinates.lat
-    })
-    ctx.body({"id": blog.id })
+blogsRouter.post("/", async (ctx, next) => {
+    const blogRequest = ctx.request.body as CreateBlogRequest
+    const id = v4();
+    connection.insert(
+        {
+            id: id,
+            title: blogRequest.title,
+            type: blogRequest.type,
+            long: blogRequest.coordinates.long,
+            lat: blogRequest.coordinates.lat,
+        }
+    ).returning('id').toString()
+    ctx.body = { "id": id }
     await next()
 })
 
