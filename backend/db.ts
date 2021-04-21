@@ -1,5 +1,5 @@
-import { knex } from 'knex';
-import * as config from './knexfile';
+import { knex } from "knex";
+import * as config from "./knexfile";
 // import { BlogType } from '../types/types';
 
 export const connection = knex(config);
@@ -16,7 +16,6 @@ export const connection = knex(config);
 //         dialect: 'postgres'
 //     });
 
-
 // export class BlogEntity extends Model {
 //     public id!: string;
 //     public long!: number;
@@ -24,7 +23,6 @@ export const connection = knex(config);
 //     public type!: BlogType;
 //     public title: string | undefined;
 // }
-
 
 // BlogEntity.init({
 //     id: {
