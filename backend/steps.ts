@@ -35,3 +35,11 @@ Given('I POST a blog with title {string}', async (title: string) => {
     expect(result.status).to.equal(200)
 })
 
+When('I GET all blogs', async () => {
+    const result = await request
+    .get('/api/blogs')
+    .set("Cookie", cookie)
+    .send()
+    expect(result.status).to.equal(200)
+})
+

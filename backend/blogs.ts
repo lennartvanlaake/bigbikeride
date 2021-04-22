@@ -1,25 +1,43 @@
 import { connection } from "./db";
-import { Blog, BlogEntity, ContentBlogEntity, CreateBlogRequest } from "../types/types";
+import {
+  Blog,
+	BlogContentKeys,
+  BlogEntity,
+  BlogKeys,
+  BLOG_TABLE_NAME,
+  ContentBlogEntity,
+  CONTENT_BLOG_TABLE_NAME,
+  CreateBlogRequest,
+} from "../types/types";
 import Router from "koa-router";
 import { v4 } from "uuid";
 
-const selectQuery = `select p.*,
-(select json_agg(arr) from (select i.* from image_posts 
-ip join images i on ip.image_id = i.id
-where ip.post_id = p.id order by i.timestamp desc) as arr) as images,
-tp.content as content
-from posts p 
-left join text_posts tp on p.id = tp.id `;
+const selectBlogs = connection(BLOG_TABLE_NAME)
+  .leftJoin(
+    CONTENT_BLOG_TABLE_NAME,
+    BLOG_TABLE_NAME + "." + BlogKeys.ID,
+    CONTENT_BLOG_TABLE_NAME + "." + BlogContentKeys.ID
+  )
+  .select(
+    BLOG_TABLE_NAME + ".*",
+    connection.raw(`(select json_agg(arr) from 
+      	(select i.* from image_blogs ip join images i on ip.image_id = i.id
+	 where ip.post_id = p.id order by i.timestamp desc)
+       as arr)
+     as images`),
+    CONTENT_BLOG_TABLE_NAME + BlogContentKeys.CONTENT
+  );
 
 export const blogsRouter = new Router();
 
 blogsRouter.get("/", async (ctx, next) => {
-  console.log(ctx);
-  console.log(next);
-  // const results = await sequelize.query(selectQuery) as [Array<Blog>, number];
-  // ctx.body = results;
-  // await next();
+  ctx.body = await findAllBlogs()
+  await next()
 });
+
+const findAllBlogs = async() => {
+  return selectBlogs
+}
 
 blogsRouter.get("/:id", async (ctx, next) => {
   console.log(ctx);
@@ -46,8 +64,8 @@ blogsRouter.post("/", async (ctx, next) => {
     .toString();
   if (blogRequest.type == "text") {
     connection.insert(<ContentBlogEntity>{
-      	id: id,
-	content: blogRequest.content,
+      id: id,
+      content: blogRequest.content,
     });
   }
   ctx.body = { id: id };
