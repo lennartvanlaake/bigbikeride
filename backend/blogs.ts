@@ -1,13 +1,18 @@
 import { connection } from "./db";
 import {
   Blog,
-	BlogContentKeys,
+  BlogContentKeys,
   BlogEntity,
   BlogKeys,
   BLOG_TABLE_NAME,
   ContentBlogEntity,
   CONTENT_BLOG_TABLE_NAME,
   CreateBlogRequest,
+  ImageBlogKeys,
+  ImageEntity,
+  ImageKeys,
+  IMAGE_BLOG_TABLE_NAME,
+  IMAGE_TABLE_NAME,
 } from "../types/types";
 import Router from "koa-router";
 import { v4 } from "uuid";
@@ -21,21 +26,31 @@ const selectBlogs = connection(BLOG_TABLE_NAME)
   .select(
     BLOG_TABLE_NAME + ".*",
     connection.raw(`(select json_agg(arr) from 
-      	(select i.* from image_blogs ip join images i on ip.image_id = i.id
-	 where ip.post_id = p.id order by i.timestamp desc)
+      	(select ${IMAGE_TABLE_NAME}.* from ${IMAGE_BLOG_TABLE_NAME}
+	 join ${IMAGE_TABLE_NAME} on 
+	 ${IMAGE_BLOG_TABLE_NAME}.${ImageBlogKeys.IMAGE_ID} = ${IMAGE_TABLE_NAME}.${ImageKeys.ID}
+	 where 
+	 ${IMAGE_BLOG_TABLE_NAME}.${ImageBlogKeys.BLOG_ID} = ${BLOG_TABLE_NAME}.${BlogKeys.ID}
+	 order by ${IMAGE_TABLE_NAME}.${ImageKeys.CREATED_AT} desc)
        as arr)
      as images`),
-    CONTENT_BLOG_TABLE_NAME + BlogContentKeys.CONTENT
+    CONTENT_BLOG_TABLE_NAME + "." + BlogContentKeys.CONTENT
   );
+
+type BlogQueryResult = {
+   images: [ImageEntity]
+   content: string
+} & BlogEntity
 
 export const blogsRouter = new Router();
 
 blogsRouter.get("/", async (ctx, next) => {
   ctx.body = await findAllBlogs()
+  console.log(ctx.body)
   await next()
 });
 
-const findAllBlogs = async() => {
+const findAllBlogs = async(): Promise<BlogQueryResult[]> => {
   return selectBlogs
 }
 
@@ -52,22 +67,27 @@ blogsRouter.get("/:id", async (ctx, next) => {
 blogsRouter.post("/", async (ctx, next) => {
   const blogRequest = <CreateBlogRequest>ctx.request.body;
   const id = v4();
-  connection
-    .insert(<BlogEntity>{
+  const now = new Date();
+
+  const blogEntity: BlogEntity = {
       id: id,
       title: blogRequest.title,
       type: blogRequest.type,
       long: blogRequest.coordinates.long,
       lat: blogRequest.coordinates.lat,
-    })
-    .returning("id")
-    .toString();
+      created_at: now,
+      updated_at: now
+    }  
+  await connection(BLOG_TABLE_NAME).insert(blogEntity);
+  
   if (blogRequest.type == "text") {
-    connection.insert(<ContentBlogEntity>{
+    const content: ContentBlogEntity = {
       id: id,
-      content: blogRequest.content,
-    });
+      content: blogRequest.content!!,
+    }
+    await connection(CONTENT_BLOG_TABLE_NAME).insert(content);
   }
+  
   ctx.body = { id: id };
   await next();
 });

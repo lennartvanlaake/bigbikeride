@@ -7,10 +7,11 @@ import {
 export async function up(knex: Knex): Promise<void> {
   return knex.schema.createTable(BLOG_TABLE_NAME, (table) => {
     table.uuid(BlogKeys.ID).notNullable().unique;
-    table.string(BlogKeys.TITLE).notNullable();
+    table.text(BlogKeys.TITLE).notNullable();
+    table.text(BlogKeys.TYPE).notNullable();
     table.double(BlogKeys.LONG).notNullable();
     table.double(BlogKeys.LAT).notNullable();
-    table.string(BlogKeys.CREATED);
+    table.timestamps(true)
   });
 }
 
