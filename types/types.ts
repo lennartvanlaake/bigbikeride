@@ -77,7 +77,7 @@ export const enum ImageKeys {
 }
 
 export interface ImageEntity {
-  id: Number;
+  id: string;
   path: string;
   description: string;
   created_at: Date;
@@ -85,7 +85,7 @@ export interface ImageEntity {
 }
 
 export interface Image {
-  id: Number;
+  id: string;
   path: string;
   description: string;
   created: Date;

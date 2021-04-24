@@ -8,6 +8,7 @@ import {
   ContentBlogEntity,
   CONTENT_BLOG_TABLE_NAME,
   CreateBlogRequest,
+  Image,
   ImageBlogKeys,
   ImageEntity,
   ImageKeys,
@@ -37,16 +38,39 @@ const selectBlogs = connection(BLOG_TABLE_NAME)
     CONTENT_BLOG_TABLE_NAME + "." + BlogContentKeys.CONTENT
   );
 
-type BlogQueryResult = {
+interface BlogQueryResult extends BlogEntity {
    images: [ImageEntity]
    content: string
-} & BlogEntity
+} 
 
+function toBlog(queryResult: BlogQueryResult): Blog {
+  return {
+     ...queryResult,
+     created: queryResult.created_at,
+     coordinates: {
+	long: queryResult.long,
+	lat: queryResult.lat
+     },
+     images: queryResult.images?.map((imageEntity) => {
+     	return toImage(imageEntity)
+     })
+  }
+}
+
+function toImage(imageEntity: ImageEntity): Image {
+  return {
+    ...imageEntity,
+    created: imageEntity.created_at,
+    updated: imageEntity.updated_at
+  }
+}
 export const blogsRouter = new Router();
 
 blogsRouter.get("/", async (ctx, next) => {
-  ctx.body = await findAllBlogs()
-  console.log(ctx.body)
+  const queryResult = await findAllBlogs() 
+  ctx.body = queryResult.map((queryResult) => {
+    return toBlog(queryResult);
+  });
   await next()
 });
 
@@ -55,17 +79,16 @@ const findAllBlogs = async(): Promise<BlogQueryResult[]> => {
 }
 
 blogsRouter.get("/:id", async (ctx, next) => {
-  console.log(ctx);
-  console.log(next);
-  // const result = await sequelize.query(selectQuery + 'where p.id = $postId', {
-  //     bind: { postId: ctx.request.params.id },
-  // }) as [Array<Blog>, number]
-  // ctx.body = result[0][0];
-  // await next();
+  ctx.body = toBlog(await findBlog(ctx.params.id))
+  next();
 });
 
+const findBlog = async(id: string): Promise<BlogQueryResult> => {
+  return selectBlogs.where(BlogKeys.ID, id).first() 
+}
+
 blogsRouter.post("/", async (ctx, next) => {
-  const blogRequest = <CreateBlogRequest>ctx.request.body;
+  const blogRequest: CreateBlogRequest = ctx.request.body;
   const id = v4();
   const now = new Date();
 
@@ -91,51 +114,3 @@ blogsRouter.post("/", async (ctx, next) => {
   ctx.body = { id: id };
   await next();
 });
-
-// return safeQuery(response, `INSERT INTO posts(id, title, type, longitude, latitude, "timestamp")
-//         VALUES ($1, $2, $3, $4, $5, $6)`, [id, title, type, longitude, latitude, timestamp],
-//     (_) => {
-//         if (type == "text") {
-//             return safeQuery(response, `INSERT INTO text_posts (id, content) VALUES ($1, $2)`,
-//              [id, content], (_) => {
-//                 return response.status(200).json({ "id": id })
-//              })
-//         } else {
-//             return response.status(200).json({ "id": id })
-//         }
-//     })
-
-// export const updateBlog = (request, response) => {
-//     if (!request.session.loggedIn) {
-//         return response.status(401).send({
-//             message: 'Not logged in'
-//         })
-//     }
-//     const { title, content, longitude, latitude, type } = request.body
-//     const id = request.params.id
-//     return safeQuery(response, `UPDATE posts
-//                 SET title = $1,
-//                 longitude = $2,
-//                 latitude =  $3
-//                 WHERE id = $4`, [title, longitude, latitude, id], (results) => {
-//         if (type == "text") {
-//             return safeQuery(response, `UPDATE text_posts SET content = $1 WHERE id = $2`, [content, id],
-//                 (_) => {
-//                     response.status(200).json({ "id": id })
-//                 })
-//         } else {
-//             return response.status(200).json({ "id": id })
-//         }
-//     })
-// }
-
-// export const deleteBlog = (request, response) => {
-//     if (!request.session.loggedIn) {
-//         return response.status(401).send({
-//             message: 'Not logged in'
-//         })
-//     }
-//     return safeQuery(response, 'DELETE FROM posts WHERE id = $1', [request.params.id], (_) => {
-//         response.status(200).json({ "id": request.params.id })
-//     })
-// }

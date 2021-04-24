@@ -4,3 +4,4 @@ Feature: Blog crud operations
     Given I am logged in
     And I POST a blog with title "test"
     And I GET all blogs
+    Then I find the blog id of the created blog in the blogs response
