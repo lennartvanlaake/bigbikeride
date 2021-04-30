@@ -10,6 +10,8 @@ let server = app.listen();
 let request = supertest(server);
 let blogId: string;
 let allBlogsResponse: Blog[];
+let oneBlogResponse: Blog;
+
 
 Given("I am logged in", async () => {
   const result = await request
@@ -48,4 +50,17 @@ Then("I find the blog id of the created blog in the blogs response", () => {
       return blog.id
   })
   expect(blogIds).to.include(blogId);
+});
+
+When("I GET the created blog", async () => {
+  const result = await request
+   .get("/api/blogs/" + blogId)
+   .set("Cookie", cookie)
+ 
+  oneBlogResponse = result.body;
+  expect(result.status).to.equal(200)
+})
+
+Then("Then the blog in the response has title {string}", (title: string) => {
+  expect(oneBlogResponse.title).to.be(title);
 });
