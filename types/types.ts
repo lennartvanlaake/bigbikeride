@@ -79,7 +79,7 @@ export const enum ImageKeys {
 export interface ImageEntity {
   id: string;
   path: string;
-  description: string;
+  description: string | null;
   created_at: Date;
   updated_at: Date;
 }
@@ -87,7 +87,7 @@ export interface ImageEntity {
 export interface Image {
   id: string;
   path: string;
-  description: string;
+  description: string | null;
   created: Date;
   updated: Date;
 }
@@ -98,6 +98,10 @@ export interface CreateBlogRequest {
   type: BlogType;
   coordinates: Coordinates;
   content: string | null;
+}
+
+export interface UpdateImageDescriptionRequest {
+  description: string | null;
 }
 
 export interface LoginRequest {

@@ -1032,6 +1032,11 @@
     "@types/yargs" "^15.0.0"
     chalk "^4.0.0"
 
+"@koa/multer@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@koa/multer/-/multer-3.0.0.tgz#439777949f28097d7b329c0b4ce3048074c862f8"
+  integrity sha512-y+OQBmex5D1jIl723gAEUYcAWPEicIXppaAKw/zCMfpllQ08ZNweDPwoCLxEoatqd5pCu2XG6V8dl67JRq3RJw==
+
 "@npmcli/move-file@^1.0.1":
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@npmcli/move-file/-/move-file-1.1.2.tgz#1a82c3e372f7cae9253eb66d72543d6b8685c674"
@@ -1423,6 +1428,13 @@
     "@types/keygrip" "*"
     "@types/koa-compose" "*"
     "@types/node" "*"
+
+"@types/koa__multer@^2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@types/koa__multer/-/koa__multer-2.0.2.tgz#53d20c5eeab669f1fcb4b82603a8c65f1868611c"
+  integrity sha512-wIRH6jXfKgfMSEGmXo8sTT+13J/RXPYqIfNRwYDE9izsNv125o2pU/7hnnc+c2rGNNO5cG/ahsegZm8h8bDWEQ==
+  dependencies:
+    "@types/koa" "*"
 
 "@types/leaflet@^1.7.0":
   version "1.7.0"

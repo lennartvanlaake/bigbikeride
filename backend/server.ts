@@ -1,4 +1,5 @@
 import { blogsRouter } from './blogs';
+import { imagesRouter } from './images';
 import { checkLogin, loginRouter } from './login';
 import { DefaultState, Context, DefaultContext } from "koa";
 import Koa from "koa";
@@ -25,33 +26,9 @@ app.use(logger())
 
 router.use("/api/blogs", blogsRouter.routes(), blogsRouter.allowedMethods());
 router.use("/api/login", loginRouter.routes(), loginRouter.allowedMethods());
-
+router.use("/api/images", imagesRouter.routes(), imagesRouter.allowedMethods()); 
 app.use(router.routes());
 app.use(router.allowedMethods());
-// Blog crud actions
-// app.put('/api/blogs/:id', jsonParser, blogs.updateBlog);
-// app.delete('/api/blogs/:id', blogs.deleteBlog);
-
-
-
-// import path from 'path';
-// import login from './login';
-// import images from './images';
-// import multer from 'multer';
-// // uploads
-// var storage = multer.diskStorage({
-//    destination: function (req, file, cb) {
-//      cb(null, 'public/')
-//    },
-//    filename: function (req, file, cb) {
-//       cb(null, Date.now() + path.extname(file.originalname))
-//     } 
-//  })
-// const upload = multer({ storage: storage })
-// app.post('/api/images', upload.single('filepond'), images.createImage);
-// app.post('/api/images/:id/post/:post', jsonParser, images.linkImageToPost);
-// app.put('/api/images/:id/description', jsonParser, images.updateImageDescription);
-
 
 // Set upload dir
 app.listen(port, () => {
