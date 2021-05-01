@@ -9,6 +9,7 @@ let cookie: string;
 let server = app.listen();
 let request = supertest(server);
 let blogId: string;
+let imageId: string;
 let allBlogsResponse: Blog[];
 let oneBlogResponse: Blog;
 
@@ -79,10 +80,19 @@ Then("the blog in the response has title {string}", (title: string) => {
 });
 
 When("I upload an image", async() => {
-  await request
+  const result = await request
    .post("/api/images")
    .attach(UPLOAD_NAME, __dirname + "/public/dragon.jpg")
    .set("Cookie", cookie)
-   .expect(200)
+   .expect(200) 
+   imageId = result.text;
 })
+
+When("I link the image to the blog", async() => {
+  await request
+   .post(`/api/images/${imageId}/post/${blogId}`)
+   .set("Cookie", cookie)
+   .expect(200) 
+})
+
 

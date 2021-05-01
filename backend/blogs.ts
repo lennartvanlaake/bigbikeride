@@ -18,8 +18,9 @@ import {
 import Router from "koa-router";
 import { v4 } from "uuid";
 
-const selectBlogs = connection(BLOG_TABLE_NAME)
-  .leftJoin(
+const baseSelectQuery = () => { 
+  return connection(BLOG_TABLE_NAME)
+  .leftOuterJoin(
     CONTENT_BLOG_TABLE_NAME,
     BLOG_TABLE_NAME + "." + BlogKeys.ID,
     CONTENT_BLOG_TABLE_NAME + "." + BlogContentKeys.ID
@@ -37,6 +38,7 @@ const selectBlogs = connection(BLOG_TABLE_NAME)
      as images`),
     CONTENT_BLOG_TABLE_NAME + "." + BlogContentKeys.CONTENT
   );
+}
 
 interface BlogQueryResult extends BlogEntity {
    images: [ImageEntity]
@@ -75,7 +77,7 @@ blogsRouter.get("/", async (ctx, next) => {
 });
 
 const findAllBlogs = async(): Promise<BlogQueryResult[]> => {
-  return selectBlogs
+  return baseSelectQuery();
 }
 
 blogsRouter.get("/:id", async (ctx, next) => {
@@ -84,7 +86,13 @@ blogsRouter.get("/:id", async (ctx, next) => {
 });
 
 const findBlog = async(id: string): Promise<BlogQueryResult> => {
-  return selectBlogs.where(BLOG_TABLE_NAME + "." + BlogKeys.ID, id).first() 
+   const query = baseSelectQuery().where(BLOG_TABLE_NAME + "." + BlogKeys.ID, id);
+   console.log(query.toSQL().sql)
+   const result: BlogQueryResult[] = await query 
+   if (result.length != 1) {
+     throw new Error(`found ${result.length} blogs when fetching one`)
+   }
+   return result[0];
 }
 
 blogsRouter.post("/", async (ctx, next) => {

@@ -16,8 +16,7 @@ import {
 import { v4 } from "uuid";
 export const imagesRouter = new Router<DefaultState, Context>();
 
-
- const storage = multer.diskStorage({
+const storage = multer.diskStorage({
     destination: function (_req, _file, cb) {
       cb(null, __dirname + '/public/')
     },
@@ -43,7 +42,8 @@ imagesRouter.post("/", upload.single(UPLOAD_NAME), async(ctx, next) => {
     updated_at: timestamp
    }
    await connection(IMAGE_TABLE_NAME).insert(imageEntity);
-   ctx.body = "success!";
+   ctx.body = id;
+   ctx.type = "text/plain";
 })
 
 imagesRouter.post("/:id/post/:post", async(ctx, next) => { 
@@ -53,18 +53,18 @@ imagesRouter.post("/:id/post/:post", async(ctx, next) => {
    }
    await connection(IMAGE_BLOG_TABLE_NAME).insert(entity);
    ctx.body = "success!";
-   next();
+   await next(); 
 })
 
-imagesRouter.put(":id/description", async(ctx, next) => {
-   const request: UpdateImageDescriptionRequest = ctx.body  
+imagesRouter.put("/:id/description", async(ctx, next) => {
+   const request: UpdateImageDescriptionRequest = ctx.request.body  
    const now = new Date();
    await connection(IMAGE_TABLE_NAME)
       .update(ImageKeys.DESCRIPTION, request.description)
       .update(ImageKeys.UPDATED_AT, now)
       .where(ImageKeys.ID, ctx.params.id)
    ctx.body = "success!";
-   next();
+   await next(); 
 })
 
 
