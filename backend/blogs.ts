@@ -87,7 +87,6 @@ blogsRouter.get("/:id", async (ctx, next) => {
 
 const findBlog = async(id: string): Promise<BlogQueryResult> => {
    const query = baseSelectQuery().where(BLOG_TABLE_NAME + "." + BlogKeys.ID, id);
-   console.log(query.toSQL().sql)
    const result: BlogQueryResult[] = await query 
    if (result.length != 1) {
      throw new Error(`found ${result.length} blogs when fetching one`)
@@ -122,3 +121,29 @@ blogsRouter.post("/", async (ctx, next) => {
   ctx.body = { id: id };
   await next();
 });
+
+blogsRouter.put("/:id", async(ctx, next) => {
+  const blogRequest: CreateBlogRequest = ctx.request.body;
+  const now = new Date();
+  await connection(BLOG_TABLE_NAME)
+   .update(BlogKeys.LAT, blogRequest.coordinates.lat)
+   .update(BlogKeys.LONG, blogRequest.coordinates.long)
+   .update(BlogKeys.TITLE, blogRequest.title)
+   .update(BlogKeys.UPDATED, now)
+   .where(BlogKeys.ID, ctx.params.id)
+  if (blogRequest.type == "text") {
+    await connection(CONTENT_BLOG_TABLE_NAME)
+     .update(BlogContentKeys.CONTENT, blogRequest.content!!)
+     .where(BlogContentKeys.ID, ctx.params.id)
+  }
+  ctx.body = "success!"
+  await next();
+})
+
+blogsRouter.delete("/:id", async(ctx, next) => {
+  await connection(BLOG_TABLE_NAME).delete().where(BlogKeys.ID, ctx.params.id);
+  ctx.body = "success!"
+  await next();
+}) 
+
+

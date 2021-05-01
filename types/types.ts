@@ -93,7 +93,7 @@ export interface Image {
 }
 
 export const UPLOAD_NAME = 'filepond';
-
+export const PUBLIC_DIR = 'public'
 // requests
 export interface CreateBlogRequest {
   title: string;
