@@ -92,6 +92,8 @@ export interface Image {
   updated: Date;
 }
 
+export const UPLOAD_NAME = 'filepond';
+
 // requests
 export interface CreateBlogRequest {
   title: string;

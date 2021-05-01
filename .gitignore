@@ -4,3 +4,5 @@
 .env
 /volumes
 /build
+/backend/public/*
+!/backend/public/dragon.jpg

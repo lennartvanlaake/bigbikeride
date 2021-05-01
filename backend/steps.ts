@@ -3,7 +3,7 @@ import { Given, When, Then } from "@cucumber/cucumber";
 import { expect } from "chai";
 import { app } from "./server";
 import supertest from "supertest";
-import { CreateBlogRequest, Blog } from "../types/types";
+import { CreateBlogRequest, Blog, BlogType, UPLOAD_NAME } from "../types/types";
 
 let cookie: string;
 let server = app.listen();
@@ -21,16 +21,30 @@ Given("I am logged in", async () => {
   expect(result.status).to.equal(200);
 });
 
-Given("I POST a blog with title {string}", async (title: string) => {
-  const requestBody: CreateBlogRequest = {
-    title: title,
-    type: "text",
-    content: "",
-    coordinates: {
-      long: 0.0,
-      lat: 0.0,
-    },
-  };
+Given("I POST a {string} blog with title {string}", async (type: BlogType, title: string) => {
+  let requestBody: CreateBlogRequest;
+  if (type == "images") {
+    requestBody = {
+      title: title,
+      type: "text",
+      content: "",
+      coordinates: {
+        long: 0.0,
+        lat: 0.0,
+      },
+    };
+  } else {
+    requestBody = {
+      title: title,
+      type: "text",
+      content: "",
+      coordinates: {
+        long: 0.0,
+        lat: 0.0,
+      },
+    };
+  }
+
   const result = await request
     .post("/api/blogs")
     .set("Cookie", cookie)
@@ -56,11 +70,19 @@ When("I GET the created blog", async () => {
   const result = await request
    .get("/api/blogs/" + blogId)
    .set("Cookie", cookie)
- 
   oneBlogResponse = result.body;
   expect(result.status).to.equal(200)
 })
 
-Then("Then the blog in the response has title {string}", (title: string) => {
-  expect(oneBlogResponse.title).to.be(title);
+Then("the blog in the response has title {string}", (title: string) => {
+  expect(oneBlogResponse.title).to.equal(title);
 });
+
+When("I upload an image", async() => {
+  await request
+   .post("/api/images")
+   .attach(UPLOAD_NAME, __dirname + "/public/dragon.jpg")
+   .set("Cookie", cookie)
+   .expect(200)
+})
+

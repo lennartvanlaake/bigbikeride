@@ -84,7 +84,7 @@ blogsRouter.get("/:id", async (ctx, next) => {
 });
 
 const findBlog = async(id: string): Promise<BlogQueryResult> => {
-  return selectBlogs.where(BlogKeys.ID, id).first() 
+  return selectBlogs.where(BLOG_TABLE_NAME + "." + BlogKeys.ID, id).first() 
 }
 
 blogsRouter.post("/", async (ctx, next) => {

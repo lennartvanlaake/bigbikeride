@@ -4,14 +4,22 @@ import { connection } from "./db";
 import path from 'path';
 import Router from "koa-router";
 import multer from "@koa/multer";
-import { ImageBlogEntity, ImageEntity, ImageKeys, IMAGE_BLOG_TABLE_NAME, IMAGE_TABLE_NAME, UpdateImageDescriptionRequest} from "../types/types";
+import {
+  ImageBlogEntity,
+  ImageEntity,
+  ImageKeys,
+  IMAGE_BLOG_TABLE_NAME,
+  IMAGE_TABLE_NAME,
+  UpdateImageDescriptionRequest,
+  UPLOAD_NAME
+} from "../types/types";
 import { v4 } from "uuid";
 export const imagesRouter = new Router<DefaultState, Context>();
 
 
  const storage = multer.diskStorage({
     destination: function (_req, _file, cb) {
-      cb(null, 'public/')
+      cb(null, __dirname + '/public/')
     },
     filename: function (_req, file, cb) {
        cb(null, Date.now() + path.extname(file.originalname))
@@ -19,12 +27,11 @@ export const imagesRouter = new Router<DefaultState, Context>();
   })
 const upload = multer({ storage: storage });
 
-imagesRouter.post("/", upload.single('filepond'), async(ctx, next) => {
-   let multerReq = <multer.MulterIncomingMessage>ctx.req;
-   let file = multerReq.file;
+imagesRouter.post("/", upload.single(UPLOAD_NAME), async(ctx, next) => {
+   const file = ctx.file;
    if (!file) {
       ctx.status = 400;
-      next()
+      await next();
    }
    const id = v4();
    const timestamp = new Date();
