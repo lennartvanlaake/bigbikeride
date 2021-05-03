@@ -15,8 +15,13 @@ function checkId(id: string) {
 	}
 }
 
-export const createBlog = async (req: CreateBlogRequest) => {
-	return axios.post(`${SNOWPACK_PUBLIC_BASE_URL}/blogs`, req);
+export const createBlog = async (req: CreateBlogRequest): Promise<string> => {
+	const result = await axios.post(
+		`${SNOWPACK_PUBLIC_BASE_URL}/blogs`,
+		req
+	);
+	checkId(result.data.id);
+	return result.data.id;
 };
 
 export const updateBlog = async (req: CreateBlogRequest, id: string) => {
@@ -56,7 +61,8 @@ export const changeImageDescription = async (
 ) => {
 	checkId(imageId);
 	return await axios.patch(
-		`${SNOWPACK_PUBLIC_BASE_URL}/images/${imageId}/description`, req
+		`${SNOWPACK_PUBLIC_BASE_URL}/images/${imageId}/description`,
+		req
 	);
 };
 

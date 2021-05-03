@@ -1,155 +1,85 @@
 <script lang="ts">
  import * as api from '../javascript/api'
+ import * as utils from '../javascript/utils'
   import { blogId } from "../javascript/storage.js";
     import PlacePicker from "../components/PlacePicker.svelte";
+    import MarkdownEditor from "../components/MarkdownEditor.svelte";
     import NavBar from "../components/Navbar.svelte";
-    import axios from "axios";
     import { tick } from "svelte";
     //@ts-ignore
     import FilePond, { registerPlugin } from "svelte-filepond";
     import FilePondPluginImagePreview from "filepond-plugin-image-preview";
-    import { Blog, Coordinates } from "../../../types/types.js";
+    import { Blog, BlogType, Coordinates, CreateBlogRequest } from "../../../types/types.js";
+    import Post from '../components/Post.svelte';
+    import { onMount } from 'svelte';
     let simplemde: any;
     let blog: Blog;
-    let location: Coordinates;
     let upload: any;
     let uploadName = "images";
+    let foundBlogId: string;
+
+    // sync the set blog id between pages/components
+    blogId.subscribe((value) => {
+       foundBlogId = value
+    })
 
     registerPlugin(FilePondPluginImagePreview);
 
-    async function fillBlog(blogId: string) {
+    async function fill(blogId: string) {
 	blog = await api.getBlog(blogId);
-	location = blog.coordinates;
-	if (blog.type == "text") {
-            await tick();
-            createMd();
-            simplemde.value(blog.content);
-        }
     }
 
-    async function submit() {
-        if (getBlogId()) {
-            await axios
-                .put("/api/blogs/" + getBlogId(), {
-                    title: blog.title,
-                    content: simplemde ? simplemde.value() : null,
-                    type: blog.type,
-                    latitude: location.latitude,
-                    longitude: location.longitude,
-                })
-                .then(function (response) {
-                    alert("Blog updated!");
-                    console.log(response);
-                })
-                .catch(function (error) {
-                    alert("Blog update failed!");
-                });
-        } else {
-            console.log("Posting...");
-            await axios
-                .post("/api/blogs", {
-                    title: blog.title,
-                    content: simplemde ? simplemde.value() : null,
-                    type: blog.type,
-                    latitude: location.latitude,
-                    longitude: location.longitude,
-                })
-                .then(function (response) {
-                    alert("Blog posted!");
-                    const id = response.data.id;
-                    if (id) {
-                        setBlogId(response.data.id);
-                    } else {
-                        alert("No Id");
-                    }
-                })
-                .catch(function (error) {
-                    alert("Blog post failed!");
-                });
-        }
-        if (blog.images) {
-            for (let i = 0; i < blog.images.length; i++) {
-                const image = blog.images[i];
-                await axios
-                    .put("/api/images/" + image.id + "/description", {
-                        description: image.description,
-                    })
-                    .catch(function (error) {
-                        console.debug(error);
-                    });
-            }
-        }
+    async function create(type: BlogType) {
+        const coordinates = await getLocation();
+	const request = {
+		title: "",
+		content: "",
+		type: type,
+ 	        coordinates: coordinates 
+	}
+	const id: string = await api.createBlog(request); 
+	blogId.set(id);
     }
 
-    async function submitAndFill() {
-        await submit();
-        fillIfId();
+    async function update(blogToUpdate: Blog, id: string) {
+        blogToUpdate.content = simplemde?.value()
+	await api.updateBlog(blogToUpdate, id);
+	if (blogToUpdate.images) {
+	    blogToUpdate.images.forEach( img => api.changeImageDescription(
+		    img.id, { description: img.description } 
+	    ))
+	}
     }
 
-    function fillIfId() {
-        if (getBlogId()) {
-            fillBlog(getBlogId());
-        }
+    async function getLocation(): Promise<Coordinates> {
+	const position = await utils.getPosition();
+	return {
+           long: position.coords.longitude,
+	   lat: position.coords.latitude
+	}
     }
 
-    function fillLocation() {
-        navigator.geolocation.getCurrentPosition((pos) => {
-            if (!blog) {
-                return;
-            }
-            location.longitude = pos.coords.longitude;
-            location.latitude = pos.coords.latitude;
-        });
-    }
-
-    async function newTextBlog() {
-        blog = { type: "text" };
-        await tick();
-        removeBlogId();
-        createMd();
-        fillIfId();
-        fillLocation();
-    }
-
-    async function newImageBlog() {
-        blog = { type: "images" };
-        if (simplemde) {
-            simplemde.toTextArea();
-            simplemde = null;
-        }
-        await tick();
-        removeBlogId();
-        fillIfId();
-        fillLocation();
-    }
-
-    async function uploadCallback(err, upload) {
-        if (err) {
-            console.log(err);
-        }
-        await submit();
-        await axios
-            .post("/api/images/" + upload.serverId + "/post/" + getBlogId())
-            .catch(function (error) {
-                console.debug(error);
-                alert("Blog post failed!");
-            });
-        fillIfId();
+    // callback after image upload success
+    async function uploadCallback(_err: any, upload: any) {
+	await update(blog, foundBlogId);
         upload.removeFiles([upload.id]);
     }
 
-    function createMd() {
-        if (!simplemde) {
-            simplemde = new SimpleMDE({
-                element: document.getElementById("content"),
-            });
-        }
+    // callback for map select
+    function selectLocation(loc: any) {
+        blog.coordinates = {
+	    long: loc.detail.location.lng,
+	    lat: loc.detail.location.lat
+	}
     }
 
-    function selectLocation(loc) {
-        location.longitude = loc.detail.location.lng;
-        location.latitude = loc.detail.location.lat;
+    // callback to fill blog
+    async function fillIfId() { 
+        if (foundBlogId) {
+	   await fill(foundBlogId);
+	}
     }
+
 </script>
 
 <svelte:head>
@@ -161,13 +91,8 @@
         rel="stylesheet"
         href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css"
     />
-    <link
-        rel="stylesheet"
-        href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css"
-    /><script
-        src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"
-        on:load={fillIfId}></script></svelte:head
->
+
+</svelte:head>
 <NavBar />
 <div class="container pt-20 pb-2 m-2 block">
     {#if blog}
@@ -203,9 +128,8 @@
                 name="title"
                 bind:value={blog.title}
             /><br />
-            {#if blog.type == "text"}
-                <label for="content">Content {blog.type}:</label><br />
-                <textarea id="content" />
+	    {#if blog.type == "text"}
+		<MarkdownEditor bind:content={blog.content} bind:simplemde={simplemde} />
             {/if}
 
             <label for="longitude">Longitude:</label><br />
@@ -213,35 +137,35 @@
                 type="text"
                 id="longitude"
                 name="longitude"
-                bind:value={location.long}
+                bind:value={blog.coordinates.long}
             /><br />
             <label for="latitude">Latitude:</label><br />
             <input
                 type="text"
                 id="latitude"
                 name="latitude"
-                bind:value={location.lat}
+                bind:value={blog.coordinates.lat}
             /><br />
         </form>
         <PlacePicker
-            latitude={location.latitude}
-            longitude={location.longitude}
+            latitude={blog.coordinates.lat}
+            longitude={blog.coordinates.long}
             on:selectLocation={selectLocation}
         />
     {/if}
     <button
         id="newBlog"
         class="bg-gray-100 hover:bg-gray-300"
-        on:click={newTextBlog}>New text blog</button
+        on:click={() => create('text') }>>New text blog</button
     >
     <button
         id="newImage"
         class="bg-gray-100 hover:bg-gray-300"
-        on:click={newImageBlog}>New image blog</button
+	on:click={() => create('images') }>New image blog</button
     >
     <button
         id="submit"
         class="bg-gray-100 hover:bg-gray-300"
-        on:click={submitAndFill}>Submit blog</button
+	on:click={() => update(blog, foundBlogId) }>>Submit blog</button
     >
 </div>
