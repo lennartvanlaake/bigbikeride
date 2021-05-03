@@ -70,6 +70,7 @@
     "page": "^1.11.6",
     "pg": "^8.5.1",
     "pg-hstore": "^2.3.3",
+    "prettier-plugin-svelte": "^2.2.0",
     "sequelize": "^6.6.2",
     "sirv-cli": "^1.0.0",
     "snowpack": "^3.0.13",

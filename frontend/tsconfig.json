@@ -1,5 +1,8 @@
 {
-    "include": ["**/*.svelte", "**/*.ts", "../types/*.ts"],
-    "extends": "../tsconfig-base.json",
-    "references": [{ "path": "../types" }]
+	"include": ["**/*.svelte", "**/*.ts", "../types/*.ts"],
+	"extends": "../tsconfig.json",
+	"references": [{ "path": "../types" }],
+	"compilerOptions": {
+		"types": ["svelte"]
+	}
 }
