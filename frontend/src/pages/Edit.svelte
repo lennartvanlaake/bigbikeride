@@ -1,26 +1,26 @@
 <script lang="ts">
-    import { blogId } from "../javascript/storage.js";
+ import * as api from '../javascript/api'
+  import { blogId } from "../javascript/storage.js";
     import PlacePicker from "../components/PlacePicker.svelte";
     import NavBar from "../components/Navbar.svelte";
     import axios from "axios";
     import { tick } from "svelte";
-    // @ts-ignore
+    //@ts-ignore
     import FilePond, { registerPlugin } from "svelte-filepond";
     import FilePondPluginImagePreview from "filepond-plugin-image-preview";
-    let simplemde;
+    import { Blog, Coordinates } from "../../../types/types.js";
+    let simplemde: any;
     let blog: Blog;
     let location: Coordinates;
-    let upload;
+    let upload: any;
     let uploadName = "images";
 
     registerPlugin(FilePondPluginImagePreview);
 
-    async function fillBlog(blogId) {
-        const returnValue = await fetch("/api/blogs/" + blogId);
-        blog = await returnValue.json();
-        location.longitude = blog.longitude
-        location.latitude = blog.latitude
-        if (blog.type == "text") {
+    async function fillBlog(blogId: string) {
+	blog = await api.getBlog(blogId);
+	location = blog.coordinates;
+	if (blog.type == "text") {
             await tick();
             createMd();
             simplemde.value(blog.content);
