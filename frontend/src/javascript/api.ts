@@ -1,5 +1,10 @@
 import axios from "axios";
-import { Blog, CreateBlogRequest, LoginRequest } from "../../../types/types";
+import {
+	Blog,
+	CreateBlogRequest,
+	LoginRequest,
+	UpdateImageDescriptionRequest,
+} from "../../../types/types";
 import * as uuid from "uuid";
 // @ts-ignore
 const { SNOWPACK_PUBLIC_BASE_URL } = import.meta.env;
@@ -37,10 +42,29 @@ export const deleteBlog = async (id: string) => {
 	return await axios.delete(`${SNOWPACK_PUBLIC_BASE_URL}/blogs/${id}`);
 };
 
+export const linkImageToBlog = async (imageId: string, blogId: string) => {
+	checkId(imageId);
+	checkId(blogId);
+	return await axios.post(
+		`${SNOWPACK_PUBLIC_BASE_URL}/images/${imageId}/post/${blogId}`
+	);
+};
+
+export const changeImageDescription = async (
+	imageId: string,
+	req: UpdateImageDescriptionRequest
+) => {
+	checkId(imageId);
+	return await axios.patch(
+		`${SNOWPACK_PUBLIC_BASE_URL}/images/${imageId}/description`, req
+	);
+};
+
 export const login = async (req: LoginRequest) => {
 	return await axios.post(`${SNOWPACK_PUBLIC_BASE_URL}/login`, req);
 };
 
-export const isLoggedIn = async () => {
-	return await axios.get(`${SNOWPACK_PUBLIC_BASE_URL}/login`);
+export const isLoggedIn = async (): Promise<Boolean> => {
+	const response = await axios.get(`${SNOWPACK_PUBLIC_BASE_URL}/login`);
+	return response.status == 200;
 };
