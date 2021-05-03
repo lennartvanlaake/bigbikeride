@@ -185,7 +185,7 @@
                     <p>
                         Image: <a href={"/" + image.path}>{"/" + image.path}</a>
                     </p>
-                    <img src={"/" + image.path} alt={image.description} /><br />
+                    <img src={"/" + image.path} alt={image.description ?? ""} /><br />
                     <label for={"content_" + image.id}>Description:</label><br
                     />
                     <textarea
@@ -213,14 +213,14 @@
                 type="text"
                 id="longitude"
                 name="longitude"
-                bind:value={location.longitude}
+                bind:value={location.long}
             /><br />
             <label for="latitude">Latitude:</label><br />
             <input
                 type="text"
                 id="latitude"
                 name="latitude"
-                bind:value={location.latitude}
+                bind:value={location.lat}
             /><br />
         </form>
         <PlacePicker
