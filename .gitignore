@@ -3,6 +3,6 @@
 .DS_Store
 .env
 /volumes
-/build
 /backend/public/*
+/frontend/dist/*
 !/backend/public/dragon.jpg
