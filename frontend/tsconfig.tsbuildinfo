@@ -86,6 +86,21 @@
         "signature": "abc0899d8cf6e1fe37b64bcc1c625b2ac4573e5e2b6205cf8339c9ba0eb427e9",
         "affectsGlobalScope": false
       },
+      "../node_modules/axios/index.d.ts": {
+        "version": "0d892f035dbee4534f0ba096407136877595ca592f67ec9bb8a5c912b9c967e8",
+        "signature": "0d892f035dbee4534f0ba096407136877595ca592f67ec9bb8a5c912b9c967e8",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@types/uuid/index.d.ts": {
+        "version": "96b49a9de749afcf92b5bce1d8cc42cfae6816cdf5ea36584fd9256b8b2e5292",
+        "signature": "96b49a9de749afcf92b5bce1d8cc42cfae6816cdf5ea36584fd9256b8b2e5292",
+        "affectsGlobalScope": false
+      },
+      "./src/javascript/api.ts": {
+        "version": "ae54ac38a38a3b589226128b55500545c429acd2018d1139e24f475ac38f07d6",
+        "signature": "4f6d64a7b0773f8b5681fe5e591feb32d595fde57ac8bf40dfbb0fdb8c1de8e9",
+        "affectsGlobalScope": false
+      },
       "../node_modules/svelte/types/runtime/internal/utils.d.ts": {
         "version": "5b39b3db3049046701fa2effd764950553294c822114291847b8054bc3020b59",
         "signature": "5b39b3db3049046701fa2effd764950553294c822114291847b8054bc3020b59",
@@ -192,8 +207,8 @@
         "affectsGlobalScope": false
       },
       "./src/javascript/bloglist.ts": {
-        "version": "9a55adb0e4632e58398be449727bc2a8fd4996794c7b2691e3be18bbe034307b",
-        "signature": "ab8834cad62397c69e2ec4981063fc80db21cd3ca7dc689fb1dff3d3a15b5446",
+        "version": "ac26502d12806abd2049a32e8049069b3615ecc9ee9218713398557f7b5405bb",
+        "signature": "00744acad00124d2728872eebb2d266683ec20451d19cc1ce66e7b01697ba838",
         "affectsGlobalScope": false
       },
       "../node_modules/@types/geojson/index.d.ts": {
@@ -207,18 +222,18 @@
         "affectsGlobalScope": false
       },
       "./src/javascript/maps.ts": {
-        "version": "108ed5db3998abecdba65972e8ba81cd7fba343fb2a6e3426d7f07f453ef2897",
-        "signature": "da61a973ac31d61cf09d8a4076e7ae5fb95023d89a636250a1540ce786536676",
+        "version": "61c6784fc6c8d54cfdb478a28a691937845a2eab995b926b8335837fd65431d0",
+        "signature": "6476fe6e94f6d22c675568f630d03491e9d0900ed52c705f13ab7d2b3bb8ab02",
         "affectsGlobalScope": false
       },
       "./src/javascript/storage.ts": {
-        "version": "2bd1a97f390ad111ae2f579fc7feb5417a3630ca881a455b1b1d7d3e691d57ae",
+        "version": "20f30d49f64d1b0f53b4ec682998996ccd8045c3645635dad9403dcf03aaf0e8",
         "signature": "c4c76e334aba0d27688dd2e06fe3912af0fd2246ee2714cfa9aaf9d8c3d35f58",
         "affectsGlobalScope": false
       },
-      "../types/types.ts": {
-        "version": "4a77a349cbee9086e49cb54d1552e6b801e2ac2c6c7bf93f716c431f41118ee9",
-        "signature": "018d92724686067d6a5779ca777f2297cb60599f093f44fa422c8ae66a991192",
+      "./src/javascript/utils.ts": {
+        "version": "45dfe8348b4c1701cad0d7e398ae96a3912c946ee050e6b1d66ea02b54d09f56",
+        "signature": "b615f2f30ed58ca9b4f3cde1b2715eb9d1545878d104206ee25584b55c3cb46c",
         "affectsGlobalScope": false
       },
       "../node_modules/svelte/types/runtime/ambient.d.ts": {
@@ -254,8 +269,13 @@
       "./src/index.ts": [
         "../node_modules/svelte/types/runtime/ambient.d.ts"
       ],
+      "./src/javascript/api.ts": [
+        "../node_modules/@types/uuid/index.d.ts",
+        "../node_modules/axios/index.d.ts"
+      ],
       "./src/javascript/bloglist.ts": [
-        "../node_modules/svelte/store/index.d.ts"
+        "../node_modules/svelte/store/index.d.ts",
+        "./src/javascript/api.ts"
       ],
       "./src/javascript/maps.ts": [
         "../node_modules/@types/leaflet/index.d.ts"
@@ -318,6 +338,9 @@
     "exportedModulesMap": {
       "./src/index.ts": [
         "../node_modules/svelte/types/runtime/ambient.d.ts"
+      ],
+      "./src/javascript/api.ts": [
+        "../node_modules/axios/index.d.ts"
       ],
       "./src/javascript/bloglist.ts": [
         "../node_modules/svelte/store/index.d.ts"
@@ -383,34 +406,28 @@
     "semanticDiagnosticsPerFile": [
       "./src/index.ts",
       [
+        "./src/javascript/api.ts",
+        [
+          {
+            "file": "./src/javascript/api.ts",
+            "start": 117,
+            "length": 22,
+            "messageText": "Output file '/home/lennart/dist/types/types.d.ts' has not been built from source file '/home/lennart/bigbikeride/types/types.ts'.",
+            "category": 1,
+            "code": 6305
+          }
+        ]
+      ],
+      [
         "./src/javascript/bloglist.ts",
         [
           {
             "file": "./src/javascript/bloglist.ts",
-            "start": 273,
-            "length": 4,
-            "messageText": "Cannot find name 'Blog'.",
+            "start": 62,
+            "length": 22,
+            "messageText": "Output file '/home/lennart/dist/types/types.d.ts' has not been built from source file '/home/lennart/bigbikeride/types/types.ts'.",
             "category": 1,
-            "code": 2304
-          },
-          {
-            "file": "./src/javascript/bloglist.ts",
-            "start": 317,
-            "length": 4,
-            "code": 2345,
-            "category": 1,
-            "messageText": {
-              "messageText": "Argument of type 'any[]' is not assignable to parameter of type 'never[]'.",
-              "category": 1,
-              "code": 2345,
-              "next": [
-                {
-                  "messageText": "Type 'any' is not assignable to type 'never'.",
-                  "category": 1,
-                  "code": 2322
-                }
-              ]
-            }
+            "code": 6305
           }
         ]
       ],
@@ -419,41 +436,20 @@
         [
           {
             "file": "./src/javascript/maps.ts",
-            "start": 65,
-            "length": 9,
-            "messageText": "Parameter 'container' implicitly has an 'any' type.",
+            "start": 56,
+            "length": 22,
+            "messageText": "Output file '/home/lennart/dist/types/types.d.ts' has not been built from source file '/home/lennart/bigbikeride/types/types.ts'.",
             "category": 1,
-            "code": 7006
-          },
-          {
-            "file": "./src/javascript/maps.ts",
-            "start": 76,
-            "length": 3,
-            "messageText": "Parameter 'lat' implicitly has an 'any' type.",
-            "category": 1,
-            "code": 7006
-          },
-          {
-            "file": "./src/javascript/maps.ts",
-            "start": 81,
-            "length": 4,
-            "messageText": "Parameter 'long' implicitly has an 'any' type.",
-            "category": 1,
-            "code": 7006
-          },
-          {
-            "file": "./src/javascript/maps.ts",
-            "start": 87,
-            "length": 4,
-            "messageText": "Parameter 'zoom' implicitly has an 'any' type.",
-            "category": 1,
-            "code": 7006
+            "code": 6305
           }
         ]
       ],
       "./src/javascript/storage.ts",
+      "./src/javascript/utils.ts",
       "../node_modules/@types/geojson/index.d.ts",
       "../node_modules/@types/leaflet/index.d.ts",
+      "../node_modules/@types/uuid/index.d.ts",
+      "../node_modules/axios/index.d.ts",
       "../node_modules/svelte/internal/index.d.ts",
       "../node_modules/svelte/store/index.d.ts",
       "../node_modules/svelte/types/runtime/ambient.d.ts",
@@ -492,20 +488,7 @@
       "../node_modules/typescript/lib/lib.es5.d.ts",
       "../node_modules/typescript/lib/lib.es6.d.ts",
       "../node_modules/typescript/lib/lib.scripthost.d.ts",
-      "../node_modules/typescript/lib/lib.webworker.importscripts.d.ts",
-      [
-        "../types/types.ts",
-        [
-          {
-            "file": "../types/types.ts",
-            "start": 2002,
-            "length": 5,
-            "messageText": "Invalid module name in augmentation, module 'koa' cannot be found.",
-            "category": 1,
-            "code": 2664
-          }
-        ]
-      ]
+      "../node_modules/typescript/lib/lib.webworker.importscripts.d.ts"
     ],
     "affectedFilesPendingEmit": [
       [
@@ -529,6 +512,10 @@
         1
       ],
       [
+        "./src/javascript/api.ts",
+        1
+      ],
+      [
         "./src/javascript/bloglist.ts",
         1
       ],
@@ -538,6 +525,10 @@
       ],
       [
         "./src/javascript/storage.ts",
+        1
+      ],
+      [
+        "./src/javascript/utils.ts",
         1
       ],
       [
@@ -793,11 +784,19 @@
         1
       ],
       [
+        "../node_modules/@types/uuid/index.d.ts",
+        1
+      ],
+      [
         "../node_modules/@types/yargs-parser/index.d.ts",
         1
       ],
       [
         "../node_modules/@types/yargs/index.d.ts",
+        1
+      ],
+      [
+        "../node_modules/axios/index.d.ts",
         1
       ],
       [

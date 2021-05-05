@@ -1,29 +1,20 @@
 <script lang="ts">
  import * as api from '../javascript/api'
  import * as utils from '../javascript/utils'
-  import { blogId } from "../javascript/storage.js";
-    import PlacePicker from "../components/PlacePicker.svelte";
-    import MarkdownEditor from "../components/MarkdownEditor.svelte";
-    import NavBar from "../components/Navbar.svelte";
-    import { tick } from "svelte";
-    //@ts-ignore
-    import FilePond, { registerPlugin } from "svelte-filepond";
-    import FilePondPluginImagePreview from "filepond-plugin-image-preview";
-    import { Blog, BlogType, Coordinates, CreateBlogRequest } from "../../../types/types.js";
-    import Post from '../components/Post.svelte';
-    import { onMount } from 'svelte';
+ import { blogId } from "../javascript/storage.js";
+ import PlacePicker from "../components/PlacePicker.svelte";
+ import ImageUpload from "../components/ImageUpload.svelte";
+ import MarkdownEditor from "../components/MarkdownEditor.svelte";
+ import NavBar from "../components/Navbar.svelte";
+ import { Blog, BlogType, Coordinates } from "../../../types/types.js";
     let simplemde: any;
     let blog: Blog;
-    let upload: any;
-    let uploadName = "images";
     let foundBlogId: string;
 
     // sync the set blog id between pages/components
     blogId.subscribe((value) => {
        foundBlogId = value
     })
-
-    registerPlugin(FilePondPluginImagePreview);
 
     async function fill(blogId: string) {
 	blog = await api.getBlog(blogId);
@@ -80,29 +71,14 @@
 	}
     }
 
+    fillIfId();
+
 </script>
-
-<svelte:head>
-    <link
-        href="https://unpkg.com/filepond/dist/filepond.css"
-        rel="stylesheet"
-    />
-    <link
-        rel="stylesheet"
-        href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css"
-    />
-
-</svelte:head>
 <NavBar />
 <div class="container pt-20 pb-2 m-2 block">
     {#if blog}
-        {#if blog.type == "images"}
-            <FilePond
-                bind:this={upload}
-                {uploadName}
-                server="/api/images"
-                onprocessfile={uploadCallback}
-            />
+	    {#if blog.type == "images"}
+	<ImageUpload uploadCallback={uploadCallback}/>
         {/if}
         {#if blog.images}
             {#each blog.images as image}
@@ -156,7 +132,7 @@
     <button
         id="newBlog"
         class="bg-gray-100 hover:bg-gray-300"
-        on:click={() => create('text') }>>New text blog</button
+        on:click={() => create('text') }>New text blog</button
     >
     <button
         id="newImage"
@@ -166,6 +142,6 @@
     <button
         id="submit"
         class="bg-gray-100 hover:bg-gray-300"
-	on:click={() => update(blog, foundBlogId) }>>Submit blog</button
+	on:click={() => update(blog, foundBlogId) }>Submit blog</button
     >
 </div>

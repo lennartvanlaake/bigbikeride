@@ -9,6 +9,8 @@ import * as uuid from "uuid";
 // @ts-ignore
 const { SNOWPACK_PUBLIC_BASE_URL } = import.meta.env;
 
+export const baseUrl: string = SNOWPACK_PUBLIC_BASE_URL;
+
 function checkId(id: string) {
 	if (!uuid.validate(id)) {
 		throw new Error(`id is invalid: ${id}`);
