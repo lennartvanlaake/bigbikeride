@@ -1,6 +1,6 @@
 <script lang="ts">
     import axios from "axios";
-    import { loggedIn } from "../javascript/storage.js";
+    import { loggedIn } from "../javascript/storage";
     import NavBar from "../components/Navbar.svelte";
     let password: string;
 

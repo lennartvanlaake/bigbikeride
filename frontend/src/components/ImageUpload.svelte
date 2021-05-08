@@ -1,4 +1,4 @@
-<script lang="typescript">
+<script lang="ts">
 	// @ts-ignore
 	import { baseUrl } from '../javascript/api'
 	let filepondElement: any;

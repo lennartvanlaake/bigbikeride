@@ -1,5 +1,5 @@
 import { writable } from "svelte/store";
-import { Blog } from "../../../types/types";
+import type { Blog } from "../../../types/types";
 import * as api from "./api";
 
 export const blogList = writable<Blog[]>([]);

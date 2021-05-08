@@ -1,10 +1,5 @@
 import axios from "axios";
-import {
-	Blog,
-	CreateBlogRequest,
-	LoginRequest,
-	UpdateImageDescriptionRequest,
-} from "../../../types/types";
+import type { Blog, CreateBlogRequest, LoginRequest, UpdateImageDescriptionRequest } from "../../../types/types";
 import * as uuid from "uuid";
 // @ts-ignore
 const { SNOWPACK_PUBLIC_BASE_URL } = import.meta.env;

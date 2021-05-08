@@ -3,8 +3,8 @@
     "compilerOptions": {
         "esModuleInterop": true,
         "declaration": true,
-        "target": "es6",
-        "module": "commonjs",
+        "target": "ES2015",
+        "module": "ES2015",
         "strict": true,
         "noUnusedLocals": false,
         "noUnusedParameters": false,

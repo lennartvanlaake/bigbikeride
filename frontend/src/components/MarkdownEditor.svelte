@@ -1,12 +1,12 @@
-<script lang="typescript">
-	export let content: string | null
-        export let simplemde: any;
+<script lang="ts">
+	export let content: string | null;
+	export let simplemde: any;
 	$: simplemde?.value(content);
 	function createMd() {
-	      	// @ts-ignore
-	        simplemde = new SimpleMDE({
-	            element: document.getElementById("content"),
-	        });
+		// @ts-ignore
+		simplemde = new SimpleMDE({
+			element: document.getElementById("content"),
+		});
 		simplemde.value(content);
 	}
 </script>

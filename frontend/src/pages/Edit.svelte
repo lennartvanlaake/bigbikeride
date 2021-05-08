@@ -1,12 +1,12 @@
 <script lang="ts">
  import * as api from '../javascript/api'
  import * as utils from '../javascript/utils'
- import { blogId } from "../javascript/storage.js";
+ import { blogId } from "../javascript/storage";
  import PlacePicker from "../components/PlacePicker.svelte";
  import ImageUpload from "../components/ImageUpload.svelte";
  import MarkdownEditor from "../components/MarkdownEditor.svelte";
  import NavBar from "../components/Navbar.svelte";
- import { Blog, BlogType, Coordinates } from "../../../types/types.js";
+ import type { Blog, BlogType, Coordinates } from "../../../types/types.js";
     let simplemde: any;
     let blog: Blog;
     let foundBlogId: string;

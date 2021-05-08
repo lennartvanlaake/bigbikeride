@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { loggedIn } from "../javascript/storage.js";
+  import { loggedIn } from "../javascript/storage";
   import axios from "axios";
   let isLoggedIn = false;
   loggedIn.subscribe((foundLoggedIn) => {

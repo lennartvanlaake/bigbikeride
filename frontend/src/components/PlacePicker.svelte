@@ -1,5 +1,5 @@
 <script lang="ts">
-    import createMap from "../javascript/maps.js";
+    import createMap from "../javascript/maps";
     import { createEventDispatcher } from "svelte";
     import * as L from "leaflet";
 
