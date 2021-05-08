@@ -1,19 +1,15 @@
 <script lang="ts">
-    import axios from "axios";
     import { loggedIn } from "../javascript/storage";
     import NavBar from "../components/Navbar.svelte";
+    import * as api from "../javascript/api";
     let password: string;
 
     function login() {
-        axios
-            .post("/api/login", {
-                password: password,
-            })
-            .then(function (response) {
+	api.login({ password }).then(function (_response) {
                 alert("Login success!");
                 loggedIn.set(true);
             })
-            .catch(function (error) {
+            .catch(function (_error) {
                 alert("Login failed!");
             });
     }

@@ -6,6 +6,7 @@
         "target": "ES2015",
         "module": "ES2015",
         "strict": true,
+	"moduleResolution": "node",
         "noUnusedLocals": false,
         "noUnusedParameters": false,
         "noImplicitReturns": false,
