@@ -1,10 +1,19 @@
 import axios from "axios";
-import type { Blog, CreateBlogRequest, LoginRequest, UpdateImageDescriptionRequest } from "../../../types/types";
+import type {
+	Blog,
+	CreateBlogRequest,
+	LoginRequest,
+	UpdateImageDescriptionRequest,
+} from "../../../types/types";
 import * as uuid from "uuid";
 // @ts-ignore
 const { VITE_PUBLIC_BASE_URL } = import.meta.env;
 
 export const baseUrl: string = VITE_PUBLIC_BASE_URL;
+
+const request = axios.create({
+	withCredentials: true,
+});
 
 function checkId(id: string) {
 	if (!uuid.validate(id)) {
@@ -13,41 +22,36 @@ function checkId(id: string) {
 }
 
 export const createBlog = async (req: CreateBlogRequest): Promise<string> => {
-	const result = await axios.post(
-		`${VITE_PUBLIC_BASE_URL}/blogs`,
-		req
-	);
+	const result = await request.post(`${VITE_PUBLIC_BASE_URL}/blogs`, req);
 	checkId(result.data.id);
 	return result.data.id;
 };
 
 export const updateBlog = async (req: CreateBlogRequest, id: string) => {
 	checkId(id);
-	return axios.put(`${VITE_PUBLIC_BASE_URL}/blogs/${id}`, req);
+	return request.put(`${VITE_PUBLIC_BASE_URL}/blogs/${id}`, req);
 };
 
 export const getAllBlogs = async (): Promise<Blog[]> => {
-	const result = await axios.get(`${VITE_PUBLIC_BASE_URL}/blogs`);
+	const result = await request.get(`${VITE_PUBLIC_BASE_URL}/blogs`);
 	return result.data;
 };
 
 export const getBlog = async (id: string): Promise<Blog> => {
 	checkId(id);
-	const result = await axios.get(
-		`${VITE_PUBLIC_BASE_URL}/blogs/${id}`
-	);
+	const result = await request.get(`${VITE_PUBLIC_BASE_URL}/blogs/${id}`);
 	return result.data;
 };
 
 export const deleteBlog = async (id: string) => {
 	checkId(id);
-	return await axios.delete(`${VITE_PUBLIC_BASE_URL}/blogs/${id}`);
+	return await request.delete(`${VITE_PUBLIC_BASE_URL}/blogs/${id}`);
 };
 
 export const linkImageToBlog = async (imageId: string, blogId: string) => {
 	checkId(imageId);
 	checkId(blogId);
-	return await axios.post(
+	return await request.post(
 		`${VITE_PUBLIC_BASE_URL}/images/${imageId}/post/${blogId}`
 	);
 };
@@ -57,17 +61,17 @@ export const changeImageDescription = async (
 	req: UpdateImageDescriptionRequest
 ) => {
 	checkId(imageId);
-	return await axios.patch(
+	return await request.patch(
 		`${VITE_PUBLIC_BASE_URL}/images/${imageId}/description`,
 		req
 	);
 };
 
 export const login = async (req: LoginRequest) => {
-	return await axios.post(`${VITE_PUBLIC_BASE_URL}/login`, req);
+	return await request.post(`${VITE_PUBLIC_BASE_URL}/login`, req);
 };
 
 export const isLoggedIn = async (): Promise<Boolean> => {
-	const response = await axios.get(`${VITE_PUBLIC_BASE_URL}/login`);
+	const response = await request.get(`${VITE_PUBLIC_BASE_URL}/login`);
 	return response.status == 200;
 };

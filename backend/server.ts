@@ -22,7 +22,7 @@ app.use(json());
 app.use(cors());
 app.use(bodyParser());
 app.use(checkLogin);
-app.use(session({ key: process.env.SECRET }, app));
+app.use(session({ key: process.env.SECRET, domain: process.env.DOMAIN }, app));
 app.use(serve(__dirname + "public"));
 app.use(logger());
 

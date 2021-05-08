@@ -107,7 +107,7 @@ blogsRouter.post("/", async (ctx, next) => {
       lat: blogRequest.coordinates.lat,
       created_at: now,
       updated_at: now
-    }  
+    } 
   await connection(BLOG_TABLE_NAME).insert(blogEntity);
   
   if (blogRequest.type == "text") {
