@@ -11,9 +11,7 @@ const { VITE_PUBLIC_BASE_URL } = import.meta.env;
 
 export const baseUrl: string = VITE_PUBLIC_BASE_URL;
 
-const request = axios.create({
-	withCredentials: true,
-});
+const request = axios.create();
 
 function checkId(id: string) {
 	if (!uuid.validate(id)) {

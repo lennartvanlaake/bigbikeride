@@ -6,9 +6,9 @@
  import ImageUpload from "../components/ImageUpload.svelte";
  import MarkdownEditor from "../components/MarkdownEditor.svelte";
  import NavBar from "../components/Navbar.svelte";
- import type { Blog, BlogType, Coordinates } from "../../../types/types.js";
+ import type { Blog, BlogType, Coordinates, CreateBlogRequest } from "../../../types/types.js";
     let simplemde: any;
-    let blog: Blog;
+    let blog: Omit<Blog, "id" | "created">;
     let foundBlogId: string;
 
     // sync the set blog id between pages/components
@@ -22,25 +22,31 @@
 
     async function create(type: BlogType) {
         const coordinates = await getLocation();
-	const request = {
+	blog = {
 		title: "",
 		content: "",
 		type: type,
- 	        coordinates: coordinates 
+		coordinates: coordinates,
+		images: [],
 	}
-	const id: string = await api.createBlog(request); 
-	blogId.set(id);
-	fill(id);
     }
 
-    async function update(blogToUpdate: Blog, id: string) {
-        blogToUpdate.content = simplemde?.value()
-	await api.updateBlog(blogToUpdate, id);
-	if (blogToUpdate.images) {
-	    blogToUpdate.images.forEach( img => api.changeImageDescription(
+    async function submit() {
+	blog.content = simplemde?.value()
+	let id;
+	if (foundBlogId) {
+		id = foundBlogId;
+		await api.updateBlog(blog, id);
+	} else {
+		id = await api.createBlog(blog);
+		blogId.set(id);
+	}
+	if (blog.images) {
+	    blog.images.forEach( img => api.changeImageDescription(
 		    img.id, { description: img.description } 
 	    ))
 	}
+	fill(id);
     }
 
     async function getLocation(): Promise<Coordinates> {
@@ -53,8 +59,9 @@
 
     // callback after image upload success
     async function uploadCallback(_err: any, upload: any) {
-	await update(blog, foundBlogId);
-        upload.removeFiles([upload.id]);
+	await submit();
+	upload.removeFiles([upload.id]);
+	await fill(foundBlogId);
     }
 
     // callback for map select
@@ -73,7 +80,6 @@
     }
 
     fillIfId();
-
 </script>
 <NavBar />
 <div class="container pt-20 pb-2 m-2 block">
@@ -142,6 +148,6 @@
     <button
         id="submit"
         class="bg-gray-100 hover:bg-gray-300"
-	on:click={() => update(blog, foundBlogId) }>Submit blog</button
+	on:click={() => submit(foundBlogId) }>Submit blog</button
     >
 </div>

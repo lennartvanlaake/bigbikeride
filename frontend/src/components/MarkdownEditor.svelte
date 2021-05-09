@@ -1,11 +1,12 @@
 <script lang="ts">
 	export let content: string | null;
 	export let simplemde: any;
+	export let contentElement: HTMLElement;
 	$: simplemde?.value(content);
 	function createMd() {
 		// @ts-ignore
 		simplemde = new SimpleMDE({
-			element: document.getElementById("content"),
+			element: contentElement,
 		});
 		simplemde.value(content);
 	}
@@ -20,6 +21,7 @@
 		on:load="{createMd}"
 	></script>
 </svelte:head>
-
-<label for="content">Content</label><br />
-<textarea id="content" />
+<div>
+	<label for="content">Content</label><br />
+	<textarea bind:this="{contentElement}" id="content" />
+</div>

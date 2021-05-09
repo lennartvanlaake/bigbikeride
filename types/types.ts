@@ -126,3 +126,10 @@ declare module "koa" {
 		session: MySession;
 	}
 }
+
+
+	declare global {
+		interface Window {
+			FilePond: any;
+		}
+	}

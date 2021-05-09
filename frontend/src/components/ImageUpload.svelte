@@ -1,24 +1,26 @@
 <script lang="ts">
-	// @ts-ignore
 	import { baseUrl } from "../javascript/api";
-	let filepondElement: any;
+	let filepondElement: HTMLElement;
 	export let uploadCallback: any;
+	let filePondLib: any;
+	let previewPlugin: any;
 
 	function createFilepond() {
-		// @ts-ignore
-		pond = FilePond.create(filepondElement);
-		// @ts-ignore
-		FilePond.setOptions({
-			server: `${baseUrl}/api/images`,
+		filePondLib.create(filepondElement);
+		filePondLib.setOptions({
+			server: `${baseUrl}/images`,
 		});
-		// @ts-ignore
-		window.FilePond.onprocessfile(uploadCallback);
+		filepondElement.addEventListener(
+			"FilePond:processfile",
+			(e: any) => uploadCallback(e)
+		);
 	}
 
 	function registerPlugin() {
+		filePondLib = (window as any).FilePond;
+		previewPlugin = (window as any).FilePondPluginImagePreview;
 		createFilepond();
-		// @ts-ignore
-		window.FilePond.registerPlugin(FilePondPluginImagePreview);
+		filePondLib.registerPlugin(previewPlugin);
 	}
 </script>
 <svelte:head>
@@ -34,5 +36,8 @@
 		on:load="{registerPlugin}"
 	></script>
 </svelte:head>
+<div>
 
-<div bind:this="{filepondElement}" id="filepond" />
+	<div bind:this="{filepondElement}" id="filepond" />
+
+	</div>
