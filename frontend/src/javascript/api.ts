@@ -69,7 +69,7 @@ export const login = async (req: LoginRequest) => {
 	return await request.post(`${VITE_PUBLIC_BASE_URL}/login`, req);
 };
 
-export const isLoggedIn = async (): Promise<Boolean> => {
+export const isLoggedIn = async (): Promise<boolean> => {
 	const response = await request.get(`${VITE_PUBLIC_BASE_URL}/login`);
 	return response.status == 200;
 };
