@@ -7,14 +7,10 @@
  import MarkdownEditor from "../components/MarkdownEditor.svelte";
  import NavBar from "../components/Navbar.svelte";
  import type { Blog, BlogType, Coordinates } from "../../../types/types.js";
+ import { onMount } from 'svelte';
+
     let simplemde: any;
     let blog: Omit<Blog, "id" | "created">;
-    let foundBlogId: string;
-
-    // sync the set blog id between pages/components
-    blogId.subscribe((value) => {
-       foundBlogId = value
-    })
 
     async function fill(blogId: string) {
 	blog = await api.getBlog(blogId);
@@ -34,8 +30,8 @@
     async function submit() {
 	blog.content = simplemde?.value()
 	let id;
-	if (foundBlogId) {
-		id = foundBlogId;
+	if ($blogId) {
+		id = $blogId;
 		await api.updateBlog(blog, id);
 	} else {
 		id = await api.createBlog(blog);
@@ -61,7 +57,7 @@
     async function uploadCallback(_err: any, upload: any) {
 	await submit();
 	upload.removeFiles([upload.id]);
-	await fill(foundBlogId);
+	await fill($blogId);
     }
 
     // callback for map select
@@ -72,16 +68,12 @@
 	}
     }
 
-    // callback to fill blog
-    async function fillIfId() { 
-        if (foundBlogId) {
-	   await fill(foundBlogId);
+    onMount(async () => {
+        if ($blogId) {
+	   await fill($blogId);
 	}
-    }
-
-    fillIfId();
+    })
 </script>
-<NavBar />
 <div class="container pt-20 pb-2 m-2 block">
     {#if blog}
 	{#if blog.type == "images"}

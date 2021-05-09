@@ -84,6 +84,7 @@
     "svelte-check": "^1.2.5",
     "svelte-filepond": "^0.0.1",
     "svelte-preprocess": "^4.7.3",
+    "svelte-routing": "^1.6.0",
     "tailwindcss": "^2.1.2",
     "tough-cookie": "^4.0.0",
     "ts-node": "^9.1.1",

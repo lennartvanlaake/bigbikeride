@@ -1,20 +1,23 @@
 <script lang="ts">
-	import router from "page";
 	import Index from "./pages/Index.svelte";
 	import Edit from "./pages/Edit.svelte";
 	import Login from "./pages/Login.svelte";
-
-	let page: any;
-	function loadPage() {
-		router("/", () => (page = Index));
-		router("/app/edit", () => (page = Edit));
-		router("/app/login", () => (page = Login));
-		router.start();
-	}
+	import { Router, Route, Link } from "svelte-routing";
 </script>
 <svelte:head>
-<link on:load={loadPage} href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+<link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
 </svelte:head>
+<Router url="">	
+     
 
-
-<svelte:component this="{page}" />
+  <nav>
+    <Link to="/">Blog</Link>
+    <Link to="edit">Edit</Link>
+    <Link to="login">Edit</Link>
+  </nav>
+  <div>
+    <Route path="/" component="{Index}" />
+    <Route path="edit" component="{Edit}" />
+    <Route path="login" component="{Login}" />
+  </div>
+</Router>
