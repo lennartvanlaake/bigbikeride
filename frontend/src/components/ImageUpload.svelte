@@ -37,7 +37,5 @@
 	></script>
 </svelte:head>
 <div>
-
 	<div bind:this="{filepondElement}" id="filepond" />
-
-	</div>
+</div>

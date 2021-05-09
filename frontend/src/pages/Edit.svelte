@@ -6,7 +6,7 @@
  import ImageUpload from "../components/ImageUpload.svelte";
  import MarkdownEditor from "../components/MarkdownEditor.svelte";
  import NavBar from "../components/Navbar.svelte";
- import type { Blog, BlogType, Coordinates, CreateBlogRequest } from "../../../types/types.js";
+ import type { Blog, BlogType, Coordinates } from "../../../types/types.js";
     let simplemde: any;
     let blog: Omit<Blog, "id" | "created">;
     let foundBlogId: string;
@@ -84,8 +84,8 @@
 <NavBar />
 <div class="container pt-20 pb-2 m-2 block">
     {#if blog}
-	    {#if blog.type == "images"}
-	<ImageUpload uploadCallback={uploadCallback}/>
+	{#if blog.type == "images"}
+		<ImageUpload uploadCallback={uploadCallback}/>
         {/if}
         {#if blog.images}
             {#each blog.images as image}
@@ -148,6 +148,6 @@
     <button
         id="submit"
         class="bg-gray-100 hover:bg-gray-300"
-	on:click={() => submit(foundBlogId) }>Submit blog</button
+	on:click={() => submit() }>Submit blog</button
     >
 </div>

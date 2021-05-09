@@ -1,7 +1,7 @@
 <script lang="ts">
 	export let content: string | null;
 	export let simplemde: any;
-	export let contentElement: HTMLElement;
+	let contentElement: HTMLElement;
 	$: simplemde?.value(content);
 	function createMd() {
 		// @ts-ignore
