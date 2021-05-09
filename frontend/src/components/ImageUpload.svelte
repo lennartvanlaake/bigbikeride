@@ -1,22 +1,24 @@
 <script lang="ts">
 	// @ts-ignore
-	import { baseUrl } from '../javascript/api'
+	import { baseUrl } from "../javascript/api";
 	let filepondElement: any;
-	let pond: any;
-	let FilePond: any;
-	let FilePondPluginImagePreview: any;
 	export let uploadCallback: any;
 
 	function createFilepond() {
+		// @ts-ignore
 		pond = FilePond.create(filepondElement);
+		// @ts-ignore
 		FilePond.setOptions({
-			server: `${baseUrl}/api/images`
+			server: `${baseUrl}/api/images`,
 		});
-		FilePond.onprocessfile(uploadCallback);
+		// @ts-ignore
+		window.FilePond.onprocessfile(uploadCallback);
 	}
 
 	function registerPlugin() {
-		FilePond.registerPlugin(FilePondPluginImagePreview);
+		createFilepond();
+		// @ts-ignore
+		window.FilePond.registerPlugin(FilePondPluginImagePreview);
 	}
 </script>
 <svelte:head>
@@ -24,10 +26,6 @@
 		rel="stylesheet"
 		href="https://unpkg.com/filepond/dist/filepond.css"
 	/>
-	<script
-		src="https://unpkg.com/filepond/dist/filepond.js"
-		on:load="{createFilepond}"
-	></script>
 	<script
 		src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"
 	></script>

@@ -18,6 +18,7 @@ loginRouter.get("/", async(ctx, next) => {
     if (!ctx?.session?.loggedIn) {
         ctx.throw(403, "not logged in")
     }
+    ctx.body = "yay";
     await next();
 })
 

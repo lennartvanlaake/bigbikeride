@@ -30,6 +30,7 @@
 	}
 	const id: string = await api.createBlog(request); 
 	blogId.set(id);
+	fill(id);
     }
 
     async function update(blogToUpdate: Blog, id: string) {
@@ -124,8 +125,7 @@
             /><br />
         </form>
         <PlacePicker
-            latitude={blog.coordinates.lat}
-            longitude={blog.coordinates.long}
+            coordinates={blog.coordinates}
             on:selectLocation={selectLocation}
         />
     {/if}
