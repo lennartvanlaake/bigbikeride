@@ -1,12 +1,9 @@
 // blog stuff
-export type BlogType = "images" | "text";
-
 export const BLOG_TABLE_NAME = "blogs";
 
 export const enum BlogKeys {
 	ID = "id",
 	TITLE = "title",
-	TYPE = "type",
 	LONG = "long",
 	LAT = "lat",
 	CREATED = "created_at",
@@ -16,7 +13,6 @@ export const enum BlogKeys {
 export interface BlogEntity {
 	id: string;
 	title: string;
-	type: BlogType;
 	long: number;
 	lat: number;
 	created_at: Date;
@@ -26,7 +22,6 @@ export interface BlogEntity {
 export interface Blog {
 	id: string;
 	title: string;
-	type: BlogType;
 	coordinates: Coordinates;
 	images: Array<Image>;
 	created: Date;
@@ -98,7 +93,6 @@ export const PUBLIC_DIR = "public";
 // requests
 export interface CreateBlogRequest {
 	title: string;
-	type: BlogType;
 	coordinates: Coordinates;
 	content: string | null;
 }

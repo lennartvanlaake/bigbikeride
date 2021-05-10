@@ -24,3 +24,25 @@
     <Route path="login" component="{Login}" />
   </div>
 </Router>
+
+
+<style>
+	nav {
+		color: white;
+		padding: 1em;
+		background: darkgreen;
+	}
+
+	:global(nav a) {
+		color: white;
+		padding: 0.5em;
+		background: gray 0.5;
+	}
+
+	:global(nav a:first-child) {
+		margin-left: 2em;
+	}
+
+</style>
+
+

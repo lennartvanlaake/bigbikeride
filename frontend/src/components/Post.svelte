@@ -54,7 +54,7 @@
 		</strong>
 		{ /if }
 	</div>
-	{ /if } { #if data.type == "images" }
+	{ /if } { #if data.type == "images" && data.images }
 	<Carousel images="{data.images}"></Carousel>
 	{ /if }
 </div>

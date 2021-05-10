@@ -2,7 +2,7 @@ import { Given, When, Then } from "@cucumber/cucumber";
 import { expect } from "chai";
 import { app } from "./server";
 import supertest from "supertest";
-import { CreateBlogRequest, Blog, BlogType, UPLOAD_NAME } from "../types/types";
+import { CreateBlogRequest, Blog, UPLOAD_NAME } from "../types/types";
 
 let cookie: string;
 let server = app.listen();
@@ -20,45 +20,26 @@ Given("I am logged in", async () => {
 	expect(result.status).to.equal(200);
 });
 
-Given(
-	"I POST a {string} blog with title {string}",
-	async (type: BlogType, title: string) => {
-		let requestBody: CreateBlogRequest;
-		if (type == "images") {
-			requestBody = {
-				title: title,
-				type: "text",
-				content: "",
-				coordinates: {
-					long: 0.0,
-					lat: 0.0,
-				},
-			};
-		} else {
-			requestBody = {
-				title: title,
-				type: "text",
-				content: "",
-				coordinates: {
-					long: 0.0,
-					lat: 0.0,
-				},
-			};
-		}
-
-		const result = await request
-			.post("/api/blogs")
-			.set("Cookie", cookie)
-			.send(requestBody);
-		blogId = result.body.id;
-		expect(result.status).to.equal(200);
-	}
-);
+Given("I POST a blog with title {string}", async (title: string) => {
+	let requestBody = {
+		title: title,
+		content: "",
+		coordinates: {
+			long: 0.0,
+			lat: 0.0,
+		},
+	};
+	const result = await request
+		.post("/api/blogs")
+		.set("Cookie", cookie)
+		.send(requestBody);
+	blogId = result.body.id;
+	expect(result.status).to.equal(200);
+});
 
 When("I change the title of the blog to {string}", async (newTitle: string) => {
 	const requestBody: CreateBlogRequest = {
 		title: newTitle,
-		type: "text",
 		content: "",
 		coordinates: {
 			long: 0.0,

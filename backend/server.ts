@@ -1,5 +1,4 @@
-import { blogsRouter } from "./blogs";
-import { imagesRouter } from "./images";
+import { blogsRouter } from "./blogs";import { imagesRouter } from "./images";
 import { checkLogin, loginRouter } from "./login";
 import { DefaultState, Context, DefaultContext } from "koa";
 import Koa from "koa";
@@ -23,7 +22,7 @@ app.use(cors());
 app.use(bodyParser());
 app.use(checkLogin);
 app.use(session({ key: process.env.SECRET, domain: process.env.DOMAIN }, app));
-app.use(serve(__dirname + "public"));
+app.use(serve(__dirname + "/public"));
 app.use(logger());
 
 router.use("/api/blogs", blogsRouter.routes(), blogsRouter.allowedMethods());

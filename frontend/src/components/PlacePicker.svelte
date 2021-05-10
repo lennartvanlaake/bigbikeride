@@ -5,6 +5,7 @@
 	import "leaflet/dist/leaflet.css";
 	import type { Coordinates } from "../../../types/types";
 
+	// default coordinates are in the Netherlands
 	export let coordinates: Coordinates = {
 		lat: 52.1326,
 		long: 5.2913,
@@ -14,12 +15,15 @@
 	const dispatch = createEventDispatcher();
 
 	$: {
+		// if there is a marker already, remove it, we want only one
 		if (marker) {
 			marker.remove();
 		}
+		// wait until the map is created to do stuff
 		if (map) {
 			marker = L.marker([coordinates.lat, coordinates.long]);
 			marker.addTo(map);
+			// center with a reasonable zoom factor to coordinates
 			map.setView([coordinates.lat, coordinates.long], 8);
 		}
 	}

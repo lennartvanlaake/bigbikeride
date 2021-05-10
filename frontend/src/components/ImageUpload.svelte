@@ -4,16 +4,14 @@
 	export let uploadCallback: any;
 	let filePondLib: any;
 	let previewPlugin: any;
+	let filePondInstance: any;
 
 	function createFilepond() {
-		filePondLib.create(filepondElement);
+		filePondInstance = filePondLib.create(filepondElement);
 		filePondLib.setOptions({
 			server: `${baseUrl}/images`,
 		});
-		filepondElement.addEventListener(
-			"FilePond:processfile",
-			(e: any) => uploadCallback(e)
-		);
+		filePondInstance.onprocessfile = uploadCallback;
 	}
 
 	function registerPlugin() {

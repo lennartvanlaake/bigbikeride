@@ -5,26 +5,25 @@
  import PlacePicker from "../components/PlacePicker.svelte";
  import ImageUpload from "../components/ImageUpload.svelte";
  import MarkdownEditor from "../components/MarkdownEditor.svelte";
- import NavBar from "../components/Navbar.svelte";
- import type { Blog, BlogType, Coordinates } from "../../../types/types.js";
+ import type { Blog, Coordinates } from "../../../types/types.js";
  import { onMount } from 'svelte';
 
     let simplemde: any;
-    let blog: Omit<Blog, "id" | "created">;
+    let blog: Omit<Blog, "id" | "created" | "type">;
 
     async function fill(blogId: string) {
 	blog = await api.getBlog(blogId);
     }
 
-    async function create(type: BlogType) {
+    async function create() {
         const coordinates = await getLocation();
 	blog = {
 		title: "",
 		content: "",
-		type: type,
 		coordinates: coordinates,
 		images: [],
 	}
+	blogId.set(null);
     }
 
     async function submit() {
@@ -43,6 +42,7 @@
 	    ))
 	}
 	fill(id);
+	alert("Post success!")
     }
 
     async function getLocation(): Promise<Coordinates> {
@@ -56,8 +56,8 @@
     // callback after image upload success
     async function uploadCallback(_err: any, upload: any) {
 	await submit();
-	upload.removeFiles([upload.id]);
-	await fill($blogId);
+	await api.linkImageToBlog(upload.serverId, $blogId!!);
+	await fill($blogId!!);
     }
 
     // callback for map select
@@ -74,27 +74,8 @@
 	}
     })
 </script>
-<div class="container pt-20 pb-2 m-2 block">
+<div class="container b-2 m-2 block">
     {#if blog}
-	{#if blog.type == "images"}
-		<ImageUpload uploadCallback={uploadCallback}/>
-        {/if}
-        {#if blog.images}
-            {#each blog.images as image}
-                <span>
-                    <p>
-                        Image: <a href={"/" + image.path}>{"/" + image.path}</a>
-                    </p>
-                    <img src={"/" + image.path} alt={image.description ?? ""} /><br />
-                    <label for={"content_" + image.id}>Description:</label><br
-                    />
-                    <textarea
-                        bind:value={image.description}
-                        id={"content_" + image.id}
-                    />
-                </span>
-            {/each}
-        {/if}
         <form>
             <label for="title">Title:</label><br />
             <input
@@ -103,9 +84,7 @@
                 name="title"
                 bind:value={blog.title}
             /><br />
-	    {#if blog.type == "text"}
-		<MarkdownEditor bind:content={blog.content} bind:simplemde={simplemde} />
-            {/if}
+	    <MarkdownEditor bind:content={blog.content} bind:simplemde={simplemde} />
 
             <label for="longitude">Longitude:</label><br />
             <input
@@ -126,20 +105,32 @@
             coordinates={blog.coordinates}
             on:selectLocation={selectLocation}
         />
+	<ImageUpload uploadCallback={uploadCallback}/>
+        {#if blog.images}
+            {#each blog.images as image}
+                <span>
+                    <p>
+                        Image: <a href={"/" + image.path}>{"/" + image.path}</a>
+                    </p>
+                    <img src={"/" + image.path} alt={image.description ?? ""} /><br />
+                    <label for={"content_" + image.id}>Description:</label><br
+                    />
+                    <textarea
+                        bind:value={image.description}
+                        id={"content_" + image.id}
+                    />
+                </span>
+            {/each}
+        {/if}
     {/if}
     <button
         id="newBlog"
         class="bg-gray-100 hover:bg-gray-300"
-        on:click={() => create('text') }>New text blog</button
-    >
-    <button
-        id="newImage"
-        class="bg-gray-100 hover:bg-gray-300"
-	on:click={() => create('images') }>New image blog</button
+        on:click={create}>New blog</button
     >
     <button
         id="submit"
         class="bg-gray-100 hover:bg-gray-300"
-	on:click={() => submit() }>Submit blog</button
+	on:click={submit}>Submit blog</button
     >
 </div>
