@@ -32,7 +32,7 @@
 		padding: 1em;
 		background: darkgreen;
 	}
-
+	
 	:global(nav a) {
 		color: white;
 		padding: 0.5em;

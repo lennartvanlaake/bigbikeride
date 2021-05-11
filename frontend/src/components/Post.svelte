@@ -17,8 +17,6 @@
 	});
 
 	function contentOverflows() {
-		if (data && data.type != "text") return false;
-		if (!blogContent) return false;
 		if (blogContent.scrollHeight - blogContent.clientHeight > 20) {
 			return true;
 		} else {
@@ -34,7 +32,7 @@
 <div class="w-full rounded border my-2 bg-white text-container">
 	<h1 class="text-lg font-medium mb-4 p-2">{data.title}</h1>
 
-	{ #if data.type == "text"}
+	{ #if data.content }
 
 	<div
 		class="text-sm overflow-hidden blog-content pb-4 px-2"
@@ -52,10 +50,10 @@
 			{ #if hideOverflow } Show content { :else } Hide content
 			{ /if }
 		</strong>
+		{ /if } { #if data.images }
+		<Carousel images="{data.images}"></Carousel>
 		{ /if }
 	</div>
-	{ /if } { #if data.type == "images" && data.images }
-	<Carousel images="{data.images}"></Carousel>
 	{ /if }
 </div>
 
