@@ -7,9 +7,24 @@
 		index++;
 	}
 </script>
-<div class="relative" on:click="{next}">
-	<img class="object-cover w-full" src={currentImage.path}
-	alt={currentImage.description ?? ""}/> { #if currentImage.description }
-	<p class="text-gray-800 py-2 text-center">{currentImage.description}</p>
+<div class="image-container" on:click="{next}">
+	<img class="image" src={currentImage.path} alt={currentImage.description
+	?? ""}/> { #if currentImage.description }
+	<p class="description">{currentImage.description}</p>
 	{ /if }
 </div>
+
+<style>
+	.image-container {
+		position: relative;
+	}
+
+	.image {
+		width: 100%;
+	}
+
+	.description {
+		text-align: center;
+		padding: 1em;
+	}
+</style>

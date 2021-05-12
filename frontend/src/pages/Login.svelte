@@ -15,9 +15,15 @@
 	}
 </script>
 
-<div class="container mx-auto max-w-5xl w-full h-full pb-2 px-2 flex-auto">
+<div class="white-rounded">
 	<input type="password" bind:value="{password}" />
-	<button class="bg-gray-100 hover:bg-gray-300" on:click="{login}">
+	<button class="button" on:click="{login}">
 		Login
 	</button>
 </div>
+<style>
+	.page-container {
+		padding-top: 1em;
+		padding-bottom: 1em;
+	}
+</style>

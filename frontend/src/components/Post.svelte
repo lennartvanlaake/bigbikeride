@@ -17,7 +17,7 @@
 	});
 
 	function contentOverflows() {
-		if (blogContent.scrollHeight - blogContent.clientHeight > 20) {
+		if (blogContent.scrollHeight - blogContent.clientHeight > 20 || data.images) {
 			return true;
 		} else {
 			return false;
@@ -29,28 +29,30 @@
 	}
 </script>
 
-<div class="w-full rounded border my-2 bg-white text-container">
-	<h1 class="text-lg font-medium mb-4 p-2">{data.title}</h1>
-
+<div class="white-rounded">
+	<div class="title-wrapper">
+		<h1 class="title">{data.title}</h1>
+	</div>
 	{ #if data.content }
 
 	<div
-		class="text-sm overflow-hidden blog-content pb-4 px-2"
+		class="text blog-content"
 		class:hide-overflow="{hideOverflow}"
 		class:display-overflow="{!hideOverflow}"
 		bind:this="{blogContent}"
 	>
 		{ #if overflows && hideOverflow }
 		<div class="fadeout-overlay" transition:fade />
-		{ /if } {@html marked(data.content ?? "")} { #if overflows }
-		<strong
-			class="bg-white text-gray-400 absolute bottom-0 z-40 font-semibold hover:text-gray-600 left-1/2 -ml-10"
-			on:click="{toggleShowContent}"
-		>
-			{ #if hideOverflow } Show content { :else } Hide content
-			{ /if }
-		</strong>
-		{ /if } { #if data.images }
+		{ /if } 
+		{@html marked(data.content ?? "")} 
+		{ #if overflows }
+		<div class="toggle-container">
+			<strong class="toggle" on:click="{toggleShowContent}">
+				{ #if hideOverflow } + { :else } - { /if }
+			</strong>
+		</div>
+		{ /if } 
+		{ #if data.images }
 		<Carousel images="{data.images}"></Carousel>
 		{ /if }
 	</div>
@@ -58,7 +60,21 @@
 </div>
 
 <style>
+	.toggle-container {
+		text-align: center;
+		position: absolute;
+		bottom: 0;
+		z-index: 999;
+		width: 100%;
+	}
+
+	.toggle {
+		font-size: large;
+		color: darkgray;
+	}
+
 	.hide-overflow {
+		overflow: hidden;
 		max-height: 9rem;
 		transition: max-height 1s ease-out;
 	}
@@ -68,6 +84,7 @@
 	}
 	.blog-content {
 		position: relative;
+		padding-bottom: 2rem;
 	}
 	.fadeout-overlay {
 		content: "";

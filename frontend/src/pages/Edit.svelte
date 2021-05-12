@@ -74,7 +74,7 @@
 	}
     })
 </script>
-<div class="container b-2 m-2 block">
+<div class="white-rounded">
     {#if blog}
         <form>
             <label for="title">Title:</label><br />
@@ -125,12 +125,10 @@
     {/if}
     <button
         id="newBlog"
-        class="bg-gray-100 hover:bg-gray-300"
         on:click={create}>New blog</button
     >
     <button
         id="submit"
-        class="bg-gray-100 hover:bg-gray-300"
 	on:click={submit}>Submit blog</button
     >
 </div>
