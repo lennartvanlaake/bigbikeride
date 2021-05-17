@@ -45,7 +45,7 @@ interface BlogQueryResult extends BlogEntity {
 	content: string;
 }
 
-function toBlog(queryResult: BlogQueryResult): Blog {
+function toBlog(queryResult: BlogQueryResult, index: number): Blog {
 	return {
 		...queryResult,
 		created: queryResult.created_at,
@@ -56,6 +56,7 @@ function toBlog(queryResult: BlogQueryResult): Blog {
 		images: queryResult.images?.map((imageEntity) => {
 			return toImage(imageEntity);
 		}),
+		index: index,
 	};
 }
 
@@ -70,8 +71,8 @@ export const blogsRouter = new Router();
 
 blogsRouter.get("/", async (ctx, next) => {
 	const queryResult = await findAllBlogs();
-	ctx.body = queryResult.map((queryResult) => {
-		return toBlog(queryResult);
+	ctx.body = queryResult.map((queryResult, index) => {
+		return toBlog(queryResult, index);
 	});
 	await next();
 });
@@ -81,7 +82,7 @@ const findAllBlogs = async (): Promise<BlogQueryResult[]> => {
 };
 
 blogsRouter.get("/:id", async (ctx, next) => {
-	ctx.body = toBlog(await findBlog(ctx.params.id));
+	ctx.body = toBlog(await findBlog(ctx.params.id), 0);
 	next();
 });
 

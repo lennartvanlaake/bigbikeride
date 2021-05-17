@@ -21,6 +21,7 @@ export interface BlogEntity {
 
 export interface Blog {
 	id: string;
+	index: number;
 	title: string;
 	coordinates: Coordinates;
 	images: Array<Image>;
@@ -120,4 +121,3 @@ declare module "koa" {
 		session: MySession;
 	}
 }
-
