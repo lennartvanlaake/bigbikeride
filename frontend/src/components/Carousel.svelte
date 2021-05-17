@@ -8,8 +8,8 @@
 	}
 </script>
 <div class="image-container" on:click="{next}">
-	<img class="image" src={currentImage.path} alt={currentImage.description
-	?? ""}/> { #if currentImage.description }
+	<img class="image" src=/{currentImage.path}
+	alt={currentImage.description ?? ""}/> { #if currentImage.description }
 	<p class="description">{currentImage.description}</p>
 	{ /if }
 </div>

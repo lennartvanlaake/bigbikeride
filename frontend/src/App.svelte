@@ -3,29 +3,53 @@
 	import Edit from "./pages/Edit.svelte";
 	import Login from "./pages/Login.svelte";
 	import AboutMe from "./pages/AboutMe.svelte";
-	import { Router, Route, Link } from "svelte-routing";
+	import Map from "./pages/Map.svelte";
+	import { Router, Route, Link } from "svelte-navigator";
 	import { loggedIn } from "./javascript/storage";
 	import * as api from "./javascript/api";
-	import { onMount } from "svelte"
+	import { onMount } from "svelte";
+	import { fillBlogList } from "./javascript/bloglist";
 	onMount(async () => {
 		const result: boolean = await api.isLoggedIn()
 		loggedIn.set(result);
+		await fillBlogList();
 	})
 </script>
 <Router url="">	
-  <nav>
-	<Link to="/">Blog</Link>
-	<Link to="about">About me</Link>
+      
+ <header>
+ <nav>
+	<Link to="/">About</Link>
+	<Link to="blog">Blog</Link>
+	<Link to="map">Map</Link>
 	{ #if $loggedIn }
 	<Link to="edit">Edit</Link>
 	{ /if }
   </nav>
-  <div id= "root" class="page-content">
-    <Route path="/" component="{Index}" />
-    <Route path="edit" component="{Edit}" />
-    <Route path="login" component="{Login}" />
-    <Route path="about" component="{AboutMe}" />
-  </div>
+ </header>
+	  <Route path="edit">
+		<div class="page-content">
+		  	<Edit />
+		</div>	  
+	  </Route>
+	  <Route path="login">
+		<div class="page-content">
+			<Login />
+		</div>
+	  </Route>
+	  <Route path="/">
+		<div class="page-content">
+			<AboutMe />
+		</div>
+	  </Route>
+	<Route path="blog">
+		<div class="page-content">
+			<Index />
+		</div>
+	</Route>
+	  <Route path="map">
+		<Map />
+	  </Route >
 </Router>
 
 

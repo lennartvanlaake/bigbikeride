@@ -58,7 +58,6 @@
 	</div>
 	<Carousel images="{images}" />
 </div>
-
 <style>
 	.github {
 		display: inline;

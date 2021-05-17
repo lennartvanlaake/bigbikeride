@@ -15,15 +15,9 @@
 	}
 </script>
 
-<div class="white-rounded">
-	<input type="password" bind:value="{password}" />
-	<button class="button" on:click="{login}">
-		Login
-	</button>
-</div>
-<style>
-	.page-container {
-		padding-top: 1em;
-		padding-bottom: 1em;
-	}
-</style>
+	<div class="white-rounded">
+		<input type="password" bind:value="{password}" />
+		<button class="button" on:click="{login}">
+			Login
+		</button>
+	</div>

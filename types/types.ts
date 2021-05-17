@@ -120,3 +120,4 @@ declare module "koa" {
 		session: MySession;
 	}
 }
+

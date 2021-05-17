@@ -74,6 +74,7 @@
 	}
     })
 </script>
+
 <div class="white-rounded">
     {#if blog}
         <form>

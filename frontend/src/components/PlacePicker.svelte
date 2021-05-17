@@ -1,15 +1,13 @@
 <script lang="ts">
 	import createMap from "../javascript/maps";
+	import { nlCoordinates } from "../javascript/consts";
 	import { createEventDispatcher } from "svelte";
 	import * as L from "leaflet";
 	import "leaflet/dist/leaflet.css";
 	import type { Coordinates } from "../../../types/types";
 
 	// default coordinates are in the Netherlands
-	export let coordinates: Coordinates = {
-		lat: 52.1326,
-		long: 5.2913,
-	};
+	export let coordinates: Coordinates = nlCoordinates;
 	let map: any;
 	let marker: any;
 	const dispatch = createEventDispatcher();
@@ -28,7 +26,7 @@
 		}
 	}
 
-	function initPlacePicker(container: string) {
+	function initPlacePicker(container: HTMLElement) {
 		map = createMap(container, coordinates, 8);
 		marker = L.marker([coordinates.lat, coordinates.long]);
 		marker.addTo(map);
