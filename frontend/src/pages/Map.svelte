@@ -13,10 +13,30 @@
 		selectedBlog = $blogList.find((b) => b.id == id);
 	});
 
+	// javascript native modulo sucks with negative numbers
+	function mod(n: number, m: number) {
+		return ((n % m) + m) % m;
+	}
+
 	function getFirstCoordinates(): Coordinates {
 		if (selectedBlog) return selectedBlog.coordinates;
 		if ($blogList.length > 0) return $blogList[0].coordinates;
 		return nlCoordinates;
+	}
+
+	function switchSelectedBlog(increment: number) {
+		if (!$blogList) {
+			return;
+		}
+		if (!selectedBlog) {
+			select($blogList[0]);
+		}
+		const currentBlogPosition = $blogList.indexOf(selectedBlog!!);
+		const newIndex = mod(
+			currentBlogPosition + increment,
+			$blogList.length
+		);
+		select($blogList[newIndex]);
 	}
 
 	function mapInit(element: HTMLElement) {
@@ -24,13 +44,51 @@
 		// this method can be called before the previous component has been destroyed
 		// that messes with the height set to the flexbox here
 		setTimeout(() => {
+			//@ts-ignore
 			map = createMap(element, getFirstCoordinates(), 8);
 			$blogList.forEach((b) => addPointer(b));
 
-			map.on("click", (e: any) => {
-				blogId.set(null);
-			});
+			const leftArrow: any = createArrow(
+				"bottomleft",
+				"<",
+				() => switchSelectedBlog(-1)
+			);
+			const rightArrow: any = createArrow(
+				"bottomright",
+				">",
+				() => switchSelectedBlog(1)
+			);
+			map.addControl(new leftArrow());
+			map.addControl(new rightArrow());
 		}, 500);
+	}
+
+	function createArrow(
+		position: string,
+		text: string,
+		callback: Function
+	) {
+		return L.Control.extend({
+			options: {
+				position: position,
+			},
+
+			onAdd: function (map: any) {
+				var container = L.DomUtil.create(
+					"a",
+					"arrowButton"
+				);
+				L.DomEvent.disableClickPropagation(container);
+				container.style.color = "black";
+				container.style.fontSize = "1.5em";
+
+				container.textContent = text;
+				container.onclick = () => {
+					callback();
+				};
+				return container;
+			},
+		});
 	}
 
 	function addPointer(blog: Blog) {
@@ -57,6 +115,14 @@
 { /if }
 
 <style>
+	:global(.arrowButton) {
+		border-radius: 1em;
+		padding: 1em;
+		display: inline-block;
+		background-color: lightgray;
+		text-decoration: none;
+	}
+
 	#map {
 		width: 100vw;
 		height: 100%;

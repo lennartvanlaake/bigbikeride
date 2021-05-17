@@ -15,9 +15,9 @@
 	}
 </script>
 
-	<div class="white-rounded">
-		<input type="password" bind:value="{password}" />
-		<button class="button" on:click="{login}">
-			Login
-		</button>
-	</div>
+<div class="white-rounded">
+	<input type="password" bind:value="{password}" />
+	<button class="button" on:click="{login}">
+		Login
+	</button>
+</div>
