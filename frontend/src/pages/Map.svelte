@@ -14,7 +14,13 @@
 	}
 
 	function mapInit(element: HTMLElement) {
-		createMap(element, getFirstCoordinates(), 8);
+		// hack to ensure height is set correctly
+		// this method can be called before the previous component has been destroyed
+		// that messes with the height set to the flexbox here
+		setTimeout(
+			() => createMap(element, getFirstCoordinates(), 8),
+			500
+		);
 	}
 </script>
 
@@ -23,6 +29,8 @@
 <style>
 	#map {
 		width: 100vw;
-		height: 100vh;
+		height: 100%;
+		flex-grow: 1;
+		position: relative;
 	}
 </style>

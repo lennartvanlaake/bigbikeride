@@ -4,7 +4,7 @@
 	import Login from "./pages/Login.svelte";
 	import AboutMe from "./pages/AboutMe.svelte";
 	import Map from "./pages/Map.svelte";
-	import { Router, Route, Link } from "svelte-navigator";
+	import { Router, Route, Link } from "svelte-routing";
 	import { loggedIn } from "./javascript/storage";
 	import * as api from "./javascript/api";
 	import { onMount } from "svelte";
