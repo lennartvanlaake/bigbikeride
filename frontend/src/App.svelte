@@ -98,9 +98,6 @@
 		max-width: 64rem;
 		margin-right: auto;
 		margin-left: auto;
-		width: 100%;
-		flex: 1 1 auto;
-		height: 100%;
 	}
 
 	:global(.white-rounded) {

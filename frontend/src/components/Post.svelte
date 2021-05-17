@@ -17,7 +17,11 @@
 	});
 
 	function contentOverflows() {
-		if (blogContent.scrollHeight - blogContent.clientHeight > 20 || data.images) {
+		if (
+			blogContent.scrollHeight - blogContent.clientHeight >
+				20 ||
+			data.images
+		) {
 			return true;
 		} else {
 			return false;
@@ -43,16 +47,13 @@
 	>
 		{ #if overflows && hideOverflow }
 		<div class="fadeout-overlay" transition:fade />
-		{ /if } 
-		{@html marked(data.content ?? "")} 
-		{ #if overflows }
+		{ /if } {@html marked(data.content ?? "")} { #if overflows }
 		<div class="toggle-container">
 			<strong class="toggle" on:click="{toggleShowContent}">
 				{ #if hideOverflow } + { :else } - { /if }
 			</strong>
 		</div>
-		{ /if } 
-		{ #if data.images }
+		{ /if } { #if data.images }
 		<Carousel images="{data.images}"></Carousel>
 		{ /if }
 	</div>
@@ -64,6 +65,7 @@
 		text-align: center;
 		position: absolute;
 		bottom: 0;
+		left: 0;
 		z-index: 999;
 		width: 100%;
 	}
