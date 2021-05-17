@@ -6,11 +6,15 @@
 	import type { Blog, Coordinates } from "../../../types/types";
 	import * as L from "leaflet";
 
-	let selectedBlog = $blogList.filter((b) => b.id == $blogId);
+	let selectedBlog = $blogList.find((b) => b.id == $blogId);
 	let map: any;
 
+	blogId.subscribe((id) => {
+		selectedBlog = $blogList.find((b) => b.id == id);
+	});
+
 	function getFirstCoordinates(): Coordinates {
-		if (selectedBlog.length > 0) return selectedBlog[0].coordinates;
+		if (selectedBlog) return selectedBlog.coordinates;
 		if ($blogList.length > 0) return $blogList[0].coordinates;
 		return nlCoordinates;
 	}
@@ -22,6 +26,10 @@
 		setTimeout(() => {
 			map = createMap(element, getFirstCoordinates(), 8);
 			$blogList.forEach((b) => addPointer(b));
+
+			map.on("click", (e: any) => {
+				blogId.set(null);
+			});
 		}, 500);
 	}
 
@@ -29,19 +37,24 @@
 		L.marker([blog.coordinates.lat, blog.coordinates.long])
 			.addTo(map)
 			.on("click", (_e) => {
-				blogId.set(blog.id);
-				map.setView(
-					[
-						blog.coordinates.lat,
-						blog.coordinates.long,
-					],
-					8
-				);
+				select(blog);
 			});
+	}
+
+	function select(blog: Blog) {
+		blogId.set(blog.id);
+		map.setView([blog.coordinates.lat, blog.coordinates.long], 8);
 	}
 </script>
 
 <div id="map" use:mapInit></div>
+{ #if selectedBlog }
+<div id="selected">
+	<div id="selectedText" class="white-rounded">
+		<h1 class="title">{ selectedBlog?.title }</h1>
+	</div>
+</div>
+{ /if }
 
 <style>
 	#map {
@@ -49,5 +62,22 @@
 		height: 100%;
 		flex-grow: 1;
 		position: relative;
+	}
+	#selected {
+		border-radius: 1em 1em 0 0;
+		width: 100vw;
+		height: 14em;
+		position: relative;
+		background-color: #e5e5e5;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	#selectedText {
+		height: 80%;
+		width: 90%;
+		margin: 1em;
+		text-align: center;
 	}
 </style>

@@ -63,13 +63,13 @@
 	:global(nav a) {
 		color: white;
 		padding: 0.5em;
-		background: gray 0.5;
 		text-decoration: none;
 	}
 
 	:global(body) {
 		font-family: ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
 		line-height: 1.5;
+		background-color: #e5e5e5;
 	}
 
 	:global(.title-wrapper) {
