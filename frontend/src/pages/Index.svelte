@@ -5,8 +5,14 @@
 	import type { Blog } from "../../../types/types";
 	import { writable } from "svelte/store";
 
+	const pageSize = 4;
 	let displayedBlogList = writable<Blog[]>([]);
 	let startIndex = 0;
+	const isAddable = (entries: Array<any>, index: number | undefined) =>
+		entries[0].isIntersecting &&
+		$displayedBlogList.length >= pageSize &&
+		index;
+
 	blogId.subscribe((id) => {
 		if (id) {
 			startIndex = $blogList.findIndex(
@@ -19,19 +25,16 @@
 		(list) =>
 			($displayedBlogList = list.slice(
 				startIndex,
-				startIndex + 4
+				startIndex + pageSize
 			))
 	);
 
 	const endObserver = new IntersectionObserver((entries) => {
-		console.log("this the end");
 		let lastDisplayedIndex =
 			$displayedBlogList[$displayedBlogList.length - 1]
 				?.index;
 		if (
-			entries[0].isIntersecting &&
-			$displayedBlogList.length >= 3 &&
-			lastDisplayedIndex &&
+			isAddable(entries, lastDisplayedIndex) &&
 			lastDisplayedIndex != $blogList.length - 1
 		) {
 			const nextBlog = $blogList[lastDisplayedIndex + 1];
@@ -49,8 +52,17 @@
 	}
 
 	const startObserver = new IntersectionObserver((entries) => {
-		if (entries[0].isIntersecting) {
-			console.log("this the start");
+		let firstDisplayedIndex = $displayedBlogList[0]?.index;
+		if (isAddable(entries, firstDisplayedIndex) && firstDisplayedIndex != 0) {
+			const previousBlog = $blogList[firstDisplayedIndex - 1];
+			if (previousBlog) {
+				$displayedBlogList = [
+					previousBlog,
+					...$displayedBlogList,
+				];
+
+
+			}
 		}
 	});
 

@@ -10,8 +10,14 @@
 	import { onMount } from "svelte";
 	import { fillBlogList } from "./javascript/bloglist";
 	onMount(async () => {
-		const result: boolean = await api.isLoggedIn()
-		loggedIn.set(result);
+		let isLoggedIn = false;
+		try {
+			await api.isLoggedIn();
+			isLoggedIn = true;
+		} catch (e) {
+			// do nothing
+		}
+		loggedIn.set(isLoggedIn);
 		await fillBlogList();
 	})
 </script>
@@ -104,7 +110,8 @@
 		background-color: white;
 		border-radius: .25rem;
 		margin-top: .5rem;
-   		margin-bottom: .5rem;
+		margin-bottom: .5rem;
+		width: 100%;
 	}
 
 
