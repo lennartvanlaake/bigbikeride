@@ -1,15 +1,11 @@
-import App from "./App.svelte";
-const app = new App({
-    target: document.body,
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const App_svelte_1 = __importDefault(require("App.svelte"));
+const app = new App_svelte_1.default({
+    target: document.getElementById("app"),
+    hydrate: true,
 });
-export default app;
-// @ts-ignore
-if (import.meta.hot) {
-    // @ts-ignore
-    import.meta.hot.accept();
-    // @ts-ignore
-    import.meta.hot.dispose(() => {
-        app.$destroy();
-    });
-}
 //# sourceMappingURL=main.js.map

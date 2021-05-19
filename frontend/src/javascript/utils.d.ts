@@ -7,3 +7,4 @@ declare type Coords = {
     longitude: number;
 };
 export {};
+//# sourceMappingURL=utils.d.ts.map

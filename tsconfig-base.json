@@ -1,0 +1,16 @@
+{
+	"compilerOptions": {
+		"declaration": true,
+		"skipLibCheck": true,
+
+		"declarationMap": true,
+		"sourceMap": true,
+		"esModuleInterop": true,
+		"module": "commonjs",
+		"moduleResolution": "node",
+		"target": "es6",
+		"jsx": "preserve",
+		"lib": ["es6"]
+	},
+	"exclude": ["node_modules"]
+}

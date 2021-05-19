@@ -1,18 +1,13 @@
 {
-    "extends": "../tsconfig.json",
-    "include": ["./*.ts", "../types/*.ts"],
-    "compilerOptions": {
-        "module": "commonjs",
-        "noUnusedLocals": false,
-        "esModuleInterop": true,
-        "target": "es6",
-        "moduleResolution": "node",
-        "sourceMap": true,
-        "outDir": "dist"
-    },
-    "references": [
-        {
-            "path": "../types"
-        }
-    ]
+	"extends": "../tsconfig-base.json",
+	"include": ["./**/*.ts"],
+	"references": [
+		{
+			"path": "../types"
+		}
+	],
+	"compilerOptions": {
+		"composite": true,
+		"outDir": "../build/backend"
+	}
 }

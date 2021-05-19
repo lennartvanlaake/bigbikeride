@@ -1,20 +1,14 @@
 {
-	"include": ["**/*.svelte", "**/*.ts"],
-	"extends": "../tsconfig.json",
-	"references": [{ "path": "../types" }],
+	"include": ["./*.svelte", "./*.ts"],
+	"extends": "../tsconfig-base.json",
+	"references": [
+		{
+			"path": "../types"
+		}
+	],
 	"compilerOptions": {
-		"moduleResolution": "node",
-		"target": "esnext",
-		"module": "esnext",
-		"importsNotUsedAsValues": "error",
-		"isolatedModules": true,
-		"resolveJsonModule": true,
-		"sourceMap": true,
-		"esModuleInterop": true,
-		"skipLibCheck": true,
-		"forceConsistentCasingInFileNames": true,
+
 		"baseUrl": ".",
-		"allowJs": true,
-		"checkJs": true
+		"composite": true
 	}
 }

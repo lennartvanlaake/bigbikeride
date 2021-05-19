@@ -2,6 +2,7 @@
 	"name": "svelte-app",
 	"version": "1.0.0",
 	"scripts": {
+		"build-be": "tsc -b types && tsc -b backend && cp -r backend/public build/public",
 		"build": "cd frontend && vite build",
 		"cucumber": "sudo docker-compose up -d && cd backend && cucumber-js --profile default",
 		"cucumber-debug": "sudo docker-compose up -d && cd backend && node --inspect-brk ../node_modules/.bin/cucumber-js --profile default",

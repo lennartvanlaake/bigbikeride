@@ -16,36 +16,44 @@
 		$blogList.length >= pageSize &&
 		index;
 
-	blogId.subscribe((id) => {
-		if (id) {
-			let foundIndex = $blogList.findIndex(
-				(blog) => blog.id == id
-			);
-			startIndex = foundIndex == -1 ? 0 : foundIndex;
-		}
-	});
+	blogId.subscribe(
+		(id) => {
+			if (id) {
+				let foundIndex = $blogList.findIndex(
+					(blog) => blog.id == id
+				);
+				startIndex = foundIndex == -1 ? 0 : foundIndex;
+			}
+		},
+		{ threshold: 1.0 }
+	);
 
 	blogList.subscribe((list) => {
 		$displayedBlogList = sliceList(list);
 	});
 
-	const endObserver = new IntersectionObserver((entries) => {
-		let lastDisplayedIndex =
-			$displayedBlogList[$displayedBlogList.length - 1]
-				?.index;
-		if (
-			isAddable(entries, lastDisplayedIndex) &&
-			lastDisplayedIndex != $blogList.length - 1
-		) {
-			const nextBlog = $blogList[lastDisplayedIndex + 1];
-			if (nextBlog) {
-				$displayedBlogList = [
-					...$displayedBlogList,
-					nextBlog,
-				];
+	const endObserver = new IntersectionObserver(
+		(entries) => {
+			let lastDisplayedIndex =
+				$displayedBlogList[
+					$displayedBlogList.length - 1
+				]?.index;
+			if (
+				isAddable(entries, lastDisplayedIndex) &&
+				lastDisplayedIndex != $blogList.length - 1
+			) {
+				const nextBlog =
+					$blogList[lastDisplayedIndex + 1];
+				if (nextBlog) {
+					$displayedBlogList = [
+						...$displayedBlogList,
+						nextBlog,
+					];
+				}
 			}
-		}
-	});
+		},
+		{ threshold: 1.0 }
+	);
 
 	function initEnd(end: Element) {
 		endObserver.observe(end);
@@ -73,14 +81,17 @@
 </script>
 
 <div class="listContainer">
-	<div use:initStart />
+	<div class="limiter" use:initStart />
 	{#each $displayedBlogList as blog }
 	<Post data="{blog}" />
 	{/each}
-	<div use:initEnd />
+	<div class="limiter" use:initEnd />
 </div>
 
 <style>
+	.limiter {
+		height: 3em;
+	}
 	.listContainer {
 		overflow-y: auto;
 		height: 85vh;

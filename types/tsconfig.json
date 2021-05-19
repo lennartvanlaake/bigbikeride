@@ -1,8 +1,8 @@
 {
-  "extends": "../tsconfig.json",
-  "compilerOptions": {
-      "outDir": "../../dist/types",
-      "composite": true,
-      "esModuleInterop": true
-    }
+	"extends": "../tsconfig-base.json",
+	"compilerOptions": {
+		"composite": true,
+		"esModuleInterop": true,
+		"outDir": "../build/types"
+	}
 }
