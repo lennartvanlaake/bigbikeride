@@ -1,13 +1,13 @@
 {
-	"include": ["./*.svelte", "./*.ts"],
-	"extends": "../tsconfig-base.json",
+	"include": ["./**/*.svelte", "./**/*.ts"],
+	"extends": "@tsconfig/svelte/tsconfig.json",
 	"references": [
 		{
 			"path": "../types"
 		}
 	],
 	"compilerOptions": {
-
+		"outDir": "../build/frontend",
 		"baseUrl": ".",
 		"composite": true
 	}
