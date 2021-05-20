@@ -2,8 +2,13 @@
 	"name": "svelte-app",
 	"version": "1.0.0",
 	"scripts": {
+		"docker-login": "echo $CR_PAT | sudo docker login ghcr.io -u lennartvanlaake --password-stdin",
 		"build-be": "tsc -b types && tsc -b backend && cp -r backend/public build/backend/public",
 		"build-fe": "cd frontend && vite build",
+		"docker-build-be": "yarn build-be && sudo docker build -f Dockerfile-be . -t ghcr.io/lennartvanlaake/bikeride-be:latest",
+		"publish-be": "yarn docker-login && yarn docker-build-be && sudo docker push ghcr.io/lennartvanlaake/bikeride-be:latest",
+		"docker-build-fe": "yarn build-fe && sudo docker build -f Dockerfile-fe . -t ghcr.io/lennartvanlaake/bikeride-fe:latest",
+		"publish-fe": "yarn docker-login && yarn docker-build-fe && sudo docker push ghcr.io/lennartvanlaake/bikeride-fe:latest",
 		"cucumber": "sudo docker-compose up -d && cd backend && cucumber-js --profile default",
 		"cucumber-debug": "sudo docker-compose up -d && cd backend && node --inspect-brk ../node_modules/.bin/cucumber-js --profile default",
 		"start-fe": "cd frontend && vite",
