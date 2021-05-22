@@ -3,7 +3,7 @@
 	"version": "1.0.0",
 	"scripts": {
 		"docker-login": "echo $CR_PAT | sudo docker login ghcr.io -u lennartvanlaake --password-stdin",
-		"build-be": "tsc -b types && tsc -b backend && cp -r backend/public build/backend/public",
+		ghcr.io"build-be": "tsc -b types && tsc -b backend && cp -r backend/public build/backend/public",
 		"build-fe": "cd frontend && vite build",
 		"docker-build-be": "yarn build-be && sudo docker build -f Dockerfile-be . -t ghcr.io/lennartvanlaake/bikeride-be:latest",
 		"publish-be": "yarn docker-login && yarn docker-build-be && sudo docker push ghcr.io/lennartvanlaake/bikeride-be:latest",

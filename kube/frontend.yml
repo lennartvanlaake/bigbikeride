@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: fe-service 
+  labels:
+    app: fe
+spec:
+  ports:
+  - port: 80
+  selector:
+    app: fe
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fe-deployment
+  labels:
+    app: fe
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fe
+  template:
+    metadata:
+      labels:
+        app: fe
+    spec:
+      containers:
+      - name: fe
+        image: ghcr.io/lennartvanlaake/bikeride-fe:latest 
+        ports:
+        - containerPort: 80
+      imagePullSecrets:
+        - name: regcred
