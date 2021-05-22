@@ -3,4 +3,7 @@ kind: ConfigMap
 metadata:
   name: config
 data:
+  PGPORT: "5432"
+  VITE_PUBLIC_BASE_URL: ""
+  PGHOST: pg-service
   POSTGRES_DB: bikeride

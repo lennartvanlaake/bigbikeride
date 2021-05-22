@@ -1,35 +1,65 @@
 apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: assets-pv-claim
+  labels:
+    app: be
+spec:
+  storageClassName: "civo-volume"
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: v1
 kind: Service
 metadata:
-  name: fe-service 
+  name: be-service 
   labels:
-    app: fe
+    app: be
 spec:
   ports:
-  - port: 80
+  - port: 5000
   selector:
-    app: fe
+    app: be
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: fe-deployment
+  name: be-deployment
   labels:
-    app: fe
+    app: be
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: fe
+      app: be
   template:
     metadata:
       labels:
-        app: fe
+        app: be
     spec:
       containers:
-      - name: fe
-        image: ghcr.io/lennartvanlaake/bikeride-fe:latest 
+      - name: be
+        image: ghcr.io/lennartvanlaake/bikeride-be:latest 
         ports:
-        - containerPort: 80
+        - containerPort: 5000
+        envFrom:
+        - configMapRef:
+            name: config
+        - secretRef:
+            name: sessionsecret
+        - secretRef:
+            name: password
+        - secretRef:
+            name: pgpassword
+        volumeMounts:
+            - mountPath: /usr/src/app/backend/public/uploads
+              name: assets 
       imagePullSecrets:
         - name: regcred
+      volumes:
+        - name: assets
+          persistentVolumeClaim:
+            claimName: assets-pv-claim

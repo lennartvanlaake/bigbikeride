@@ -1,0 +1,22 @@
+kind: Ingress
+apiVersion: extensions/v1beta1
+metadata:
+  name: "ingress"
+
+spec:
+  rules:
+    - host: e8512175-218b-4c80-950c-25853ee2c31a.k8s.civo.com
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: fe-service
+              servicePort: 80
+          - path: /api
+            backend:
+              serviceName: be-service
+              servicePort: 5000
+          - path: /uploads
+            backend:
+              serviceName: be-service
+              servicePort: 5000
