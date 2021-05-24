@@ -7,9 +7,8 @@ import type {
 } from "../../../types/types";
 import * as uuid from "uuid";
 // @ts-ignore
-const { VITE_PUBLIC_BASE_URL } = import.meta.env;
 
-export const baseUrl: string = VITE_PUBLIC_BASE_URL;
+export const baseUrl: string = "/api";
 
 const request = axios.create();
 
@@ -20,37 +19,37 @@ function checkId(id: string) {
 }
 
 export const createBlog = async (req: CreateBlogRequest): Promise<string> => {
-	const result = await request.post(`${VITE_PUBLIC_BASE_URL}/blogs`, req);
+	const result = await request.post(`${baseUrl}/blogs`, req);
 	checkId(result.data.id);
 	return result.data.id;
 };
 
 export const updateBlog = async (req: CreateBlogRequest, id: string) => {
 	checkId(id);
-	return request.put(`${VITE_PUBLIC_BASE_URL}/blogs/${id}`, req);
+	return request.put(`${baseUrl}/blogs/${id}`, req);
 };
 
 export const getAllBlogs = async (): Promise<Blog[]> => {
-	const result = await request.get(`${VITE_PUBLIC_BASE_URL}/blogs`);
+	const result = await request.get(`${baseUrl}/blogs`);
 	return result.data;
 };
 
 export const getBlog = async (id: string): Promise<Blog> => {
 	checkId(id);
-	const result = await request.get(`${VITE_PUBLIC_BASE_URL}/blogs/${id}`);
+	const result = await request.get(`${baseUrl}/blogs/${id}`);
 	return result.data;
 };
 
 export const deleteBlog = async (id: string) => {
 	checkId(id);
-	return await request.delete(`${VITE_PUBLIC_BASE_URL}/blogs/${id}`);
+	return await request.delete(`${baseUrl}/blogs/${id}`);
 };
 
 export const linkImageToBlog = async (imageId: string, blogId: string) => {
 	checkId(imageId);
 	checkId(blogId);
 	return await request.post(
-		`${VITE_PUBLIC_BASE_URL}/images/${imageId}/post/${blogId}`
+		`${baseUrl}/images/${imageId}/post/${blogId}`
 	);
 };
 
@@ -60,16 +59,16 @@ export const changeImageDescription = async (
 ) => {
 	checkId(imageId);
 	return await request.patch(
-		`${VITE_PUBLIC_BASE_URL}/images/${imageId}/description`,
+		`${baseUrl}/images/${imageId}/description`,
 		req
 	);
 };
 
 export const login = async (req: LoginRequest) => {
-	return await request.post(`${VITE_PUBLIC_BASE_URL}/login`, req);
+	return await request.post(`${baseUrl}/login`, req);
 };
 
 export const isLoggedIn = async (): Promise<boolean> => {
-	const response = await request.get(`${VITE_PUBLIC_BASE_URL}/login`);
+	const response = await request.get(`${baseUrl}/login`);
 	return response.status == 200;
 };

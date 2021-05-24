@@ -6,9 +6,9 @@
 		"declarationMap": true,
 		"sourceMap": true,
 		"esModuleInterop": true,
-		"module": "commonjs",
+		"module": "es6",
 		"moduleResolution": "node",
-		"target": "es6",
+		"target": "es2020",
 		"jsx": "preserve",
 		"lib": ["es6"]
 	},

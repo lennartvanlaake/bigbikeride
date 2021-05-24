@@ -1,0 +1,23 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migrate
+spec:
+  template:
+    spec:
+      containers:
+      - name: migrate
+        image: ghcr.io/lennartvanlaake/migrate:latest 
+        envFrom:
+        - configMapRef:
+            name: config
+        - secretRef:
+            name: sessionsecret
+        - secretRef:
+            name: password
+        - secretRef:
+            name: pgpassword
+        command: ["yarn",  "migrate"]
+      restartPolicy: Never
+      imagePullSecrets:
+        - name: regcred

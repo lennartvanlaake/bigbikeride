@@ -1,0 +1,4 @@
+FROM node:15-alpine
+WORKDIR /usr/src/app
+# Copy all other source code to work directory
+ADD . /usr/src/app

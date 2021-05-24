@@ -7,8 +7,9 @@ import json from "koa-json";
 import bodyParser from "koa-bodyparser";
 import logger from "koa-logger";
 import session from "koa-session";
-import cors = require("@koa/cors");
-import serve = require("koa-static");
+
+const cors = require("@koa/cors");
+const serve = require("koa-static");
 
 // base config
 export const app = new Koa<DefaultState, DefaultContext>();
