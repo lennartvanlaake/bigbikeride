@@ -16,8 +16,8 @@ services:
   nginx:
     image: nginx
     volumes:
-      - ./proxy/nginx.conf:/etc/nginx/conf:ro
-      - ./proxy/conf.d:/etc/nginx/conf.d:ro
+      - ./develop/proxy/nginx.conf:/etc/nginx/conf:ro
+      - ./develop/proxy/conf.d:/etc/nginx/conf.d:ro
     ports:
       - 8080:80
 

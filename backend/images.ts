@@ -16,9 +16,10 @@ import {
 import { v4 } from "uuid";
 export const imagesRouter = new Router<DefaultState, Context>();
 debugger;
+const uploadDir = "api/uploads"
 const storage = multer.diskStorage({
 	destination: function (_req, _file, cb) {
-		cb(null, __dirname + "/public/");
+		cb(null, __dirname + `/public/${uploadDir}`);
 	},
 	filename: function (_req, file, cb) {
 		cb(null, Date.now() + path.extname(file.originalname));
@@ -38,7 +39,7 @@ imagesRouter.post("/", upload.single(UPLOAD_NAME), async (ctx, next) => {
 	const imageEntity: ImageEntity = {
 		id: id,
 		description: null,
-		path: `uploads/${file.filename}`,
+		path: `${uploadDir}/${file.filename}`,
 		created_at: timestamp,
 		updated_at: timestamp,
 	};

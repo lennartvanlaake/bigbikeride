@@ -6,7 +6,7 @@
 	const images: Image[] = [
 		{
 			id: "_",
-			path: "/uploads/profile1.jpg",
+			path: "assets/profile1.jpg",
 			description: null,
 			created: new Date(),
 			updated: new Date(),

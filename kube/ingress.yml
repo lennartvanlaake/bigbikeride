@@ -5,18 +5,16 @@ metadata:
 
 spec:
   rules:
-    - host: e8512175-218b-4c80-950c-25853ee2c31a.k8s.civo.com
+    - host: lennartsbigbikeride.eu
       http:
         paths:
-          - path: /
+          - pathType: Prefix
+            path: /
             backend:
               serviceName: fe-service
               servicePort: 80
-          - path: /api
-            backend:
-              serviceName: be-service
-              servicePort: 5000
-          - path: /uploads
+          - pathType: Prefix
+            path: /api
             backend:
               serviceName: be-service
               servicePort: 5000

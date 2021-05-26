@@ -7,6 +7,8 @@
 		}
 	],
 	"compilerOptions": {
+		"module": "CommonJS",
+		"esModuleInterop": true,
 		"composite": true,
 		"outDir": "../build/backend"
 	}
