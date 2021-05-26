@@ -1,10 +1,10 @@
 {
 	"name": "svelte-app",
-	"version": "1.1.0",
+	"version": "0.5.0",
 	"type": "commonjs",
 	"scripts": {
-		"deploy-be": "bash deploy-be.sh",
-		"deploy-fe": "bash deploy-fe.sh",
+		"deploy-be": "yarn version --minor && bash deploy-be.sh $npm_package_version",
+		"deploy-fe": "yarn version --minor && bash deploy-fe.sh",
 		"deploy-migration": "bash migrate.sh",
 		"cucumber": "sudo docker-compose up -d && cd backend && cucumber-js --profile default",
 		"cucumber-debug": "sudo docker-compose up -d && cd backend && node --inspect-brk ../node_modules/.bin/cucumber-js --profile default",
