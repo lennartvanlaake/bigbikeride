@@ -1,30 +1,34 @@
 <script lang="ts">
 	import type { Image } from "../../../types/types";
+	// Import Swiper styles
+	import "swiper/swiper.scss";
+
+	import "swiper/components/pagination/pagination.min.css";
+	import "swiper/components/navigation/navigation.min.css";
+
+	import "./style.css";
+	import { Swiper, SwiperSlide } from "swiper/svelte";
+	// import Swiper core and required modules
+	import SwiperCore, { Pagination, Navigation } from "swiper/core";
+
 	export let images: Array<Image>;
-	let index = 0;
-	$: currentImage = images[index % images.length];
-	function next() {
-		index++;
-	}
+	SwiperCore.use([Pagination, Navigation]);
 </script>
-<div class="image-container" on:click="{next}">
-	<img class="image" src=/{currentImage.path}
-	alt={currentImage.description ?? ""}/> { #if currentImage.description }
-	<p class="description">{currentImage.description}</p>
-	{ /if }
-</div>
 
-<style>
-	.image-container {
-		position: relative;
-	}
-
-	.image {
-		width: 100%;
-	}
-
-	.description {
-		text-align: center;
-		padding: 1em;
-	}
-</style>
+<Swiper
+	pagination="{{
+  'type': 'fraction'
+}}"
+	navigation="{true}"
+	class="mySwiper"
+>
+	{ #each images as currentImage }
+	<SwiperSlide>
+		<img class="image" src=/{currentImage.path}
+		alt={currentImage.description ?? ""}/> { #if
+		currentImage.description }
+		<p class="description">{currentImage.description}</p>
+		{ /if }
+	</SwiperSlide>
+	{ /each }
+</Swiper>

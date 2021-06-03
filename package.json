@@ -90,6 +90,7 @@
 		"svelte-navigator": "^3.1.5",
 		"svelte-preprocess": "^4.7.3",
 		"svelte-routing": "^1.6.0",
+		"swiper": "^6.7.0",
 		"tailwindcss": "^2.1.2",
 		"tough-cookie": "^4.0.0",
 		"ts-node": "^9.1.1",
