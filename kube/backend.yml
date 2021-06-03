@@ -5,12 +5,12 @@ metadata:
   labels:
     app: be
 spec:
-  storageClassName: "civo-volume"
+  storageClassName: "longhorn"
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 10Gi
+      storage: 8Gi
 ---
 apiVersion: v1
 kind: Service
