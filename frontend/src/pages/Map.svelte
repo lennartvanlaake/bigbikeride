@@ -30,6 +30,7 @@
 		}
 		if (!selectedBlog) {
 			select($blogList[0]);
+			return;
 		}
 		const currentBlogPosition = $blogList.indexOf(selectedBlog!!);
 		const newIndex = mod(
@@ -81,7 +82,6 @@
 				L.DomEvent.disableClickPropagation(container);
 				container.style.color = "black";
 				container.style.fontSize = "1.5em";
-
 				container.textContent = text;
 				container.onclick = () => {
 					callback();
@@ -101,6 +101,7 @@
 
 	function select(blog: Blog) {
 		blogId.set(blog.id);
+		selectedBlog = blog;
 		map.setView([blog.coordinates.lat, blog.coordinates.long], 8);
 	}
 </script>
@@ -116,11 +117,13 @@
 
 <style>
 	:global(.arrowButton) {
-		border-radius: 1em;
+		background-color: green;
 		padding: 1em;
+		border-radius: 3px;
+		border-color: black;
 		display: inline-block;
-		background-color: lightgray;
 		text-decoration: none;
+		top: -2em;
 	}
 
 	#map {
@@ -130,11 +133,10 @@
 		position: relative;
 	}
 	#selected {
-		border-radius: 1em 1em 0 0;
 		width: 100vw;
 		height: 14em;
 		position: relative;
-		background-color: #e5e5e5;
+		background-color: white;
 		display: flex;
 		align-items: center;
 		justify-content: center;

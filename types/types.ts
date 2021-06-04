@@ -106,6 +106,10 @@ export interface LoginRequest {
 	password: string;
 }
 
+export interface LoginResponse {
+	loggedIn: boolean;
+}
+
 export interface MySession {
 	loggedIn: boolean;
 }

@@ -115,13 +115,11 @@ blogsRouter.post("/", async (ctx, next) => {
 	};
 	await connection(BLOG_TABLE_NAME).insert(blogEntity);
 
-	if (blogRequest.content) {
-		const content: ContentBlogEntity = {
-			id: id,
-			content: blogRequest.content!!,
-		};
-		await connection(CONTENT_BLOG_TABLE_NAME).insert(content);
-	}
+	const content: ContentBlogEntity = {
+		id: id,
+		content: blogRequest.content ?? "",
+	};
+	await connection(CONTENT_BLOG_TABLE_NAME).insert(content);
 
 	ctx.body = { id: id };
 	await next();
@@ -136,6 +134,7 @@ blogsRouter.put("/:id", async (ctx, next) => {
 		.update(BlogKeys.TITLE, blogRequest.title)
 		.update(BlogKeys.UPDATED, now)
 		.where(BlogKeys.ID, ctx.params.id);
+	debugger;
 	if (blogRequest.content) {
 		await connection(CONTENT_BLOG_TABLE_NAME)
 			.update(BlogContentKeys.CONTENT, blogRequest.content!!)

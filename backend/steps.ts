@@ -37,20 +37,23 @@ Given("I POST a blog with title {string}", async (title: string) => {
 	expect(result.status).to.equal(200);
 });
 
-When("I change the title of the blog to {string}", async (newTitle: string) => {
-	const requestBody: CreateBlogRequest = {
-		title: newTitle,
-		content: "",
-		coordinates: {
-			long: 0.0,
-			lat: 0.0,
-		},
-	};
-	await request
-		.put(`/api/blogs/${blogId}`)
-		.set("Cookie", cookie)
-		.send(requestBody);
-});
+When(
+	"I change the title of the blog to {string} and the content to {string}",
+	async (newTitle: string, newContent: string) => {
+		const requestBody: CreateBlogRequest = {
+			title: newTitle,
+			content: newContent,
+			coordinates: {
+				long: 0.0,
+				lat: 0.0,
+			},
+		};
+		await request
+			.put(`/api/blogs/${blogId}`)
+			.set("Cookie", cookie)
+			.send(requestBody);
+	}
+);
 
 When("I GET all blogs", async () => {
 	const result = await request
@@ -80,6 +83,10 @@ Then("the blog in the response has title {string}", (title: string) => {
 	expect(oneBlogResponse.title).to.equal(title);
 });
 
+Then("the blog in the response has content {string}", (content: string) => {
+	expect(oneBlogResponse.content).to.equal(content);
+});
+
 When("I delete the created blog", async () => {
 	await request
 		.delete(`/api/blogs/${blogId}`)
@@ -97,7 +104,7 @@ Then("the blog is no longer returned", async () => {
 When("I upload an image", async () => {
 	const result = await request
 		.post("/api/images")
-		.attach(UPLOAD_NAME, __dirname + "/public/dragon.jpg")
+		.attach(UPLOAD_NAME, __dirname + "/features/dragon.jpg")
 		.set("Cookie", cookie)
 		.expect(200);
 	imageId = result.text;

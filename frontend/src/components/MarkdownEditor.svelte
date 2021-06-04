@@ -2,13 +2,13 @@
 	export let content: string | null;
 	export let simplemde: any;
 	let contentElement: HTMLElement;
-	$: simplemde?.value(content);
+	$: simplemde?.value(content ?? "");
 	function createMd() {
 		// @ts-ignore
 		simplemde = new SimpleMDE({
 			element: contentElement,
 		});
-		simplemde.value(content);
+		simplemde.value(content ?? "");
 	}
 </script>
 <svelte:head>

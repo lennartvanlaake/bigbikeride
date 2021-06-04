@@ -10,13 +10,7 @@
 	import { onMount } from "svelte";
 	import { fillBlogList } from "./javascript/bloglist";
 	onMount(async () => {
-		let isLoggedIn = false;
-		try {
-			await api.isLoggedIn();
-			isLoggedIn = true;
-		} catch (e) {
-			// do nothing
-		}
+		let isLoggedIn = await api.isLoggedIn();
 		loggedIn.set(isLoggedIn);
 		await fillBlogList();
 	})

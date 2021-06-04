@@ -17,6 +17,7 @@
 	});
 
 	function contentOverflows() {
+		if (!blogContent) return false;
 		if (
 			blogContent.scrollHeight - blogContent.clientHeight >
 				20 ||
@@ -47,16 +48,20 @@
 	>
 		{ #if overflows && hideOverflow }
 		<div class="fadeout-overlay" transition:fade />
-		{ /if } {@html marked(data.content ?? "")} { #if overflows }
+		{ /if }
+		<div class="actual-content">
+			{@html marked(data.content ?? "")}
+		</div>
+		{ #if overflows }
 		<div class="toggle-container">
 			<strong class="toggle" on:click="{toggleShowContent}">
 				{ #if hideOverflow } + { :else } - { /if }
 			</strong>
 		</div>
-		{ /if } { #if data.images }
-		<Carousel images="{data.images}"></Carousel>
 		{ /if }
 	</div>
+	{ /if } { #if data.images }
+	<Carousel images="{data.images}"></Carousel>
 	{ /if }
 </div>
 

@@ -15,8 +15,7 @@ import {
 } from "../types/types";
 import { v4 } from "uuid";
 export const imagesRouter = new Router<DefaultState, Context>();
-debugger;
-const uploadDir = "api/uploads"
+const uploadDir = "api/uploads";
 const storage = multer.diskStorage({
 	destination: function (_req, _file, cb) {
 		cb(null, __dirname + `/public/${uploadDir}`);
@@ -35,7 +34,6 @@ imagesRouter.post("/", upload.single(UPLOAD_NAME), async (ctx, next) => {
 	}
 	const id = v4();
 	const timestamp = new Date();
-	debugger;
 	const imageEntity: ImageEntity = {
 		id: id,
 		description: null,
@@ -77,7 +75,7 @@ imagesRouter.delete("/:id", async (ctx, next) => {
 			.first()
 	);
 
-	fs.unlinkSync(`${__dirname}/${imagePath.path}`);
+	fs.unlinkSync(__dirname + `/public/${imagePath.path}`);
 	await connection(IMAGE_TABLE_NAME)
 		.delete()
 		.where(ImageKeys.ID, ctx.params.id);

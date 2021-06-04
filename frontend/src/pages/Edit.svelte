@@ -2,6 +2,7 @@
  import * as api from '../javascript/api'
  import * as utils from '../javascript/utils'
  import { blogId } from "../javascript/storage";
+ import { nlCoordinates } from "../javascript/consts";
  import PlacePicker from "../components/PlacePicker.svelte";
  import ImageUpload from "../components/ImageUpload.svelte";
  import MarkdownEditor from "../components/MarkdownEditor.svelte";
@@ -9,7 +10,7 @@
  import { onMount } from 'svelte';
 
     let simplemde: any;
-    let blog: Omit<Blog, "id" | "created" | "type">;
+    let blog: Omit<Blog, "id" | "created" | "type" | "index">;
 
     async function fill(blogId: string) {
 	blog = await api.getBlog(blogId);
@@ -23,33 +24,36 @@
 		coordinates: coordinates,
 		images: [],
 	}
-	blogId.set(null);
+	blogId.set(undefined);
     }
 
     async function submit() {
 	blog.content = simplemde?.value()
-	let id;
 	if ($blogId) {
-		id = $blogId;
-		await api.updateBlog(blog, id);
+		await api.updateBlog(blog, $blogId);
 	} else {
-		id = await api.createBlog(blog);
-		blogId.set(id);
+		blogId.set(await api.createBlog(blog));
 	}
 	if (blog.images) {
 	    blog.images.forEach( img => api.changeImageDescription(
 		    img.id, { description: img.description } 
 	    ))
 	}
-	fill(id);
+	fill($blogId);
 	alert("Post success!")
     }
 
     async function getLocation(): Promise<Coordinates> {
+    	try {
+
 	const position = await utils.getPosition();
 	return {
            long: position.coords.longitude,
 	   lat: position.coords.latitude
+	}
+	} catch (e) {
+		console.error(e);
+		return nlCoordinates;
 	}
     }
 
@@ -69,7 +73,11 @@
     }
 
     onMount(async () => {
-        if ($blogId) {
+	if ($blogId) {
+		if (!api.isId($blogId)) {
+		   blogId.set(undefined);
+		   return
+		}
 	   await fill($blogId);
 	}
     })
@@ -85,7 +93,7 @@
                 name="title"
                 bind:value={blog.title}
             /><br />
-	    <MarkdownEditor bind:content={blog.content} bind:simplemde={simplemde} />
+	    <MarkdownEditor bind:simplemde={simplemde} />
 
             <label for="longitude">Longitude:</label><br />
             <input

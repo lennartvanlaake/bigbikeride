@@ -3,6 +3,7 @@ import type {
 	Blog,
 	CreateBlogRequest,
 	LoginRequest,
+	LoginResponse,
 	UpdateImageDescriptionRequest,
 } from "../../../types/types";
 import * as uuid from "uuid";
@@ -16,6 +17,10 @@ function checkId(id: string) {
 	if (!uuid.validate(id)) {
 		throw new Error(`id is invalid: ${id}`);
 	}
+}
+
+export function isId(id: string | undefined) {
+	return uuid.validate(id);
 }
 
 export const createBlog = async (req: CreateBlogRequest): Promise<string> => {
@@ -69,6 +74,7 @@ export const login = async (req: LoginRequest) => {
 };
 
 export const isLoggedIn = async (): Promise<boolean> => {
-	const response = await request.get(`${baseUrl}/login`);
-	return response.status == 200;
+	const response = (await (await request.get(`${baseUrl}/login`))
+		.data) as LoginResponse;
+	return response.loggedIn;
 };
