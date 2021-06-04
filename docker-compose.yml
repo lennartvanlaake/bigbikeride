@@ -14,12 +14,14 @@ services:
       - 1234:5432
 
   nginx:
-    image: nginx
+    build:
+      context: .
+      dockerfile: Dockerfile-nginx
     volumes:
       - ./develop/proxy/nginx.conf:/etc/nginx/conf:ro
       - ./develop/proxy/conf.d:/etc/nginx/conf.d:ro
-    ports:
-      - 8080:80
+    network_mode: "host"
+
 
 volumes:
   blog_postgres:
