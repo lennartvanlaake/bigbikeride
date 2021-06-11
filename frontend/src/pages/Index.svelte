@@ -2,77 +2,98 @@
 	import { blogList } from "../javascript/bloglist";
 	import { blogId } from "../javascript/storage";
 	import Post from "../components/Post.svelte";
+	import SelectedBlog from "../components/SelectedBlog.svelte";
 	import type { Blog } from "../../../types/types";
-	import { writable } from "svelte/store";
+	import { tick } from "svelte";
 
 	const pageSize = 4;
-	let startIndex = 0;
 	const sliceList = (list: Blog[]) => {
-		return list.slice(startIndex, startIndex + pageSize);
+		const selectedBlogIndex = list.find((b) => b.id == $blogId)
+			?.index;
+		const startIndex =
+			selectedBlogIndex - pageSize > 0
+				? selectedBlogIndex - pageSize
+				: 0;
+		const endIndex = selectedBlogIndex
+			? selectedBlogIndex + pageSize
+			: list.length - 1;
+		return [...list.slice(startIndex, endIndex)];
 	};
-	let displayedBlogList = writable<Blog[]>(sliceList($blogList));
+	let initialList = true;
+	let listElement: HTMLElement;
+	let displayedBlogList = sliceList($blogList);
+	blogList.subscribe((list) => (displayedBlogList = sliceList(list)));
+
 	const isAddable = (entries: Array<any>, index: number | undefined) =>
-		entries[0].isIntersecting &&
-		$blogList.length >= pageSize &&
-		index;
+		entries[0].isIntersecting && index;
 
-	blogId.subscribe(
-		(id) => {
-			if (id) {
-				let foundIndex = $blogList.findIndex(
-					(blog) => blog.id == id
-				);
-				startIndex = foundIndex == -1 ? 0 : foundIndex;
+	const endObserver = new IntersectionObserver(async (entries) => {
+		initialList = false;
+		let currentScrollPosition = listElement.scrollTop;
+		let oldScroll =
+			listElement.scrollHeight - listElement.clientHeight;
+
+		let lastDisplayedIndex =
+			displayedBlogList[displayedBlogList.length - 1]?.index;
+
+		if (
+			isAddable(entries, lastDisplayedIndex) &&
+			lastDisplayedIndex != $blogList.length - 1
+		) {
+			const nextBlogs = $blogList.slice(
+				lastDisplayedIndex + 1,
+				lastDisplayedIndex + 1 + pageSize
+			);
+			if (nextBlogs) {
+				displayedBlogList = [
+					...displayedBlogList,
+					...nextBlogs,
+				];
 			}
-		},
-		{ threshold: 1.0 }
-	);
+		}
 
-	blogList.subscribe((list) => {
-		$displayedBlogList = sliceList(list);
+		await tick();
+		let newScroll =
+			listElement.scrollHeight - listElement.clientHeight;
+		listElement.scrollTop =
+			currentScrollPosition + (newScroll - oldScroll);
 	});
-
-	const endObserver = new IntersectionObserver(
-		(entries) => {
-			let lastDisplayedIndex =
-				$displayedBlogList[
-					$displayedBlogList.length - 1
-				]?.index;
-			if (
-				isAddable(entries, lastDisplayedIndex) &&
-				lastDisplayedIndex != $blogList.length - 1
-			) {
-				const nextBlog =
-					$blogList[lastDisplayedIndex + 1];
-				if (nextBlog) {
-					$displayedBlogList = [
-						...$displayedBlogList,
-						nextBlog,
-					];
-				}
-			}
-		},
-		{ threshold: 1.0 }
-	);
 
 	function initEnd(end: Element) {
 		endObserver.observe(end);
 	}
 
-	const startObserver = new IntersectionObserver((entries) => {
-		let firstDisplayedIndex = $displayedBlogList[0]?.index;
+	const startObserver = new IntersectionObserver(async (entries) => {
+		initialList = false;
+
+		let currentScrollPosition = listElement.scrollTop;
+		let oldScroll =
+			listElement.scrollHeight - listElement.clientHeight;
+
+		let firstDisplayedIndex = displayedBlogList[0]?.index;
 		if (
 			isAddable(entries, firstDisplayedIndex) &&
 			firstDisplayedIndex != 0
 		) {
-			const previousBlog = $blogList[firstDisplayedIndex - 1];
-			if (previousBlog) {
-				$displayedBlogList = [
-					previousBlog,
-					...$displayedBlogList,
+			const previousBlogs = $blogList.slice(
+				firstDisplayedIndex - (1 + pageSize) > 0
+					? firstDisplayedIndex - (1 + pageSize)
+					: 0,
+				firstDisplayedIndex
+			);
+			if (previousBlogs) {
+				displayedBlogList = [
+					...previousBlogs,
+					...displayedBlogList,
 				];
 			}
 		}
+
+		await tick();
+		let newScroll =
+			listElement.scrollHeight - listElement.clientHeight;
+		listElement.scrollTop =
+			currentScrollPosition + (newScroll - oldScroll);
 	});
 
 	function initStart(start: Element) {
@@ -80,11 +101,15 @@
 	}
 </script>
 
-<div class="listContainer">
+<div class="listContainer" bind:this="{listElement}">
 	<div class="limiter" use:initStart />
-	{#each $displayedBlogList as blog }
+	{#each displayedBlogList as blog } {#if blog.id == $blogId &&
+	initialList }
+	<SelectedBlog />
 	<Post data="{blog}" />
-	{/each}
+	{:else }
+	<Post data="{blog}" />
+	{/if } {/each}
 	<div class="limiter" use:initEnd />
 </div>
 

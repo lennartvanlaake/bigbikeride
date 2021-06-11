@@ -95,14 +95,14 @@
 	:global(.page-content) {
 	    	margin-bottom: 1rem;
 		padding: .5rem;
-		max-width: 64rem;
+		width: 64rem;
 		margin-right: auto;
 		margin-left: auto;
 	}
 
 	:global(.white-rounded) {
 		background-color: white;
-		border-radius: .25rem;
+		border-radius: 1rem;
 		margin-top: .5rem;
 		margin-bottom: .5rem;
 		width: 100%;

@@ -37,7 +37,8 @@ const baseSelectQuery = () => {
        as arr)
      as images`),
 			CONTENT_BLOG_TABLE_NAME + "." + BlogContentKeys.CONTENT
-		);
+		)
+		.orderBy(BlogKeys.CREATED, "desc");
 };
 
 interface BlogQueryResult extends BlogEntity {

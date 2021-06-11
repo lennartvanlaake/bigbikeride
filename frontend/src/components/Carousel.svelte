@@ -7,18 +7,26 @@
 	import { onDestroy, onMount } from "svelte";
 
 	export let images: Array<Pick<Image, "path" | "description">>;
+	const hasMoreThanOneImage = images.length > 1;
+	const plugins = hasMoreThanOneImage
+		? [SwiperPluginLazyload, SwiperPluginNavigation]
+		: [SwiperPluginLazyload];
 	let container: HTMLElement;
 	let swiper: any;
+	const swiperConfig = hasMoreThanOneImage
+		? {
+				navigation: {
+					prevEl:
+						".swiper-plugin-navigation-prevEl",
 
+					nextEl:
+						".swiper-plugin-navigation-nextEl",
+				},
+		  }
+		: {};
 	onMount(() => {
-		Swiper.use([SwiperPluginLazyload, SwiperPluginNavigation]);
-		swiper = new Swiper(container, {
-			navigation: {
-				prevEl: ".swiper-plugin-navigation-prevEl",
-
-				nextEl: ".swiper-plugin-navigation-nextEl",
-			},
-		});
+		Swiper.use(plugins);
+		swiper = new Swiper(container, swiperConfig);
 	});
 
 	onDestroy(() => {
@@ -33,15 +41,20 @@
 	<div class="swiper-wrapper">
 		{ #each images as currentImage }
 		<div class="swiper-slide">
-			<img class="image" src=/{currentImage.path}
-			alt={currentImage.description ?? ""}/> { #if
-			currentImage.description }
-			<p class="description">{currentImage.description}</p>
+			<div class="swiper-img-container">
+				<img class="image" src=/{currentImage.path}
+				alt={currentImage.description ?? ""}/>
+			</div>
+			{ #if currentImage.description }
+			<div class="description">
+				<p>{currentImage.description}</p>
+			</div>
 			{ /if }
 		</div>
 		{ /each }
 	</div>
 
+	{ #if hasMoreThanOneImage }
 	<button class="swiper-plugin-navigation-prevEl">
 		&lt;
 	</button>
@@ -49,11 +62,13 @@
 	<button class="swiper-plugin-navigation-nextEl">
 		&gt;
 	</button>
+	{ /if }
 </div>
 { /if }
 
 <style>
 	.swiper-container {
+		border-radius: 1rem;
 		position: relative;
 		overflow: hidden;
 	}
@@ -71,18 +86,24 @@
 		display: flex;
 		flex-shrink: 0;
 		justify-content: center;
-		width: 100%;
-		height: 100%;
+		height: 30rem;
 		font-size: 18px;
 		align-items: center;
 		cursor: grab;
 	}
-
-	.swiper-slide img {
-		display: block;
+	.swiper-img-container {
+		position: absolute;
+		top: 0;
 		width: 100%;
-		height: 100%;
-		object-fit: cover;
+		height: 27rem;
+		background-color: black;
+	}
+	.swiper-slide img {
+		position: absolute;
+		top: 0;
+		width: 100%;
+		height: 27rem;
+		object-fit: scale-down;
 		object-position: top;
 	}
 
@@ -91,8 +112,8 @@
 		display: block;
 		position: absolute;
 		top: 50%;
-		padding: 0;
-		font-size: 24px;
+		padding: 0.5rem;
+		font-size: 2rem;
 		font-weight: bold;
 		color: #fff;
 		border: none;
@@ -111,5 +132,18 @@
 
 	.swiper-plugin-navigation-nextEl {
 		right: 20px;
+	}
+
+	.description {
+		position: absolute;
+		width: 100%;
+		height: 3rem;
+		bottom: 0;
+		background-color: white;
+		color: black;
+		text-align: center;
+	}
+	.description p {
+		margin-top: 0.2rem;
 	}
 </style>

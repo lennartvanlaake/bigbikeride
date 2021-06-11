@@ -3,24 +3,25 @@
 
 	import Carousel from "../components/Carousel.svelte";
 
-	const images: Image[] = [
+	const images = [
 		{
-			id: "_",
-			path: "assets/profile1.jpg",
+			path: "api/assets/me-working.jpg",
 			description: null,
-			created: new Date(),
-			updated: new Date(),
+		},
+		{
+			path: "api/assets/face.jpg",
+			description: null,
 		},
 	];
 </script>
 
 <div class="white-rounded">
 	<div class="title-wrapper">
-		<h1 class="title">Hello!</h1>
+		<h1 class="title">hello!</h1>
 	</div>
 	<div class="text">
 		<p>
-			I am Lennart and I will be cycling around Europe for a
+			I am Lennart and I will be cycling around europe for a
 			year. I am really bad in telling about myself. Selfies
 			are not my thing and I used to be one of those teenagers
 			that was always "fine" and to whom nothing happened. To

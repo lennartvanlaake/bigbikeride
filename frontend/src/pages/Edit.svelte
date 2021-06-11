@@ -141,3 +141,12 @@
 	on:click={submit}>Submit blog</button
     >
 </div>
+
+
+<style>
+
+	img {
+		object-fit: scale-down;
+		height: 20rem;
+	}
+</style>

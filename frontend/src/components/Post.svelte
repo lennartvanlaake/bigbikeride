@@ -38,8 +38,6 @@
 	<div class="title-wrapper">
 		<h1 class="title">{data.title}</h1>
 	</div>
-	{ #if data.content }
-
 	<div
 		class="text blog-content"
 		class:hide-overflow="{hideOverflow}"
@@ -47,12 +45,14 @@
 		bind:this="{blogContent}"
 	>
 		{ #if overflows && hideOverflow }
-		<div class="fadeout-overlay" transition:fade />
+		<div class="fadeout-overlay"></div>
 		{ /if }
 		<div class="actual-content">
 			{@html marked(data.content ?? "")}
 		</div>
-		{ #if overflows }
+		{ #if data.images }
+		<Carousel images="{data.images}" />
+		{ /if } { #if overflows }
 		<div class="toggle-container">
 			<strong class="toggle" on:click="{toggleShowContent}">
 				{ #if hideOverflow } + { :else } - { /if }
@@ -60,11 +60,7 @@
 		</div>
 		{ /if }
 	</div>
-	{ /if } { #if data.images }
-	<Carousel images="{data.images}"></Carousel>
-	{ /if }
 </div>
-
 <style>
 	.toggle-container {
 		text-align: center;
@@ -76,7 +72,8 @@
 	}
 
 	.toggle {
-		font-size: large;
+		font-size: 1.5rem;
+		padding: 1rem;
 		color: darkgray;
 	}
 
