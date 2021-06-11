@@ -3,58 +3,64 @@
 		SwiperPluginLazyload,
 		SwiperPluginNavigation,
 	} from "tiny-swiper";
-	import type { Image } from "../../../types/types";
-	import { onDestroy, onMount } from "svelte";
-	import { blogList } from "../javascript/bloglist";
+	import type { Blog } from "../../../types/types";
+	import { onDestroy, onMount, afterUpdate } from "svelte";
+	import marked from "marked";
+	import type { Writable } from "svelte/store";
+	export let blogId: Writable<string>;
+	export let blogList: Writable<Blog[]>;
 
-	export let images: Array<Pick<Image, "path" | "description">>;
-	const hasMoreThanOneImage = images.length > 1;
-	const plugins = hasMoreThanOneImage
-		? [SwiperPluginLazyload, SwiperPluginNavigation]
-		: [SwiperPluginLazyload];
+	const plugins = [SwiperPluginLazyload, SwiperPluginNavigation];
 	let container: HTMLElement;
 	let swiper: any;
-	const swiperConfig = hasMoreThanOneImage
-		? {
-				navigation: {
-					prevEl:
-						".swiper-plugin-navigation-prevEl",
 
-					nextEl:
-						".swiper-plugin-navigation-nextEl",
-				},
-		  }
-		: {};
+	const swiperConfig = {
+		navigation: {
+			prevEl: ".swiper-plugin-navigation-prevEl",
+
+			nextEl: ".swiper-plugin-navigation-nextEl",
+		},
+	};
+
+	$: $blogList, swiper?.update();
+	$: swiper?.slideTo($blogList.findIndex((b) => b.id == $blogId));
 
 	onMount(() => {
 		Swiper.use(plugins);
 		swiper = new Swiper(container, swiperConfig);
+		swiper.on("before-slide", (i, _) => {
+			let selectedBlogId = $blogList[i]?.id;
+			if (selectedBlogId) {
+				$blogId = selectedBlogId;
+			}
+		});
 	});
 
 	onDestroy(() => {
-		swiper?.destroy();
+		if (swiper) {
+			swiper.destroy();
+		}
 	});
+
+	afterUpdate(() => swiper?.update());
 </script>
 
-{ #if images }
 <div class="swiper-container" bind:this="{container}">
 	<div class="swiper-wrapper">
-		{ #each images as currentImage }
+		{ #each $blogList as blog }
 		<div class="swiper-slide">
-			<div class="swiper-img-container">
-				<img class="image" src=/{currentImage.path}
-				alt={currentImage.description ?? ""}/>
+			<h1>{ blog.title }</h1>
+			{@html marked(blog.content ?? "")} { #if blog.images }
+			<div class="images-container">
+				{ #each blog.images as image } <img
+				class="image" src=/{image.path}/
+				alt="{image.description ?? ''}"> { /each }
 			</div>
-			{ #if currentImage.description }
-			<div class="description">
-				<p>{currentImage.description}</p>
-			</div>
-			{ /if }
+			{/if }
 		</div>
 		{ /each }
 	</div>
 
-	{ #if hasMoreThanOneImage }
 	<button class="swiper-plugin-navigation-prevEl">
 		&lt;
 	</button>
@@ -62,9 +68,7 @@
 	<button class="swiper-plugin-navigation-nextEl">
 		&gt;
 	</button>
-	{ /if }
 </div>
-{ /if }
 
 <style>
 	.swiper-container {
@@ -86,25 +90,13 @@
 		display: flex;
 		flex-shrink: 0;
 		justify-content: center;
-		height: 30rem;
+		height: 10rem;
 		font-size: 18px;
 		align-items: center;
+		width: 100vw;
 		cursor: grab;
 	}
-	.swiper-img-container {
-		position: absolute;
-		top: 0;
-		width: 100%;
-		height: 27rem;
-		background-color: black;
-	}
 	.swiper-slide img {
-		position: absolute;
-		top: 0;
-		width: 100%;
-		height: 27rem;
-		object-fit: scale-down;
-		object-position: top;
 	}
 
 	.swiper-plugin-navigation-prevEl,
@@ -132,18 +124,5 @@
 
 	.swiper-plugin-navigation-nextEl {
 		right: 20px;
-	}
-
-	.description {
-		position: absolute;
-		width: 100%;
-		height: 3rem;
-		bottom: 0;
-		background-color: white;
-		color: black;
-		text-align: center;
-	}
-	.description p {
-		margin-top: 0.2rem;
 	}
 </style>
