@@ -53,7 +53,7 @@
 			{@html marked(blog.content ?? "")} { #if blog.images }
 			<div class="images-container">
 				{ #each blog.images as image } <img
-				class="image" src=/{image.path}/
+				class="image" src=/{image.path}
 				alt="{image.description ?? ''}"> { /each }
 			</div>
 			{/if }
@@ -97,6 +97,8 @@
 		cursor: grab;
 	}
 	.swiper-slide img {
+		width: 4rem;
+		object-fit: scale-down;
 	}
 
 	.swiper-plugin-navigation-prevEl,

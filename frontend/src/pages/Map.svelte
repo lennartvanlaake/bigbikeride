@@ -10,6 +10,15 @@
 	let selectedBlog = $blogList.find((b) => b.id == $blogId);
 	let map: any;
 	let pointers = [];
+	let bikeIcon = L.icon({
+		iconUrl: "api/assets/orange-bike.png",
+		shadowUrl: "api/assets/marker-shadow.png",
+		iconSize: [55, 70], // size of the icon
+		shadowSize: [40, 50], // size of the shadow
+		iconAnchor: [16, 80], // point of the icon which will correspond to marker's location
+		shadowAnchor: [4, 62], // the same for the shadow
+		popupAnchor: [-3, -76], // point from which the popup should open relative to the iconAnchor
+	});
 
 	$: select($blogList.find((b) => b.id == $blogId));
 	$: $blogList, reinitMap();
@@ -45,7 +54,10 @@
 			return;
 		}
 		pointers.push(
-			L.marker([blog.coordinates.lat, blog.coordinates.long])
+			L.marker(
+				[blog.coordinates.lat, blog.coordinates.long],
+				{ icon: bikeIcon }
+			)
 				.addTo(map)
 				.on("click", (_e) => {
 					blogId.set(blog.id);
