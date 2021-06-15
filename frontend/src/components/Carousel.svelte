@@ -86,7 +86,7 @@
 		display: flex;
 		flex-shrink: 0;
 		justify-content: center;
-		height: 30rem;
+		height: 60vw;
 		font-size: 18px;
 		align-items: center;
 		cursor: grab;
@@ -95,14 +95,14 @@
 		position: absolute;
 		top: 0;
 		width: 100%;
-		height: 27rem;
+		height: 90%;
 		background-color: black;
 	}
 	.swiper-slide img {
 		position: absolute;
 		top: 0;
 		width: 100%;
-		height: 27rem;
+		height: 100%;
 		object-fit: scale-down;
 		object-position: top;
 	}
@@ -137,7 +137,7 @@
 	.description {
 		position: absolute;
 		width: 100%;
-		height: 3rem;
+		height: 10%;
 		bottom: 0;
 		background-color: white;
 		color: black;

@@ -56,8 +56,10 @@
 <style>
 	nav {
 		color: white;
-		padding: 1em;
+		padding-top: 1em;
+		padding-bottom: 1em;
 		background: darkgreen;
+		width: 100vw;
 	}
 
 	:global(nav a) {
@@ -94,10 +96,12 @@
 
 	:global(.page-content) {
 	    	margin-bottom: 1rem;
-		padding: .5rem;
-		width: 64rem;
 		margin-right: auto;
 		margin-left: auto;
+		width: 100%;
+		max-width: 64rem;
+		box-sizing: border-box;
+		padding: 0.5rem;
 	}
 
 	:global(.white-rounded) {

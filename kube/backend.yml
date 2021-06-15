@@ -55,7 +55,7 @@ spec:
         - secretRef:
             name: pgpassword
         volumeMounts:
-            - mountPath: /usr/src/app/backend/public/uploads
+            - mountPath: /usr/src/app/backend/public/api/uploads
               name: assets 
       imagePullSecrets:
         - name: regcred
