@@ -87,6 +87,7 @@
 		flex-shrink: 0;
 		justify-content: center;
 		height: 60vw;
+		max-height: 35rem;
 		font-size: 18px;
 		align-items: center;
 		cursor: grab;
