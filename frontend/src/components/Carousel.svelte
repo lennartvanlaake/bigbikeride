@@ -5,7 +5,6 @@
 	} from "tiny-swiper";
 	import type { Image } from "../../../types/types";
 	import { onDestroy, onMount } from "svelte";
-	import { blogList } from "../javascript/bloglist";
 
 	export let images: Array<Pick<Image, "path" | "description">>;
 	const hasMoreThanOneImage = images.length > 1;
@@ -23,6 +22,7 @@
 					nextEl:
 						".swiper-plugin-navigation-nextEl",
 				},
+				loop: true,
 		  }
 		: {};
 
@@ -79,6 +79,7 @@
 		margin: 0;
 		width: 100%;
 		height: 100%;
+		background-color: pink;
 	}
 
 	.swiper-slide {

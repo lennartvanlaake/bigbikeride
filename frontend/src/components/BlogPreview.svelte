@@ -3,6 +3,7 @@
 		SwiperPluginLazyload,
 		SwiperPluginNavigation,
 	} from "tiny-swiper";
+	import { navigate } from "svelte-routing";
 	import type { Blog } from "../../../types/types";
 	import { onDestroy, onMount, afterUpdate } from "svelte";
 	import marked from "marked";
@@ -20,6 +21,7 @@
 
 			nextEl: ".swiper-plugin-navigation-nextEl",
 		},
+		loop: true,
 	};
 
 	$: $blogList, swiper?.update();
@@ -49,10 +51,17 @@
 	<div class="swiper-wrapper">
 		{ #each $blogList as blog }
 		<div class="swiper-slide">
-			<h1>{ blog.title }</h1>
-			{@html marked(blog.content ?? "")} { #if blog.images }
+			<div class="swiper-text">
+				<h1 on:click="{() => navigate('/blog')}">
+					{ blog.title }
+				</h1>
+
+				{@html marked(blog.content ?? "")}
+			</div>
+			{ #if blog.images }
+
 			<div class="images-container">
-				{ #each blog.images as image } <img
+				{ #each blog.images.slice(0, 3) as image } <img
 				class="image" src=/{image.path}
 				alt="{image.description ?? ''}"> { /each }
 			</div>
@@ -91,14 +100,29 @@
 		flex-shrink: 0;
 		justify-content: center;
 		height: 10rem;
-		font-size: 18px;
 		align-items: center;
 		width: 100vw;
 		cursor: grab;
 	}
+
+	.swiper-text {
+		flex-direction: column;
+		overflow: hidden;
+		margin: 1rem;
+		max-width: 30rem;
+		max-height: 8rem;
+	}
+
+	.swiper-text h1 {
+		font-size: 1, 25rem;
+	}
+
 	.swiper-slide img {
-		width: 4rem;
+		width: 6rem;
+		height: 6rem;
+		background-color: black;
 		object-fit: scale-down;
+		margin: 0.5rem;
 	}
 
 	.swiper-plugin-navigation-prevEl,
