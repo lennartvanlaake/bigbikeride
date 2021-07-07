@@ -1,8 +1,9 @@
 <script lang="ts">
 	export let isEnabled: boolean = false;
+	export let isPlus: boolean = false;
 </script>
 <div id="button" on:click="{() => isEnabled = !isEnabled}">
-	{ #if isEnabled } - { :else } + { /if }
+	{ #if isPlus } + { :else } - { /if }
 </div>
 
 <style>

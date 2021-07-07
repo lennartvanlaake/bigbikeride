@@ -17,7 +17,7 @@
 		{ /if }
 	</div>
 	<div id="expand">
-		<ExpandButton bind:isEnabled="{isVisible}" />
+		<ExpandButton bind:isEnabled="{isVisible}" isPlus="{false}" />
 	</div>
 </div>
 

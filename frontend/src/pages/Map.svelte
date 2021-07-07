@@ -88,7 +88,7 @@
 <div class:invisible="{overlayVisible}">
 	<BlogPreview blogId="{blogId}" blogList="{blogList}" />
 	<div id="previewExpand" on:click="{() => selectOverlay('Blog')}">
-		<ExpandButton />
+		<ExpandButton isPlus="{true}" />
 	</div>
 </div>
 <style>
