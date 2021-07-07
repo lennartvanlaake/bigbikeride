@@ -71,6 +71,7 @@
 	}
 
 	function selectOverlay(type: string) {
+		console.log("Selecting overlay");
 		overlayVisible = true;
 		overlayType = type;
 	}
@@ -79,7 +80,7 @@
 <div
 	id="bikeIcon"
 	class="iconButton"
-	onclick="{() => selectOverlay('AboutMe')}"
+	on:click="{() => selectOverlay('AboutMe')}"
 >
 	<RoundButton icon="fa-bicycle"></RoundButton>
 </div>
@@ -88,14 +89,20 @@
 </div>
 <Overlay bind:isVisible="{overlayVisible}" bind:type="{overlayType}" />
 <div id="map" use:mapInit></div>
-<BlogPreview blogId="{blogId}" blogList="{blogList}" />
+<div class:invisible="{overlayVisible}">
+	<BlogPreview blogId="{blogId}" blogList="{blogList}" />
+</div>
 <style>
+	.invisible {
+		display: none;
+	}
+
 	#meIcon {
-		top: 5rem;
+		top: 3rem;
 	}
 
 	#bikeIcon {
-		top: 12rem;
+		top: 9rem;
 	}
 	.iconButton {
 		z-index: 500;

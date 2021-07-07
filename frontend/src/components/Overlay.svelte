@@ -32,7 +32,8 @@
 		top: 2rem;
 	}
 	#overlay {
-		width: 100%;
+		position: relative;
+		width: 100vw;
 		height: 100%;
 		z-index: 9999;
 		background-color: white;

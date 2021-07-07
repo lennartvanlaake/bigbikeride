@@ -5,6 +5,7 @@
 	} from "tiny-swiper";
 	import { navigate } from "svelte-routing";
 	import type { Blog } from "../../../types/types";
+	import RoundButton from "./RoundButton.svelte";
 	import { onDestroy, onMount, afterUpdate } from "svelte";
 	import marked from "marked";
 	import type { Writable } from "svelte/store";
@@ -25,8 +26,6 @@
 	};
 
 	$: $blogList, swiper?.update();
-	$: swiper?.slideTo($blogList.findIndex((b) => b.id == $blogId));
-
 	onMount(() => {
 		Swiper.use(plugins);
 		swiper = new Swiper(container, swiperConfig);
@@ -58,14 +57,6 @@
 
 				{@html marked(blog.content ?? "")}
 			</div>
-			{ #if blog.images }
-
-			<div class="images-container">
-				{ #each blog.images.slice(0, 3) as image } <img
-				class="image" src=/{image.path}
-				alt="{image.description ?? ''}"> { /each }
-			</div>
-			{/if }
 		</div>
 		{ /each }
 	</div>
@@ -99,7 +90,7 @@
 		display: flex;
 		flex-shrink: 0;
 		justify-content: center;
-		height: 10rem;
+		height: 8rem;
 		align-items: center;
 		width: 100vw;
 		cursor: grab;
@@ -110,19 +101,11 @@
 		overflow: hidden;
 		margin: 1rem;
 		max-width: 30rem;
-		max-height: 8rem;
+		max-height: 6rem;
 	}
 
 	.swiper-text h1 {
-		font-size: 1, 25rem;
-	}
-
-	.swiper-slide img {
-		width: 6rem;
-		height: 6rem;
-		background-color: black;
-		object-fit: scale-down;
-		margin: 0.5rem;
+		font-size: 1.5rem;
 	}
 
 	.swiper-plugin-navigation-prevEl,
