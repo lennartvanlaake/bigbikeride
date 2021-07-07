@@ -28,8 +28,6 @@ spec:
     spec:
       containers:
       - name: fe
-        image: ghcr.io/lennartvanlaake/bikeride-fe:latest 
+        image: lennartvanlaake/bikeride-fe:latest 
         ports:
         - containerPort: 80
-      imagePullSecrets:
-        - name: regcred

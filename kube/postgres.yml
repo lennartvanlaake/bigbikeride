@@ -5,7 +5,7 @@ metadata:
   labels:
     app: postgres
 spec:
-  storageClassName: "longhorn"
+  storageClassName: "do-block-storage"
   accessModes:
     - ReadWriteOnce
   resources:
@@ -40,6 +40,7 @@ spec:
     spec: 
       containers:
         - name: postgres
+          # image: sverrirab/sleep
           image: postgres:latest
           ports:
               - containerPort: 5432

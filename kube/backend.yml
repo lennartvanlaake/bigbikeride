@@ -5,12 +5,12 @@ metadata:
   labels:
     app: be
 spec:
-  storageClassName: "longhorn"
+  storageClassName: "do-block-storage"
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 8Gi
+      storage: 2Gi
 ---
 apiVersion: v1
 kind: Service
@@ -42,18 +42,14 @@ spec:
     spec:
       containers:
       - name: be
-        image: ghcr.io/lennartvanlaake/bikeride-be:latest 
+        image: lennartvanlaake/bikeride-be:latest 
         ports:
         - containerPort: 5000
         envFrom:
         - configMapRef:
             name: config
         - secretRef:
-            name: sessionsecret
-        - secretRef:
-            name: password
-        - secretRef:
-            name: pgpassword
+            name: node-env 
         volumeMounts:
             - mountPath: /usr/src/app/backend/public/api/uploads
               name: assets 

@@ -4,7 +4,6 @@ kind: Ingress
 metadata:
   name: "ingress"
 
-
 spec:
   rules:
   - http:

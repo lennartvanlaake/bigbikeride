@@ -7,16 +7,12 @@ spec:
     spec:
       containers:
       - name: migrate
-        image: ghcr.io/lennartvanlaake/migrate:latest 
+        image: lennartvanlaake/bikeride-migrate:latest 
         envFrom:
         - configMapRef:
             name: config
         - secretRef:
-            name: sessionsecret
-        - secretRef:
-            name: password
-        - secretRef:
-            name: pgpassword
+            name: node-env 
         command: ["yarn",  "migrate"]
       restartPolicy: Never
       imagePullSecrets:

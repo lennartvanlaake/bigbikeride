@@ -3,9 +3,11 @@
 	import { blogList } from "../javascript/bloglist";
 	import createMap from "../javascript/maps";
 	import { blogId } from "../javascript/storage";
+	import RoundButton from "../components/RoundButton.svelte";
 	import type { Blog, Coordinates } from "../../../types/types";
 	import * as L from "leaflet";
-	import BlogPreview from "../components/BlogPreview.svelte";
+	import BlogText from "../components/BlogText.svelte";
+	import Overlay from "../components/Overlay.svelte";
 
 	let selectedBlog = $blogList.find((b) => b.id == $blogId);
 	let map: any;
@@ -19,6 +21,10 @@
 		shadowAnchor: [4, 62], // the same for the shadow
 		popupAnchor: [-3, -76], // point from which the popup should open relative to the iconAnchor
 	});
+
+	let isCollapsed = true;
+	let overlayVisible = false;
+	let overlayType;
 
 	$: select($blogList.find((b) => b.id == $blogId));
 	$: $blogList, reinitMap();
@@ -64,11 +70,62 @@
 				})
 		);
 	}
+
+	function selectOverlay(type: string) {
+		overlayVisible = true;
+		overlayType = type;
+	}
 </script>
 
+<div
+	id="bikeIcon"
+	class="iconButton"
+	onclick="{() => selectOverlay('AboutMe')}"
+>
+	<RoundButton icon="fa-bicycle"></RoundButton>
+</div>
+<div id="meIcon" class="iconButton">
+	<RoundButton icon="fa-user"></RoundButton>
+</div>
+<Overlay bind:isVisible="{overlayVisible}" bind:type="{overlayType}" />
 <div id="map" use:mapInit></div>
-<BlogPreview blogId="{blogId}" blogList="{blogList}" />
+<div id="blogContainer">
+	<BlogText bind:isCollapsed="{isCollapsed}" />
+</div>
 <style>
+	.fadeout-overlay {
+		content: "";
+		display: block;
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		padding-bottom: 10px;
+		background-image: linear-gradient(
+			to bottom,
+			transparent 10%,
+			white 75%,
+			white 100%
+		);
+		z-index: 30;
+	}
+	#blogContainer {
+		height: 20rem;
+		overflow: hidden;
+	}
+
+	#meIcon {
+		top: 5rem;
+	}
+
+	#bikeIcon {
+		top: 12rem;
+	}
+	.iconButton {
+		z-index: 500;
+		position: absolute;
+		right: 3rem;
+	}
+
 	#map {
 		width: 100vw;
 		height: 100%;
