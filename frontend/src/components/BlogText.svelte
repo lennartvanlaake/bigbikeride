@@ -6,7 +6,6 @@
 	import type { Blog } from "../../../types/types";
 	import { tick } from "svelte";
 
-	$: console.log($blogId);
 	const pageSize = 4;
 	const sliceList = (list: Blog[]) => {
 		const selectedBlogIndex = list.find((b) => b.id == $blogId)

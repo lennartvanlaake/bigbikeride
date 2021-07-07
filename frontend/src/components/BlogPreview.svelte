@@ -18,20 +18,20 @@
 	const swiperConfig = {
 		navigation: {
 			prevEl: ".swiper-plugin-navigation-prevEl",
-
 			nextEl: ".swiper-plugin-navigation-nextEl",
 		},
 		loop: true,
 	};
 
 	$: $blogList, swiper?.update();
+	$: swiper?.slideTo($blogList.findIndex((b) => b.id == $blogId));
 	onMount(() => {
 		Swiper.use(plugins);
 		swiper = new Swiper(container, swiperConfig);
-		swiper.on("before-slide", (i, _) => {
-			let selectedBlogId = $blogList[i]?.id;
+		swiper.on("before-slide", (o, _, n) => {
+			let selectedBlogId = $blogList[n]?.id;
 			if (selectedBlogId) {
-				$blogId = selectedBlogId;
+				blogId.set(selectedBlogId);
 			}
 		});
 	});
@@ -115,7 +115,7 @@
 		padding: 0.5rem;
 		font-size: 2rem;
 		font-weight: bold;
-		color: #fff;
+		color: lightgrey;
 		border: none;
 		outline: none;
 		background: transparent;

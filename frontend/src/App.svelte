@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Edit from "./pages/Edit.svelte";
 	import Login from "./pages/Login.svelte";
-	import Map from "./pages/Map.svelte";
+	import BlogMap from "./pages/Map.svelte";
 	import { Router, Route } from "svelte-routing";
 	import { loggedIn } from "./javascript/storage";
 	import * as api from "./javascript/api";
@@ -15,7 +15,7 @@
 </script>
 <Router url="">
 	<Route path="/">
-		<Map />
+		<BlogMap />
 	</Route>
 	<Route path="edit">
 		<div class="page-content">
@@ -36,7 +36,6 @@
 			Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
 			"Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 		line-height: 1.5;
-		background-color: #e5e5e5;
 	}
 
 	:global(.title-wrapper) {
