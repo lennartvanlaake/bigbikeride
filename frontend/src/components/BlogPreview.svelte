@@ -5,7 +5,6 @@
 	} from "tiny-swiper";
 	import { navigate } from "svelte-routing";
 	import type { Blog } from "../../../types/types";
-	import RoundButton from "./RoundButton.svelte";
 	import { onDestroy, onMount, afterUpdate } from "svelte";
 	import marked from "marked";
 	import type { Writable } from "svelte/store";

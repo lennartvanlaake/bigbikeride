@@ -8,6 +8,7 @@
 	import * as L from "leaflet";
 	import BlogPreview from "../components/BlogPreview.svelte";
 	import Overlay from "../components/Overlay.svelte";
+	import ExpandButton from "../components/ExpandButton.svelte";
 
 	let selectedBlog = $blogList.find((b) => b.id == $blogId);
 	let map: any;
@@ -77,22 +78,27 @@
 	}
 </script>
 
-<div
-	id="bikeIcon"
-	class="iconButton"
-	on:click="{() => selectOverlay('AboutMe')}"
->
+<div id="bikeIcon" class="iconButton" on:click="{() => selectOverlay('Gear')}">
 	<RoundButton icon="fa-bicycle"></RoundButton>
 </div>
-<div id="meIcon" class="iconButton">
+<div id="meIcon" class="iconButton" on:click="{() => selectOverlay('AboutMe')}">
 	<RoundButton icon="fa-user"></RoundButton>
 </div>
 <Overlay bind:isVisible="{overlayVisible}" bind:type="{overlayType}" />
 <div id="map" use:mapInit></div>
 <div class:invisible="{overlayVisible}">
 	<BlogPreview blogId="{blogId}" blogList="{blogList}" />
+	<div id="previewExpand" on:click="{() => selectOverlay('Blog')}">
+		<ExpandButton />
+	</div>
 </div>
 <style>
+	#previewExpand {
+		position: absolute;
+		bottom: 4rem;
+		right: 1rem;
+	}
+
 	.invisible {
 		display: none;
 	}
