@@ -6,7 +6,7 @@
 	import RoundButton from "../components/RoundButton.svelte";
 	import type { Blog, Coordinates } from "../../../types/types";
 	import * as L from "leaflet";
-	import BlogText from "../components/BlogText.svelte";
+	import BlogPreview from "../components/BlogPreview.svelte";
 	import Overlay from "../components/Overlay.svelte";
 
 	let selectedBlog = $blogList.find((b) => b.id == $blogId);
@@ -22,7 +22,6 @@
 		popupAnchor: [-3, -76], // point from which the popup should open relative to the iconAnchor
 	});
 
-	let isCollapsed = true;
 	let overlayVisible = false;
 	let overlayType;
 
@@ -89,30 +88,8 @@
 </div>
 <Overlay bind:isVisible="{overlayVisible}" bind:type="{overlayType}" />
 <div id="map" use:mapInit></div>
-<div id="blogContainer">
-	<BlogText bind:isCollapsed="{isCollapsed}" />
-</div>
+<BlogPreview blogId="{blogId}" blogList="{blogList}" />
 <style>
-	.fadeout-overlay {
-		content: "";
-		display: block;
-		position: absolute;
-		width: 100%;
-		height: 100%;
-		padding-bottom: 10px;
-		background-image: linear-gradient(
-			to bottom,
-			transparent 10%,
-			white 75%,
-			white 100%
-		);
-		z-index: 30;
-	}
-	#blogContainer {
-		height: 20rem;
-		overflow: hidden;
-	}
-
 	#meIcon {
 		top: 5rem;
 	}

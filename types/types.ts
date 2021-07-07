@@ -125,3 +125,8 @@ declare module "koa" {
 		session: MySession;
 	}
 }
+
+// fe stuff
+export enum OverlayType {
+	"AboutMe", "Gear", "Blog"
+};
