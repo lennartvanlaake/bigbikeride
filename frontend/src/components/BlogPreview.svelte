@@ -111,7 +111,7 @@
 	.swiper-plugin-navigation-nextEl {
 		display: block;
 		position: absolute;
-		top: 50%;
+		top: 30%;
 		padding: 0.5rem;
 		font-size: 2rem;
 		font-weight: bold;

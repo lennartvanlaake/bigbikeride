@@ -126,7 +126,3 @@ declare module "koa" {
 	}
 }
 
-// fe stuff
-export enum OverlayType {
-	"AboutMe", "Gear", "Blog"
-};
