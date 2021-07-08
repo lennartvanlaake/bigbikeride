@@ -31,16 +31,18 @@
 		}
 	}
 
+	function setBlogId() {
+		setTimeout(() => {
+			$blogId = document.getElementsByClassName(
+				"preview-slide swiper-slide-active"
+			)[0]?.id;
+		}, 300);
+	}
+
 	$: $blogId, $blogList, slideToSelected();
 	onMount(() => {
 		Swiper.use(plugins);
 		swiper = new Swiper(container, swiperConfig);
-		swiper.on("before-slide", (o, _, n) => {
-			let selectedBlogId = $blogList[n]?.id;
-			if (selectedBlogId) {
-				blogId.set(selectedBlogId);
-			}
-		});
 		setTimeout(() => {
 			slideToSelected();
 		}, 500);
@@ -58,7 +60,7 @@
 <div class="swiper-container" bind:this="{container}">
 	<div class="swiper-wrapper">
 		{ #each $blogList as blog }
-		<div class="swiper-slide">
+		<div class="swiper-slide preview-slide" id="{blog.id}">
 			<div class="swiper-text">
 				<h1 on:click="{() => navigate('/blog')}">
 					{ blog.title }
@@ -70,11 +72,11 @@
 		{ /each }
 	</div>
 
-	<button class="swiper-plugin-navigation-prevEl">
+	<button on:click="{setBlogId}" class="swiper-plugin-navigation-prevEl">
 		&lt;
 	</button>
 
-	<button class="swiper-plugin-navigation-nextEl">
+	<button on:click="{setBlogId}" class="swiper-plugin-navigation-nextEl">
 		&gt;
 	</button>
 </div>

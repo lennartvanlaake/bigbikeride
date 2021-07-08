@@ -1,6 +1,7 @@
 <script lang="ts">
 	import ExpandButton from "./ExpandButton.svelte";
 	import AboutMe from "../components/AboutMe.svelte";
+	import Gear from "../components/Gear.svelte";
 	import BlogText from "./BlogText.svelte";
 	type OverlayType = "AboutMe" | "Gear" | "Blog";
 	export let isVisible: boolean = false;
@@ -13,7 +14,7 @@
 		{ :else if type == "Blog" }
 		<BlogText />
 		{ :else }
-		<div>GEAR POST THING</div>
+		<Gear />
 		{ /if }
 	</div>
 	<div id="expand">
