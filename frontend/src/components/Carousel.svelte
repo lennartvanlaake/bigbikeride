@@ -97,7 +97,7 @@
 		position: absolute;
 		top: 0;
 		width: 100%;
-		height: 90%;
+		height: 100%;
 		background-color: lightgrey;
 	}
 	.swiper-slide img {
@@ -117,7 +117,7 @@
 		padding: 0.5rem;
 		font-size: 2rem;
 		font-weight: bold;
-		color: #fff;
+		color: black;
 		border: none;
 		outline: none;
 		background: transparent;
@@ -129,11 +129,11 @@
 	}
 
 	.swiper-plugin-navigation-prevEl {
-		left: 20px;
+		left: 2rem;
 	}
 
 	.swiper-plugin-navigation-nextEl {
-		right: 20px;
+		right: 2rem;
 	}
 
 	.description {

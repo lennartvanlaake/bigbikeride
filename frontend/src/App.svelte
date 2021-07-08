@@ -71,9 +71,14 @@
 	:global(.white-rounded) {
 		background-color: white;
 		border-radius: 1rem;
-		margin-top: 0.5rem;
-		margin-bottom: 0.5rem;
+		margin-top: 1rem;
+		margin-bottom: 1rem;
+		padding: 1rem;
 		width: 100%;
+		border-color: lightgrey;
+		border-style: dotted;
+		border-width: medium;
+		box-sizing: border-box;
 	}
 
 	:global(button) {
