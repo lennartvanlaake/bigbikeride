@@ -128,7 +128,7 @@
 		top: 50%;
 		transform: translateY(-50%);
 		padding: 0.2rem;
-		font-size: 1.5rem;
+		font-size: 1.75rem;
 		font-weight: bold;
 		color: white;
 		border: none;

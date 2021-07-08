@@ -23,8 +23,15 @@
 		loop: true,
 	};
 
-	$: $blogList, swiper?.update();
-	$: swiper?.slideTo($blogList.findIndex((b) => b.id == $blogId));
+	function slideToSelected() {
+		swiper?.update();
+		let newIndex = $blogList.findIndex((b) => b.id == $blogId);
+		if (newIndex >= 0) {
+			swiper?.slideTo(newIndex);
+		}
+	}
+
+	$: $blogId, $blogList, slideToSelected();
 	onMount(() => {
 		Swiper.use(plugins);
 		swiper = new Swiper(container, swiperConfig);
@@ -34,6 +41,9 @@
 				blogId.set(selectedBlogId);
 			}
 		});
+		setTimeout(() => {
+			slideToSelected();
+		}, 500);
 	});
 
 	onDestroy(() => {
