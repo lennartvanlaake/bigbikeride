@@ -122,13 +122,15 @@
 
 	.swiper-plugin-navigation-prevEl,
 	.swiper-plugin-navigation-nextEl {
+		text-shadow: 2px 1px rgba(0, 0, 0, 0.4);
 		display: block;
 		position: absolute;
 		top: 50%;
-		padding: 0.5rem;
-		font-size: 2rem;
+		transform: translateY(-50%);
+		padding: 0.2rem;
+		font-size: 1.5rem;
 		font-weight: bold;
-		color: black;
+		color: white;
 		border: none;
 		outline: none;
 		background: transparent;
@@ -156,7 +158,7 @@
 		color: black;
 		text-align: center;
 	}
-	.description p {
+	.description em {
 		margin-top: 0.2rem;
 	}
 </style>

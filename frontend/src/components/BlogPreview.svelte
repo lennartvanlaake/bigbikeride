@@ -109,9 +109,10 @@
 
 	.swiper-plugin-navigation-prevEl,
 	.swiper-plugin-navigation-nextEl {
+		top: 50%;
+		transform: translateY(-50%);
 		display: block;
 		position: absolute;
-		top: 30%;
 		padding: 0.5rem;
 		font-size: 2rem;
 		font-weight: bold;
