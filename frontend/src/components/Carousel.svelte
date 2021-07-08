@@ -98,7 +98,7 @@
 		top: 0;
 		width: 100%;
 		height: 90%;
-		background-color: black;
+		background-color: lightgrey;
 	}
 	.swiper-slide img {
 		position: absolute;

@@ -6,11 +6,11 @@
 	const images = [
 		{
 			path: "api/assets/me-working.jpg",
-			description: null,
+			description: "Working hard, or hardly working?",
 		},
 		{
-			path: "api/assets/face.jpg",
-			description: null,
+			path: "api/assets/me-climbing.jpeg",
+			description: "Climbing under a bridge",
 		},
 	];
 </script>
