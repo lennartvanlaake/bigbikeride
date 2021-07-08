@@ -6,9 +6,11 @@
 	const images = [
 		{
 			path: "api/assets/me-working.jpg",
+			description: null,
 		},
 		{
 			path: "api/assets/me-climbing.jpeg",
+			description: null,
 		},
 	];
 </script>
@@ -64,7 +66,7 @@
 	}
 
 	p {
-		margin: 1rem;
+		margin-bottom: 1rem;
 	}
 
 	a {

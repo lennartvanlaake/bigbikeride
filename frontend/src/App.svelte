@@ -52,8 +52,7 @@
 	}
 
 	:global(.text) {
-		margin-bottom: 2rem;
-		padding: 0.5rem;
+		margin-bottom: 0.5rem;
 		font-size: 0.875rem;
 		line-height: 1.25rem;
 	}
@@ -73,7 +72,7 @@
 		border-radius: 1rem;
 		margin-top: 1rem;
 		margin-bottom: 1rem;
-		padding: 1rem;
+		padding: 2rem;
 		width: 100%;
 		border-color: lightgrey;
 		border-style: dotted;

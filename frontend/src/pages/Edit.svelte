@@ -43,6 +43,12 @@
 	alert("Post success!")
     }
 
+    async function remove() {
+	await api.deleteBlog($blogId);
+	create();
+	alert("Blog deleted!")
+    }
+
     async function getLocation(): Promise<Coordinates> {
     	try {
 
@@ -139,6 +145,10 @@
     <button
         id="submit"
 	on:click={submit}>Submit blog</button
+    >
+    <button
+        id="delete"
+	on:click={remove}>Delete blog</button
     >
 </div>
 

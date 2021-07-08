@@ -41,13 +41,17 @@
 	<div class="swiper-wrapper">
 		{ #each images as currentImage }
 		<div class="swiper-slide">
-			<div class="swiper-img-container">
+			<div
+				class="swiper-img-container"
+				class:full-length-image="{!currentImage.description}"
+				class:description-cropped-image="{currentImage.description}"
+			>
 				<img class="image" src=/{currentImage.path}
 				alt={currentImage.description ?? ""}/>
 			</div>
 			{ #if currentImage.description }
 			<div class="description">
-				<p>{currentImage.description}</p>
+				<em>{currentImage.description}</em>
 			</div>
 			{ /if }
 		</div>
@@ -87,9 +91,9 @@
 		display: flex;
 		flex-shrink: 0;
 		justify-content: center;
-		height: 60vw;
-		max-height: 35rem;
-		font-size: 18px;
+		height: 40vw;
+		max-height: 30rem;
+		font-size: 0.75rem;
 		align-items: center;
 		cursor: grab;
 	}
@@ -97,7 +101,6 @@
 		position: absolute;
 		top: 0;
 		width: 100%;
-		height: 100%;
 		background-color: lightgrey;
 	}
 	.swiper-slide img {
@@ -107,6 +110,14 @@
 		height: 100%;
 		object-fit: scale-down;
 		object-position: top;
+	}
+
+	.full-length-image {
+		height: 100%;
+	}
+
+	.description-cropped-image {
+		height: 90%;
 	}
 
 	.swiper-plugin-navigation-prevEl,
