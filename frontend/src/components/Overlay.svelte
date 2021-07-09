@@ -16,8 +16,10 @@
 		<BlogText />
 		{ :else if type == "Contact" }
 		<Contact />
-		{ :else }
+		{ :else if type == "Gear" }
 		<Gear />
+		{ :else }
+		<div>Ooops..</div>
 		{ /if }
 	</div>
 	<div id="expand">
@@ -31,7 +33,7 @@
 	}
 
 	#expand {
-		position: absolute;
+		position: fixed;
 		right: 2rem;
 		top: 2rem;
 	}

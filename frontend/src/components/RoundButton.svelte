@@ -13,7 +13,8 @@
 		height: 4rem;
 		text-align: center;
 		line-height: 4rem;
-		background-color: white;
+		color: white;
+		background-color: orange;
 		font-size: 1.5rem;
 	}
 </style>

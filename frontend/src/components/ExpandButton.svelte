@@ -15,6 +15,7 @@
 		height: 2rem;
 		text-align: center;
 		line-height: 2rem;
-		background-color: white;
+		background-color: orange;
+		color: white;
 	}
 </style>

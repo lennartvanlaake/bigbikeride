@@ -138,7 +138,13 @@
 				Decathlon Kalenji light modular trail hat
 			</li>
 			<li>
+				Merino-wool long-sleeve shirt and running tights
+			</li>
+			<li>
 				Light button-down shirt
+			</li>
+			<li>
+				2 vests
 			</li>
 			<li>
 				2 sets of padded bike underwear
