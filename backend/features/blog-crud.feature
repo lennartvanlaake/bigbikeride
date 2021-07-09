@@ -1,5 +1,9 @@
 Feature: Blog crud operations
 
+  Scenario: Send mail
+    Given I am logged in
+    Then I send an email
+	
   Scenario: Create a text blog
     Given I am logged in
     And I POST a blog with title "test"
@@ -23,4 +27,5 @@ Feature: Blog crud operations
     And I GET the created blog
     Then the blog in the response has an image with description "things"
 
+    Given I send an email
     And I delete the image

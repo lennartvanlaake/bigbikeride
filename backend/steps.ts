@@ -2,7 +2,12 @@ import { Given, When, Then } from "@cucumber/cucumber";
 import { expect } from "chai";
 import { app } from "./server";
 import supertest from "supertest";
-import { CreateBlogRequest, Blog, UPLOAD_NAME } from "../types/types";
+import {
+	CreateBlogRequest,
+	Blog,
+	UPLOAD_NAME,
+	MailRequest,
+} from "../types/types";
 
 let cookie: string;
 let server = app.listen();
@@ -141,5 +146,17 @@ When("I delete the image", async () => {
 	await request
 		.delete(`/api/images/${imageId}`)
 		.set("Cookie", cookie)
+		.expect(200);
+});
+
+When("I send an email", async () => {
+	const mailBody: MailRequest = {
+		message: "bla",
+		sender: "doekmans@gmail.com",
+	};
+	await request
+		.post("/api/mail")
+		.set("Cookie", cookie)
+		.send(mailBody)
 		.expect(200);
 });

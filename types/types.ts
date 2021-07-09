@@ -110,6 +110,11 @@ export interface LoginResponse {
 	loggedIn: boolean;
 }
 
+export interface MailRequest {
+	message: string;
+	sender: string;
+}
+
 export interface MySession {
 	loggedIn: boolean;
 }

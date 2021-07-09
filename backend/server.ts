@@ -1,4 +1,6 @@
-import { blogsRouter } from "./blogs";import { imagesRouter } from "./images";
+import { blogsRouter } from "./blogs";
+import { imagesRouter } from "./images";
+import { mailRouter }  from "./mail";
 import { checkLogin, loginRouter } from "./login";
 import { DefaultState, Context, DefaultContext } from "koa";
 import Koa from "koa";
@@ -29,6 +31,7 @@ app.use(logger());
 router.use("/api/blogs", blogsRouter.routes(), blogsRouter.allowedMethods());
 router.use("/api/login", loginRouter.routes(), loginRouter.allowedMethods());
 router.use("/api/images", imagesRouter.routes(), imagesRouter.allowedMethods());
+router.use("/api/mail", mailRouter.routes(), mailRouter.allowedMethods());
 app.use(router.routes());
 app.use(router.allowedMethods());
 
