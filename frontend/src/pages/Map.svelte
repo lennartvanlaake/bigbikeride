@@ -26,12 +26,18 @@
 	let overlayVisible = false;
 	let overlayType;
 
-	$: select($blogList.find((b) => b.id == $blogId))
+	$: select($blogList.find((b) => b.id == $blogId));
 	$: $blogList, reinitMap();
 
 	function select(blog: Blog) {
+		if (!blog) {
+			return;
+		}
 		if (map) {
-			map?.setView([blog.coordinates.lat, blog.coordinates.long], 8);
+			map?.setView(
+				[blog.coordinates.lat, blog.coordinates.long],
+				8
+			);
 		} else {
 			setTimeout(() => select(blog), 300);
 		}
@@ -87,7 +93,11 @@
 <div id="bikeIcon" class="iconButton" on:click="{() => selectOverlay('Gear')}">
 	<RoundButton icon="fa-bicycle"></RoundButton>
 </div>
-<div id="contactIcon" class="iconButton" on:click="{() => selectOverlay('Contact')}">
+<div
+	id="contactIcon"
+	class="iconButton"
+	on:click="{() => selectOverlay('Contact')}"
+>
 	<RoundButton icon="fa-comment-alt"></RoundButton>
 </div>
 <Overlay bind:isVisible="{overlayVisible}" bind:type="{overlayType}" />
