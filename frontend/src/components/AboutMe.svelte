@@ -28,9 +28,21 @@
 			and challenge myself. Partially forced by the pandemic,
 			I got excited about the hassle-free travel I can get in
 			Europe. Not having to deal with visa or remote scary
-			places enables me to plan less and be more random in my
+			places allows me to plan less and be more random in my
 			travels.
 		</p>
+
+		<p>
+			My plans so far are to travel from my home in the
+			Netherlands towards Istanbul and then find my way back.
+			I am planning to camp when possible, use hospitality
+			exchange networks and allow myself the 'luxury' of a
+			hostel once in a while. If I see some amazing place on
+			the road, I want to take the time stay there for a
+			while. I hope to find the peace of mind to take it slow
+			and fully enjoy what I discover.
+		</p>
+
 		<p>
 			While not making any promises, I hope to update this
 			blog about once a week. This blog will not be a full
@@ -50,7 +62,7 @@
 			is an attempt to make reading the story of a
 			bicycle-adventure more entertaining by creating a more
 			interactive interface and visibly linking the posts to
-			the places I visit.
+			the places visited.
 		</p>
 
 		<p>

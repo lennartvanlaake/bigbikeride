@@ -1,6 +1,4 @@
 <script lang="ts">
-	import type { Image } from "../../../types/types";
-
 	import Carousel from "../components/Carousel.svelte";
 
 	const images = [
@@ -17,81 +15,236 @@
 
 <div class="white-rounded">
 	<div class="title-wrapper">
-		<h1 class="title">Hello!</h1>
+		<h1 class="title">Practicalities</h1>
 	</div>
 	<div class="text">
 		<p>
-			I am Lennart and welcome to the blog of my big bike
-			ride! I am planning to do a tour around Europe for a
-			year. Before corona hit I wanted to do "travel around
-			the world" to experience freedom, meet awesome people
-			and challenge myself. Partially forced by the pandemic,
-			I got excited about the hassle-free travel I can get in
-			Europe. Not having to deal with visa or remote scary
-			places enables me to plan less and be more random in my
-			travels.
-		</p>
-		<p>
-			While not making any promises, I hope to update this
-			blog about once a week. This blog will not be a full
-			day-by-day diary of my trip. Instead, I want to
-			highlight surprising events and the special people I
-			meet on the road. I am still a beginner at photography,
-			but I hope to add some interesting portraits of people
-			and places I see while travelling.
+			This page is about the practical side of going on a long
+			bicycle tour. While perparing/obsessing about my own
+			tour I found videos and pages about gear, finance and
+			travel tips very helpful. I hope that if you are
+			planning a long trip that you find this page helpful.
 		</p>
 
+		<h2>Gear</h2>
 		<p>
-			As you might have noticed, this website is not your
-			typical WordPress blog. While preparing for my bike ride
-			I got really into stories from bicycle-travellers. I
-			discovered many lovely books and vlogs, but most blogs
-			did not motivate me to keep on reading them. This site
-			is an attempt to make reading the story of a
-			bicycle-adventure more entertaining by creating a more
-			interactive interface and visibly linking the posts to
-			the places I visit.
+			I try to only buy top brand items when I can point to a
+			specific reason why they are better then a cheaper
+			alternative. For instance, I have more faith that my
+			Ortlieb bags keep my essentials dry compared to an
+			off-brand set of panniers. But I do not care that much
+			if some less important things gets a little damp, so I
+			am happy to store them in chepaer alternatives.
 		</p>
-
 		<p>
-			Because this blog is a piece of custom software some
-			bugs might occur. You can create an issue about the bug
-			(or even a PR) in this
-			<li class="github">
-				<a
-					href="https://github.com/lennartvanlaake/bigbikeride"
-					><strong>github</strong>
-					<svg
-						version="1.1"
-						width="16"
-						height="16"
-						viewBox="0 0 16 16"
-						class="octicon octicon-mark-github"
-						aria-hidden="true"
-					>
-						<path
-							fill-rule="evenodd"
-							d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"
-						></path>
-					</svg>
-				</a>
+			Some of the stuff I am taking is not strictly necessary.
+			I don't mind adding a bit of weight when that allows me
+			to do something that I enjoy a lot, such as making good
+			coffee in the morning or going climbing. I try to keep
+			the base-weight from exploding by looking for savings
+			when possible, for instance by not having front panniers
+			and a front rack.
+		</p>
+		<h3>Bags</h3>
+		<ul>
+			<li>
+				Ortlieb Back Rollers 20L back panniers (majority
+				of gear)
 			</li>
-			repository.
+			<li>
+				Topeak Versacage + no-brand 5L drybags as
+				replacement for front panniers (rain clothes and
+				climbing shoes)
+			</li>
+			<li>
+				Decathlon Itiwit 30L drybag backpack (tent and
+				extra food, strapped onto back rack)
+			</li>
+			<li>
+				Decathlon Riverside 900 saddle bag 2.5L (repair
+				kit and spares)
+			</li>
+			<li>
+				Decathlon Riverside 520 frame bag 2L (snacks,
+				phone and other quick-access items)
+			</li>
+		</ul>
+		<h3>Camping gear</h3>
+		<ul>
+			<li>
+				Decathlon Trek 900 2-person tent
+			</li>
+			<li>
+				Down sleeping bag (forgot brand)
+			</li>
+			<li>
+				Silk sleeping bag liner (forgot brand)
+			</li>
+			<li>
+				Thermarest Xlite sleeping mat
+			</li>
+			<li>
+				Nemo Fillo Elite pillow
+			</li>
+			<li>
+				Helinox Chair Zero
+			</li>
+			<li>
+				Trangia cooking pot and non-stick pan (for
+				pancakes)
+			</li>
+			<li>
+				Insulated water bottle
+			</li>
+			<li>
+				Bamboo cup
+			</li>
+		</ul>
+		<h3>Clothes</h3>
+		<ul>
+			<li>
+				Lowa Locarno Gore-Tex shoes
+			</li>
+			<li>
+				Teva sandals
+			</li>
+			<li>
+				Agu strato helmet
+			</li>
+			<li>
+				Patagonia torrentshell rain jacket
+			</li>
+			<li>
+				Decathlon Forclaz Trek 500 down jacket
+			</li>
+			<li>
+				Reflective saftey vest
+			</li>
+			<li>
+				Decathlon Quecha MH500 rain trousers
+			</li>
+			<li>
+				Decathlon Kalenji gaiters (closes gap between
+				rain trowsers and shoes)
+			</li>
+			<li>
+				Buff neck gaiter (as replacement for cap or
+				scarf)
+			</li>
+			<li>
+				Decathlon Kimjaly Yoga pants (cheap, light,
+				comfy and quick-drying!)
+			</li>
+			<li>
+				Decathlon Artengo Tennis pants
+			</li>
+			<li>
+				Decathlon Kalenji light modular trail hat
+			</li>
+			<li>
+				Light button-down shirt
+			</li>
+			<li>
+				2 sets of padded bike underwear
+			</li>
+			<li>
+				2 sets of shorts
+			</li>
+			<li>
+				A few t-shirts, normal underwear and socks
+			</li>
+		</ul>
+		<h3>Electronics</h3>
+		<ul>
+			<li>Chromebook, USB-C chargeable and set-up for programming</li>
+			<li>Aukey high-speed charger</li>
+			<li>Power bank (off-brand)</li>
+			<li>Kobo E-reader</li>
+			<li>Decathlon Trek 500 solar panel</li>
+		</ul>
+		<h3>Misc</h3>
+		<ul>
+			<li>
+				Light my fire titanium spork
+			</li>
+			<li>
+				Opinel knife
+			</li>
+			<li>
+				Leyzne strip drive rear light
+			</li>
+			<li>
+				Sunscreen
+			</li>
+			<li>
+				Decathlon Nabaiji ribbed towel
+			</li>
+			<li>
+				Decathlon isotonic drink mix (to prevent
+				dehydration)
+			</li>
+			<li>
+				Climbing shoes
+			</li>
+			<li>
+				Bialetti Venus 2 cup coffee maker
+			</li>
+			<li>
+				Set of playing cards
+			</li>
+			<li>
+				Pen and paper
+			</li>
+			<li>
+				Toiletries
+			</li>
+		</ul>
+
+		<h2>Bike</h2>
+		<p>
+			I bought my bike a few years ago secondhand for 250 euros, mostly because of the high-end components already on it. By now the bike is adjusted to my tastes. In adjusting the bike I chose easily accessible components over fancy super-durable components, because I would rather assume that things will break and be able to fix the problems that can occur then assume that things won't break and have a massive problem when that assumption fails. 
 		</p>
+		<li>
+			Stevens steel MTB frame
+		</li>
+		<li>
+			Shimano XT hubs and breaks
+		</li>
+		<li>
+			Tubus rear rack
+		</li>
+		<li>
+			Microshift Advent 1x9 drivetrain (sold by Decathlon as 'Rockrider')
+		</li>
+		<li>
+			Koga Dali handlebar with leather padding
+		</li>
+		<li>
+			Selle Royal Respiro Moderate saddle
+		</li>
+
 	</div>
 	<Carousel images="{images}" />
 </div>
 <style>
-	.github {
-		display: inline;
-		list-style: none;
+	ul {
+		margin-left: 1rem;
 	}
 
-	p {
+	p,
+	ul {
+		margin-bottom: 0.75rem;
+	}
+	h2,
+	h3 {
+		color: #574f4e;
 		margin-bottom: 1rem;
 	}
-
-	a {
-		text-decoration: none;
+	h2 {
+		font-size: 1.1rem;
+	}
+	h3 {
+		font-style: italic;
+		font-size: 1rem;
 	}
 </style>

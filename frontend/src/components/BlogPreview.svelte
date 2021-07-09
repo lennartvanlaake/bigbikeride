@@ -17,8 +17,8 @@
 
 	const swiperConfig = {
 		navigation: {
-			prevEl: ".swiper-plugin-navigation-prevEl",
-			nextEl: ".swiper-plugin-navigation-nextEl",
+			prevEl: ".swiper-preview-navigation-prevEl",
+			nextEl: ".swiper-preview-navigation-nextEl",
 		},
 		loop: true,
 	};
@@ -57,7 +57,7 @@
 	afterUpdate(() => swiper?.update());
 </script>
 
-<div class="swiper-container" bind:this="{container}">
+<div on:click="{setBlogId}" class="swiper-container" bind:this="{container}">
 	<div class="swiper-wrapper">
 		{ #each $blogList as blog }
 		<div class="swiper-slide preview-slide" id="{blog.id}">
@@ -72,11 +72,11 @@
 		{ /each }
 	</div>
 
-	<button on:click="{setBlogId}" class="swiper-plugin-navigation-prevEl">
+	<button class="swiper-preview-navigation-prevEl">
 		&lt;
 	</button>
 
-	<button on:click="{setBlogId}" class="swiper-plugin-navigation-nextEl">
+	<button class="swiper-preview-navigation-nextEl">
 		&gt;
 	</button>
 </div>
@@ -119,8 +119,8 @@
 		font-size: 1.5rem;
 	}
 
-	.swiper-plugin-navigation-prevEl,
-	.swiper-plugin-navigation-nextEl {
+	.swiper-preview-navigation-prevEl,
+	.swiper-preview-navigation-nextEl {
 		top: 50%;
 		transform: translateY(-50%);
 		display: block;
@@ -139,11 +139,11 @@
 		cursor: not-allowed;
 	}
 
-	.swiper-plugin-navigation-prevEl {
+	.swiper-preview-navigation-prevEl {
 		left: 20px;
 	}
 
-	.swiper-plugin-navigation-nextEl {
+	.swiper-preview-navigation-nextEl {
 		right: 20px;
 	}
 </style>
