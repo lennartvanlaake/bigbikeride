@@ -111,8 +111,9 @@
 <style>
 	#previewExpand {
 		position: absolute;
-		bottom: 5rem;
-		right: 0.75rem;
+		bottom: 0.5rem;
+		left: 50%;
+		transform: translate(-50%, 0);
 	}
 
 	.invisible {

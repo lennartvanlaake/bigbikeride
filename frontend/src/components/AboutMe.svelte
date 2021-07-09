@@ -23,10 +23,10 @@
 		<p>
 			I am Lennart and welcome to the blog of my big bike
 			ride! I am planning to do a tour around Europe for a
-			year. Before corona hit I wanted to do "travel around
-			the world" to experience freedom, meet awesome people
-			and challenge myself. Partially forced by the pandemic,
-			I got excited about the hassle-free travel I can get in
+			year. Before corona hit I wanted to "travel around the
+			world" to experience freedom, meet awesome people and
+			challenge myself. Partially forced by the pandemic, I
+			got excited about the hassle-free travel I can get in
 			Europe. Not having to deal with visa or remote scary
 			places allows me to plan less and be more random in my
 			travels.

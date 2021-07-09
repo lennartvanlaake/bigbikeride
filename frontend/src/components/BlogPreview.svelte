@@ -65,6 +65,7 @@
 	<div class="swiper-wrapper">
 		{ #each $blogList as blog }
 		<div class="swiper-slide preview-slide" id="{blog.id}">
+			<div class="fadeout-overlay" />
 			<div class="swiper-text">
 				<h1 on:click="{() => navigate('/blog')}">
 					{ blog.title }
@@ -86,6 +87,22 @@
 </div>
 
 <style>
+	.fadeout-overlay {
+		content: "";
+		display: block;
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		padding-bottom: 10px;
+		background-image: linear-gradient(
+			to bottom,
+			transparent 70%,
+			white 85%,
+			white 100%
+		);
+		z-index: 30;
+	}
+
 	.swiper-container {
 		border-radius: 1rem;
 		position: relative;
@@ -117,6 +134,8 @@
 		margin: 1rem;
 		max-width: 30rem;
 		max-height: 6rem;
+		padding-left: 3rem;
+		padding-right: 3rem;
 	}
 
 	.swiper-text h1 {

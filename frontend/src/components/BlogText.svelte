@@ -119,7 +119,7 @@
 	}
 	.listContainer {
 		overflow-y: auto;
-		height: 85vh;
+		height: 100vh;
 		width: 100%;
 	}
 </style>

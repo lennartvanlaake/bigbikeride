@@ -58,7 +58,6 @@
 	}
 
 	:global(.page-content) {
-		margin-bottom: 1rem;
 		margin-right: auto;
 		margin-left: auto;
 		width: 100%;
@@ -102,9 +101,5 @@
 		color: #000;
 		background-color: #6c757d;
 		border-color: #6c757d;
-	}
-
-	:global(nav a:first-child) {
-		margin-left: 2em;
 	}
 </style>
