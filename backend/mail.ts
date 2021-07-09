@@ -14,12 +14,11 @@ const transporter = nodemailer.createTransport({
 
 mailRouter.post("/", async (ctx, next) => {
 	const mailRequest: MailRequest = ctx.request.body;
-	debugger;
 	await transporter.sendMail({
 		from: process.env.EMAIL,
 		to: process.env.EMAIL,
 		subject: "message from the blog",
-		text: mailRequest.message,
+		text: mailRequest.message + " sender: " + mailRequest.sender,
 	});
 	ctx.body = {};
 	await next();

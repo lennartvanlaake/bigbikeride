@@ -156,7 +156,6 @@ When("I send an email", async () => {
 	};
 	await request
 		.post("/api/mail")
-		.set("Cookie", cookie)
 		.send(mailBody)
 		.expect(200);
 });
