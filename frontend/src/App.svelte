@@ -61,6 +61,7 @@
 		margin-right: auto;
 		margin-left: auto;
 		width: 100%;
+		min-height: 100vh;
 		max-width: 64rem;
 		box-sizing: border-box;
 		padding: 0.5rem;
