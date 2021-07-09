@@ -4,11 +4,7 @@
 	const images = [
 		{
 			path: "api/assets/me-working.jpg",
-			description: null,
-		},
-		{
-			path: "api/assets/me-climbing.jpeg",
-			description: null,
+			description: "bla",
 		},
 	];
 </script>
@@ -156,7 +152,10 @@
 		</ul>
 		<h3>Electronics</h3>
 		<ul>
-			<li>Chromebook, USB-C chargeable and set-up for programming</li>
+			<li>
+				Chromebook, USB-C chargeable and set-up for
+				programming
+			</li>
 			<li>Aukey high-speed charger</li>
 			<li>Power bank (off-brand)</li>
 			<li>Kobo E-reader</li>
@@ -202,7 +201,15 @@
 
 		<h2>Bike</h2>
 		<p>
-			I bought my bike a few years ago secondhand for 250 euros, mostly because of the high-end components already on it. By now the bike is adjusted to my tastes. In adjusting the bike I chose easily accessible components over fancy super-durable components, because I would rather assume that things will break and be able to fix the problems that can occur then assume that things won't break and have a massive problem when that assumption fails. 
+			I bought my bike a few years ago secondhand for 250
+			euros, mostly because of the high-end components already
+			on it. By now the bike is adjusted to my tastes. In
+			adjusting the bike I chose easily accessible components
+			over fancy super-durable components, because I would
+			rather assume that things will break and be able to fix
+			the problems that can occur then assume that things
+			won't break and have a massive problem when that
+			assumption fails.
 		</p>
 		<li>
 			Stevens steel MTB frame
@@ -214,7 +221,8 @@
 			Tubus rear rack
 		</li>
 		<li>
-			Microshift Advent 1x9 drivetrain (sold by Decathlon as 'Rockrider')
+			Microshift Advent 1x9 drivetrain (sold by Decathlon as
+			'Rockrider')
 		</li>
 		<li>
 			Koga Dali handlebar with leather padding
@@ -222,7 +230,6 @@
 		<li>
 			Selle Royal Respiro Moderate saddle
 		</li>
-
 	</div>
 	<Carousel images="{images}" />
 </div>

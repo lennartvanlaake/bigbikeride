@@ -2,8 +2,9 @@
 	import ExpandButton from "./ExpandButton.svelte";
 	import AboutMe from "../components/AboutMe.svelte";
 	import Gear from "../components/Gear.svelte";
+	import Contact from "../components/Contact.svelte";
 	import BlogText from "./BlogText.svelte";
-	type OverlayType = "AboutMe" | "Gear" | "Blog";
+	type OverlayType = "AboutMe" | "Gear" | "Blog" | "Contact";
 	export let isVisible: boolean = false;
 	export let type: OverlayType;
 </script>
@@ -13,6 +14,8 @@
 		<AboutMe />
 		{ :else if type == "Blog" }
 		<BlogText />
+		{ :else if type == "Contact" }
+		<Contact />
 		{ :else }
 		<Gear />
 		{ /if }

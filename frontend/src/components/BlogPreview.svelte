@@ -21,13 +21,20 @@
 			nextEl: ".swiper-preview-navigation-nextEl",
 		},
 		loop: true,
+		plugins: plugins,
 	};
 
 	function slideToSelected() {
-		swiper?.update();
-		let newIndex = $blogList.findIndex((b) => b.id == $blogId);
-		if (newIndex >= 0) {
-			swiper?.slideTo(newIndex);
+		if (swiper) {
+			swiper.update();
+			let newIndex = $blogList.findIndex(
+				(b) => b.id == $blogId
+			);
+			if (newIndex >= 0) {
+				swiper.slideTo(newIndex);
+			}
+		} else {
+			setTimeout(() => slideToSelected(), 300);
 		}
 	}
 
@@ -41,11 +48,8 @@
 
 	$: $blogId, $blogList, slideToSelected();
 	onMount(() => {
-		Swiper.use(plugins);
 		swiper = new Swiper(container, swiperConfig);
-		setTimeout(() => {
-			slideToSelected();
-		}, 500);
+		slideToSelected();
 	});
 
 	onDestroy(() => {

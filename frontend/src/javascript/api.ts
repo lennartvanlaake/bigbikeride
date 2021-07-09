@@ -1,5 +1,6 @@
 import axios from "axios";
 import type {
+	MailRequest,
 	Blog,
 	CreateBlogRequest,
 	LoginRequest,
@@ -37,6 +38,10 @@ export const updateBlog = async (req: CreateBlogRequest, id: string) => {
 export const getAllBlogs = async (): Promise<Blog[]> => {
 	const result = await request.get(`${baseUrl}/blogs`);
 	return result.data;
+};
+
+export const fillContactForm = async (req: MailRequest): Promise<void> => {
+	await request.post(`${baseUrl}/mail`, req);
 };
 
 export const getBlog = async (id: string): Promise<Blog> => {

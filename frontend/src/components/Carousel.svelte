@@ -23,11 +23,11 @@
 						".swiper-plugin-navigation-nextEl",
 				},
 				loop: true,
+				plugins: plugins,
 		  }
-		: {};
+		: { plugins: plugins };
 
 	onMount(() => {
-		Swiper.use(plugins);
 		swiper = new Swiper(container, swiperConfig);
 	});
 
