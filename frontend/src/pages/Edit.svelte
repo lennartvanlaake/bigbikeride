@@ -10,11 +10,30 @@
  import { onMount } from 'svelte';
 
     let simplemde: any;
-    let blog: Omit<Blog, "id" | "created" | "type" | "index">;
+    let blog: Omit<Blog, "id" | "type" | "index">;
+    let dateElement;
 
     async function fill(blogId: string) {
 	blog = await api.getBlog(blogId);
+	setMdeValue();
+	setDateValue();
     }
+
+    function setDateValue() {
+	if (dateElement && blog.created) {
+		dateElement.value = blog.created.toString().substring(0, 10);
+	} else {
+		setTimeout(setDateValue, 500);
+	}
+    }
+
+    function setMdeValue() {
+	if (simplemde && blog.content) {
+		simplemde.value(blog.content);
+	} else {
+		setTimeout(setMdeValue, 500);
+	}
+    };
 
     async function create() {
         const coordinates = await getLocation();
@@ -23,6 +42,7 @@
 		content: "",
 		coordinates: coordinates,
 		images: [],
+		created: new Date()
 	}
 	blogId.set(undefined);
     }
@@ -30,6 +50,7 @@
     async function submit() {
 	blog.content = simplemde?.value()
 	if ($blogId) {
+		blog.created = new Date(dateElement.value); 
 		await api.updateBlog(blog, $blogId);
 	} else {
 		blogId.set(await api.createBlog(blog));
@@ -51,12 +72,11 @@
 
     async function getLocation(): Promise<Coordinates> {
     	try {
-
-	const position = await utils.getPosition();
-	return {
-           long: position.coords.longitude,
-	   lat: position.coords.latitude
-	}
+		const position = await utils.getPosition();
+		return {
+		   long: position.coords.longitude,
+		   lat: position.coords.latitude
+		}
 	} catch (e) {
 		console.error(e);
 		return nlCoordinates;
@@ -92,6 +112,13 @@
 <div class="white-rounded">
     {#if blog}
         <form>
+            <label for="title">Date:</label><br />
+            <input
+                type="date"
+                id="created"
+                name="created"
+		bind:this={dateElement}
+            /><br />
             <label for="title">Title:</label><br />
             <input
                 type="text"

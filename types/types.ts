@@ -96,6 +96,7 @@ export interface CreateBlogRequest {
 	title: string;
 	coordinates: Coordinates;
 	content: string | null;
+	created: Date | null;
 }
 
 export interface UpdateImageDescriptionRequest {

@@ -96,8 +96,8 @@
 		padding-bottom: 10px;
 		background-image: linear-gradient(
 			to bottom,
-			transparent 70%,
-			white 85%,
+			transparent 50%,
+			white 90%,
 			white 100%
 		);
 		z-index: 30;
@@ -122,7 +122,7 @@
 		display: flex;
 		flex-shrink: 0;
 		justify-content: center;
-		height: 8rem;
+		height: 12rem;
 		align-items: center;
 		width: 100vw;
 		cursor: grab;

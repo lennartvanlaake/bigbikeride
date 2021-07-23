@@ -104,15 +104,15 @@ const findBlog = async (id: string): Promise<BlogQueryResult> => {
 blogsRouter.post("/", async (ctx, next) => {
 	const blogRequest: CreateBlogRequest = ctx.request.body;
 	const id = v4();
-	const now = new Date();
+	const created = blogRequest.created ? blogRequest.created : new Date();
 
 	const blogEntity: BlogEntity = {
 		id: id,
 		title: blogRequest.title,
 		long: blogRequest.coordinates.long,
 		lat: blogRequest.coordinates.lat,
-		created_at: now,
-		updated_at: now,
+		created_at: created,
+		updated_at: created,
 	};
 	await connection(BLOG_TABLE_NAME).insert(blogEntity);
 
@@ -135,7 +135,18 @@ blogsRouter.put("/:id", async (ctx, next) => {
 		.update(BlogKeys.TITLE, blogRequest.title)
 		.update(BlogKeys.UPDATED, now)
 		.where(BlogKeys.ID, ctx.params.id);
-	debugger;
+
+	if (blogRequest.created) {
+		await connection(BLOG_TABLE_NAME)
+			.update(BlogKeys.CREATED, blogRequest.created)
+			.where(BlogKeys.ID, ctx.params.id);
+	}
+	await connection(BLOG_TABLE_NAME)
+		.update(BlogKeys.LAT, blogRequest.coordinates.lat)
+		.update(BlogKeys.LONG, blogRequest.coordinates.long)
+		.update(BlogKeys.TITLE, blogRequest.title)
+		.update(BlogKeys.UPDATED, now)
+		.where(BlogKeys.ID, ctx.params.id);
 	if (blogRequest.content) {
 		await connection(CONTENT_BLOG_TABLE_NAME)
 			.update(BlogContentKeys.CONTENT, blogRequest.content!!)

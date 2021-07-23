@@ -1,12 +1,6 @@
 <script lang="ts">
 	import Carousel from "../components/Carousel.svelte";
 
-	const images = [
-		{
-			path: "api/assets/me-working.jpg",
-			description: "bla",
-		},
-	];
 </script>
 
 <div class="white-rounded">
@@ -237,7 +231,6 @@
 			Selle Royal Respiro Moderate saddle
 		</li>
 	</div>
-	<Carousel images="{images}" />
 </div>
 <style>
 	ul {
