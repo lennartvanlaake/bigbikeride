@@ -12,7 +12,7 @@
     let simplemde: any;
     let blog: Omit<Blog, "id" | "type" | "index">;
     let dateElement;
-
+    
     async function fill(blogId: string) {
 	blog = await api.getBlog(blogId);
 	setMdeValue();
