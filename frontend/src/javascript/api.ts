@@ -6,6 +6,7 @@ import type {
 	LoginRequest,
 	LoginResponse,
 	UpdateImageDescriptionRequest,
+	CreateImageRequest,
 } from "../../../types/types";
 import * as uuid from "uuid";
 // @ts-ignore
@@ -55,12 +56,14 @@ export const deleteBlog = async (id: string) => {
 	return await request.delete(`${baseUrl}/blogs/${id}`);
 };
 
-export const linkImageToBlog = async (imageId: string, blogId: string) => {
-	checkId(imageId);
-	checkId(blogId);
-	return await request.post(
-		`${baseUrl}/images/${imageId}/post/${blogId}`
-	);
+export const deleteImage = async (id: string) => {
+	checkId(id);
+	return await request.delete(`${baseUrl}/images/${id}`);
+}
+
+export const createImage = async (req: CreateImageRequest) => {
+	checkId(req.blogId);
+	return await request.post(`${baseUrl}/images`, req);
 };
 
 export const changeImageDescription = async (

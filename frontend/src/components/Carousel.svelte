@@ -46,7 +46,7 @@
 				class:full-length-image="{!currentImage.description}"
 				class:description-cropped-image="{currentImage.description}"
 			>
-				<img class="image" src=/{currentImage.path}
+				<img class="image" src={currentImage.path}
 				alt={currentImage.description ?? ""}/>
 			</div>
 			{ #if currentImage.description }

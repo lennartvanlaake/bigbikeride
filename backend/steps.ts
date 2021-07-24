@@ -33,6 +33,7 @@ Given("I POST a blog with title {string}", async (title: string) => {
 			long: 0.0,
 			lat: 0.0,
 		},
+		created: new Date(),
 	};
 	const result = await request
 		.post("/api/blogs")
@@ -52,6 +53,7 @@ When(
 				long: 0.0,
 				lat: 0.0,
 			},
+			created: new Date(),
 		};
 		await request
 			.put(`/api/blogs/${blogId}`)
@@ -109,17 +111,10 @@ Then("the blog is no longer returned", async () => {
 When("I upload an image", async () => {
 	const result = await request
 		.post("/api/images")
-		.attach(UPLOAD_NAME, __dirname + "/features/dragon.jpg")
+		.send({ path: "https://someurl", blogId: blogId })
 		.set("Cookie", cookie)
 		.expect(200);
-	imageId = result.text;
-});
-
-When("I link the image to the blog", async () => {
-	await request
-		.post(`/api/images/${imageId}/post/${blogId}`)
-		.set("Cookie", cookie)
-		.expect(200);
+	imageId = result.body.id;
 });
 
 When(
@@ -154,8 +149,5 @@ When("I send an email", async () => {
 		message: "bla",
 		sender: "doekmans@gmail.com",
 	};
-	await request
-		.post("/api/mail")
-		.send(mailBody)
-		.expect(200);
+	await request.post("/api/mail").send(mailBody).expect(200);
 });

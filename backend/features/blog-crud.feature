@@ -21,7 +21,6 @@ Feature: Blog crud operations
     Given I am logged in
     And I POST a blog with title "test"
     When I upload an image
-    And I link the image to the blog
     And I change the description of the image to "things"
     And I GET the created blog
     Then the blog in the response has an image with description "things"

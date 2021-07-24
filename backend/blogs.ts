@@ -8,6 +8,7 @@ import {
 	ContentBlogEntity,
 	CONTENT_BLOG_TABLE_NAME,
 	CreateBlogRequest,
+	Identity,
 	Image,
 	ImageBlogKeys,
 	ImageEntity,
@@ -33,12 +34,12 @@ const baseSelectQuery = () => {
 	 ${IMAGE_BLOG_TABLE_NAME}.${ImageBlogKeys.IMAGE_ID} = ${IMAGE_TABLE_NAME}.${ImageKeys.ID}
 	 where 
 	 ${IMAGE_BLOG_TABLE_NAME}.${ImageBlogKeys.BLOG_ID} = ${BLOG_TABLE_NAME}.${BlogKeys.ID}
-	 order by ${IMAGE_TABLE_NAME}.${ImageKeys.CREATED_AT} desc)
+	 order by ${IMAGE_TABLE_NAME}.${ImageKeys.CREATED_AT} asc)
        as arr)
      as images`),
 			CONTENT_BLOG_TABLE_NAME + "." + BlogContentKeys.CONTENT
 		)
-		.orderBy(BlogKeys.CREATED, "desc");
+		.orderBy(BlogKeys.CREATED, "asc");
 };
 
 interface BlogQueryResult extends BlogEntity {
@@ -121,8 +122,7 @@ blogsRouter.post("/", async (ctx, next) => {
 		content: blogRequest.content ?? "",
 	};
 	await connection(CONTENT_BLOG_TABLE_NAME).insert(content);
-
-	ctx.body = { id: id };
+	ctx.body = <Identity>{ id: id };
 	await next();
 });
 

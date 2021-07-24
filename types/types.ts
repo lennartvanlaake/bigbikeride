@@ -103,6 +103,16 @@ export interface UpdateImageDescriptionRequest {
 	description: string | null;
 }
 
+export interface CreateImageRequest {
+	path: string;
+	blogId: string;
+	description: string;
+}
+
+export interface Identity {
+	id: string;
+}
+
 export interface LoginRequest {
 	password: string;
 }
@@ -131,4 +141,3 @@ declare module "koa" {
 		session: MySession;
 	}
 }
-

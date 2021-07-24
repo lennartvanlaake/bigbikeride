@@ -4,15 +4,15 @@
  import { blogId } from "../javascript/storage";
  import { nlCoordinates } from "../javascript/consts";
  import PlacePicker from "../components/PlacePicker.svelte";
- import ImageUpload from "../components/ImageUpload.svelte";
  import MarkdownEditor from "../components/MarkdownEditor.svelte";
- import type { Blog, Coordinates } from "../../../types/types.js";
+ import type { Blog, Coordinates, CreateImageRequest } from "../../../types/types.js";
  import { onMount } from 'svelte';
 
     let simplemde: any;
     let blog: Omit<Blog, "id" | "type" | "index">;
     let dateElement;
-    
+    let newImage: CreateImageRequest = { path: "", description: "", blogId: "" }
+
     async function fill(blogId: string) {
 	blog = await api.getBlog(blogId);
 	setMdeValue();
@@ -49,17 +49,24 @@
 
     async function submit() {
 	blog.content = simplemde?.value()
+	let id;
 	if ($blogId) {
 		blog.created = new Date(dateElement.value); 
 		await api.updateBlog(blog, $blogId);
 	} else {
-		blogId.set(await api.createBlog(blog));
+		id = await api.createBlog(blog);
+		blogId.set(id);
+	}
+	newImage.blogId = id ?? $blogId;
+	if (newImage.path) {
+	    await api.createImage(newImage);
 	}
 	if (blog.images) {
 	    blog.images.forEach( img => api.changeImageDescription(
 		    img.id, { description: img.description } 
 	    ))
 	}
+
 	fill($blogId);
 	alert("Post success!")
     }
@@ -83,11 +90,17 @@
 	}
     }
 
-    // callback after image upload success
-    async function uploadCallback(_err: any, upload: any) {
-	await submit();
-	await api.linkImageToBlog(upload.serverId, $blogId!!);
-	await fill($blogId!!);
+
+    async function deleteImage(imageId: string) {
+	try {
+	   await api.deleteImage(imageId);
+	   await fill($blogId);
+	   alert("Image deleted!");
+	} catch (e) {
+
+	   alert("Image deletion failed!");
+	}
+
     }
 
     // callback for map select
@@ -147,20 +160,42 @@
             coordinates={blog.coordinates}
             on:selectLocation={selectLocation}
         />
-	<ImageUpload uploadCallback={uploadCallback}/>
-        {#if blog.images}
+
+
+
+    <label for="title">New image path:</label><br />
+    <input
+	type="text"
+	id="path"
+	name="path"
+	bind:value={newImage.path}
+    /><br />
+    <label for="title">New image description:</label><br />
+    <textarea
+	id="description"
+	name="description"
+	bind:value={newImage.description}
+	/><br />
+    <strong>preview</strong><br />
+    <img src={newImage.path} alt={newImage.description ?? ""} /><br />
+
+	{#if blog.images}
             {#each blog.images as image}
                 <span>
                     <p>
-                        Image: <a href={"/" + image.path}>{"/" + image.path}</a>
+                        Image: <a href={image.path}>{image.path}</a>
                     </p>
-                    <img src={"/" + image.path} alt={image.description ?? ""} /><br />
+                    <img src={image.path} alt={image.description ?? ""} /><br />
                     <label for={"content_" + image.id}>Description:</label><br
                     />
                     <textarea
                         bind:value={image.description}
                         id={"content_" + image.id}
                     />
+		    <button
+			    on:click={() => deleteImage(image.id)}>Delete</button
+		    >
+		    <br/>
                 </span>
             {/each}
         {/if}
