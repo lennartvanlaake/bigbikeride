@@ -1,15 +1,14 @@
 <script lang="ts">
-	import ExpandButton from "../components/ExpandButton.svelte";
+	import ExpandButton from "./ExpandButton.svelte";
+	import { tick, onDestroy } from "svelte";
 	import { showImageOverlay, overlayImages } from "../javascript/storage";
 	import Swiper, {
 		SwiperPluginLazyload,
 		SwiperPluginNavigation,
 	} from "tiny-swiper";
-	import type { Image } from "../../../types/types";
-	import { onDestroy, onMount } from "svelte";
 
-	export let images: Array<Pick<Image, "path" | "description">>;
-	const hasMoreThanOneImage = images.length > 1;
+	$: $showImageOverlay, init();
+	$: hasMoreThanOneImage = $overlayImages.length > 1;
 	const plugins = hasMoreThanOneImage
 		? [SwiperPluginLazyload, SwiperPluginNavigation]
 		: [SwiperPluginLazyload];
@@ -19,34 +18,35 @@
 		? {
 				navigation: {
 					prevEl:
-						".swiper-plugin-navigation-prevEl",
+						".swiper-img-overlay-navigation-prevEl",
 
 					nextEl:
-						".swiper-plugin-navigation-nextEl",
+						".swiper-img-overlay-navigation-nextEl",
 				},
 				loop: true,
 				plugins: plugins,
 		  }
 		: { plugins: plugins };
 
-	function expand() {
-		$showImageOverlay = true;
-		$overlayImages = images;
+	async function init() {
+		if ($showImageOverlay && $overlayImages) {
+			await tick();
+			swiper = new Swiper(container, swiperConfig);
+		}
 	}
-
-	onMount(() => {
-		swiper = new Swiper(container, swiperConfig);
-	});
-
 	onDestroy(() => {
 		swiper?.destroy();
 	});
 </script>
 
-{ #if images }
-<div class="swiper-container" bind:this="{container}">
+<div
+	class="swiper-container"
+	bind:this="{container}"
+	class:overlay="{$showImageOverlay}"
+>
+	{ #if $showImageOverlay }
 	<div class="swiper-wrapper">
-		{ #each images as currentImage }
+		{ #each $overlayImages as currentImage }
 		<div class="swiper-slide">
 			<div
 				class="swiper-img-container"
@@ -56,50 +56,37 @@
 				<img class="image" src={currentImage.path}
 				alt={currentImage.description ?? ""}/>
 			</div>
-			{ #if currentImage.description }
-			<div class="description">
-				<em>{currentImage.description}</em>
-			</div>
-			{ /if }
 		</div>
 		{ /each }
 	</div>
 
 	{ #if hasMoreThanOneImage }
-	<button class="swiper-plugin-navigation-prevEl">
+	<button class="swiper-img-overlay-navigation-prevEl">
 		&lt;
 	</button>
 
-	<button class="swiper-plugin-navigation-nextEl">
+	<button class="swiper-img-overlay-navigation-nextEl">
 		&gt;
 	</button>
 	{ /if }
 
-	<div id="expand" on:click="{expand}">
-		<ExpandButton isPlus="{true}" />
+	<div id="expand" on:click="{() => $showImageOverlay = false}">
+		<ExpandButton isPlus="{false}" />
 	</div>
+	{ /if }
 </div>
-{ /if }
 
 <style>
 	#expand {
-		position: absolute;
-		top: 2vh;
-		right: 2vh;
+		position: fixed;
+		right: 2rem;
+		top: 2rem;
 	}
-
-	.swiper-container {
-		border-radius: 1rem;
-		position: relative;
-		overflow: hidden;
-	}
-
-	.swiper-container,
-	.swiper-wrapper {
-		padding: 0;
-		margin: 0;
-		width: 100%;
-		height: 100%;
+	.overlay {
+		position: fixed;
+		width: 100vw;
+		height: 100vh;
+		z-index: 999;
 		background-color: white;
 	}
 
@@ -107,14 +94,15 @@
 		position: relative;
 		display: flex;
 		flex-shrink: 0;
+		height: 100%;
 		justify-content: center;
-		height: 40vw;
-		max-height: 30rem;
 		font-size: 0.75rem;
 		align-items: center;
 		cursor: grab;
 	}
 	.swiper-img-container {
+		width: 100vw;
+		height: 100vh;
 		position: absolute;
 		top: 0;
 		width: 100%;
@@ -126,19 +114,11 @@
 		width: 100%;
 		height: 100%;
 		object-fit: scale-down;
-		object-position: top;
+		object-position: center;
 	}
 
-	.full-length-image {
-		height: 100%;
-	}
-
-	.description-cropped-image {
-		height: 90%;
-	}
-
-	.swiper-plugin-navigation-prevEl,
-	.swiper-plugin-navigation-nextEl {
+	.swiper-img-overlay-navigation-prevEl,
+	.swiper-img-overlay-navigation-nextEl {
 		text-shadow: 2px 1px rgba(0, 0, 0, 0.4);
 		display: block;
 		position: absolute;
@@ -153,29 +133,11 @@
 		background: transparent;
 		cursor: pointer;
 	}
-	:global(.swiper-button-disabled) {
-		opacity: 0.5;
-		cursor: not-allowed;
-	}
-
-	.swiper-plugin-navigation-prevEl {
+	.swiper-img-overlay-navigation-prevEl {
 		left: 2rem;
 	}
 
-	.swiper-plugin-navigation-nextEl {
+	.swiper-img-overlay-navigation-nextEl {
 		right: 2rem;
-	}
-
-	.description {
-		position: absolute;
-		width: 100%;
-		height: 10%;
-		bottom: 0;
-		background-color: white;
-		color: black;
-		text-align: center;
-	}
-	.description em {
-		margin-top: 0.2rem;
 	}
 </style>

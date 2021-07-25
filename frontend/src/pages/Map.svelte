@@ -7,7 +7,9 @@
 	import type { Blog, Coordinates } from "../../../types/types";
 	import * as L from "leaflet";
 	import BlogPreview from "../components/BlogPreview.svelte";
+
 	import Overlay from "../components/Overlay.svelte";
+	import ImageOverlay from "../components/ImageOverlay.svelte";
 	import ExpandButton from "../components/ExpandButton.svelte";
 
 	let selectedBlog = $blogList.find((b) => b.id == $blogId);
@@ -101,6 +103,7 @@
 	<RoundButton icon="fa-comment-alt"></RoundButton>
 </div>
 <Overlay bind:isVisible="{overlayVisible}" bind:type="{overlayType}" />
+<ImageOverlay />
 <div id="map" use:mapInit></div>
 
 { #if !overlayVisible }
@@ -112,7 +115,7 @@
 <style>
 	#previewExpand {
 		position: absolute;
-		bottom: 0.5rem;
+		bottom: 1vh;
 		left: 50%;
 		transform: translate(-50%, 0);
 	}
