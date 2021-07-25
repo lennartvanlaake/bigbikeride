@@ -102,12 +102,13 @@
 </div>
 <Overlay bind:isVisible="{overlayVisible}" bind:type="{overlayType}" />
 <div id="map" use:mapInit></div>
-<div class:invisible="{overlayVisible}">
-	<BlogPreview blogId="{blogId}" blogList="{blogList}" />
-	<div id="previewExpand" on:click="{() => selectOverlay('Blog')}">
-		<ExpandButton isPlus="{true}" />
-	</div>
+
+{ #if !overlayVisible }
+<BlogPreview blogId="{blogId}" blogList="{blogList}" />
+<div id="previewExpand" on:click="{() => selectOverlay('Blog')}">
+	<ExpandButton isPlus="{true}" />
 </div>
+{ /if }
 <style>
 	#previewExpand {
 		position: absolute;

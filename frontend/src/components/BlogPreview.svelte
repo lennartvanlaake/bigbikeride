@@ -41,18 +41,27 @@
 	function setBlogId() {
 		setTimeout(() => {
 			$blogId = document.getElementsByClassName(
-				"preview-slide swiper-slide-active"
+				"swiper-slide-active preview-slide"
 			)[0]?.id;
 		}, 300);
 	}
 
 	$: $blogId, $blogList, slideToSelected();
+
+	function configureSlider() {
+		if (container) {
+			swiper = new Swiper(container, swiperConfig);
+			slideToSelected();
+			swiper.on("after-slide", () => {
+				setBlogId();
+			});
+		} else {
+			setTimeout(configureSlider, 300);
+		}
+	}
+
 	onMount(() => {
-		swiper = new Swiper(container, swiperConfig);
-		slideToSelected();
-		swiper.on("after-slide", () => {
-			setBlogId();
-		});
+		setTimeout(configureSlider, 300);
 	});
 
 	onDestroy(() => {
