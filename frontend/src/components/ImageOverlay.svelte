@@ -2,31 +2,12 @@
 	import ExpandButton from "./ExpandButton.svelte";
 	import { tick, onDestroy } from "svelte";
 	import { showImageOverlay, overlayImages } from "../javascript/storage";
-	import Swiper, {
-		SwiperPluginLazyload,
-		SwiperPluginNavigation,
-	} from "tiny-swiper";
+	import Swiper, { SwiperPluginLazyload } from "tiny-swiper";
 
 	$: $showImageOverlay, init();
-	$: hasMoreThanOneImage = $overlayImages.length > 1;
-	const plugins = hasMoreThanOneImage
-		? [SwiperPluginLazyload, SwiperPluginNavigation]
-		: [SwiperPluginLazyload];
 	let container: HTMLElement;
 	let swiper: any;
-	const swiperConfig = hasMoreThanOneImage
-		? {
-				navigation: {
-					prevEl:
-						".swiper-img-overlay-navigation-prevEl",
-
-					nextEl:
-						".swiper-img-overlay-navigation-nextEl",
-				},
-				loop: true,
-				plugins: plugins,
-		  }
-		: { plugins: plugins };
+	const swiperConfig = { plugins: [SwiperPluginLazyload] };
 
 	async function init() {
 		if ($showImageOverlay && $overlayImages) {
@@ -59,16 +40,6 @@
 		</div>
 		{ /each }
 	</div>
-
-	{ #if hasMoreThanOneImage }
-	<button class="swiper-img-overlay-navigation-prevEl">
-		&lt;
-	</button>
-
-	<button class="swiper-img-overlay-navigation-nextEl">
-		&gt;
-	</button>
-	{ /if }
 
 	<div id="expand" on:click="{() => $showImageOverlay = false}">
 		<ExpandButton isPlus="{false}" />
