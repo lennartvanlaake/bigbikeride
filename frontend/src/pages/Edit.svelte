@@ -44,6 +44,8 @@
 		images: [],
 		created: new Date()
 	}
+	newImage = { path: "", description: "", blogId: "" }
+
 	blogId.set(undefined);
     }
 
@@ -66,7 +68,7 @@
 		    img.id, { description: img.description } 
 	    ))
 	}
-
+	newImage = { path: "", description: "", blogId: "" }
 	fill($blogId);
 	alert("Post success!")
     }

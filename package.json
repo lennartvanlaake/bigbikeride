@@ -1,6 +1,6 @@
 {
 	"name": "svelte-app",
-	"version": "0.4.31",
+	"version": "0.4.38",
 	"type": "commonjs",
 	"scripts": {
 		"deploy-be": "yarn version --patch && bash deploy-be.sh $npm_package_version",

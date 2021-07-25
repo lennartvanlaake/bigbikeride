@@ -50,6 +50,9 @@
 	onMount(() => {
 		swiper = new Swiper(container, swiperConfig);
 		slideToSelected();
+		swiper.on("after-slide", () => {
+			setBlogId();
+		});
 	});
 
 	onDestroy(() => {
@@ -61,7 +64,7 @@
 	afterUpdate(() => swiper?.update());
 </script>
 
-<div on:click="{setBlogId}" class="swiper-container" bind:this="{container}">
+<div class="swiper-container" bind:this="{container}">
 	<div class="swiper-wrapper">
 		{ #each $blogList as blog }
 		<div class="swiper-slide preview-slide" id="{blog.id}">
