@@ -1,33 +1,17 @@
 <script lang="ts">
 	import ExpandButton from "../components/ExpandButton.svelte";
 	import { showImageOverlay, overlayImages } from "../javascript/storage";
-	import Swiper, {
-		SwiperPluginLazyload,
-		SwiperPluginNavigation,
-	} from "tiny-swiper";
+	import Swiper, { SwiperPluginLazyload } from "tiny-swiper";
 	import type { Image } from "../../../types/types";
 	import { onDestroy, onMount } from "svelte";
 
 	export let images: Array<Pick<Image, "path" | "description">>;
-	const hasMoreThanOneImage = images.length > 1;
-	const plugins = hasMoreThanOneImage
-		? [SwiperPluginLazyload, SwiperPluginNavigation]
-		: [SwiperPluginLazyload];
 	let container: HTMLElement;
 	let swiper: any;
-	const swiperConfig = hasMoreThanOneImage
-		? {
-				navigation: {
-					prevEl:
-						".swiper-plugin-navigation-prevEl",
-
-					nextEl:
-						".swiper-plugin-navigation-nextEl",
-				},
-				loop: true,
-				plugins: plugins,
-		  }
-		: { plugins: plugins };
+	const swiperConfig = {
+		loop: true,
+		plugins: [SwiperPluginLazyload],
+	};
 
 	function expand() {
 		$showImageOverlay = true;
@@ -64,16 +48,6 @@
 		</div>
 		{ /each }
 	</div>
-
-	{ #if hasMoreThanOneImage }
-	<button class="swiper-plugin-navigation-prevEl">
-		&lt;
-	</button>
-
-	<button class="swiper-plugin-navigation-nextEl">
-		&gt;
-	</button>
-	{ /if }
 
 	<div id="expand" on:click="{expand}">
 		<ExpandButton isPlus="{true}" />
@@ -136,36 +110,6 @@
 	.description-cropped-image {
 		height: 90%;
 	}
-
-	.swiper-plugin-navigation-prevEl,
-	.swiper-plugin-navigation-nextEl {
-		text-shadow: 2px 1px rgba(0, 0, 0, 0.4);
-		display: block;
-		position: absolute;
-		top: 50%;
-		transform: translateY(-50%);
-		padding: 0.2rem;
-		font-size: 1.75rem;
-		font-weight: bold;
-		color: white;
-		border: none;
-		outline: none;
-		background: transparent;
-		cursor: pointer;
-	}
-	:global(.swiper-button-disabled) {
-		opacity: 0.5;
-		cursor: not-allowed;
-	}
-
-	.swiper-plugin-navigation-prevEl {
-		left: 2rem;
-	}
-
-	.swiper-plugin-navigation-nextEl {
-		right: 2rem;
-	}
-
 	.description {
 		position: absolute;
 		width: 100%;

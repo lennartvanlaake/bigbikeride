@@ -7,7 +7,7 @@
 	$: $showImageOverlay, init();
 	let container: HTMLElement;
 	let swiper: any;
-	const swiperConfig = { plugins: [SwiperPluginLazyload] };
+	const swiperConfig = { plugins: [SwiperPluginLazyload], loop: true };
 
 	async function init() {
 		if ($showImageOverlay && $overlayImages) {
