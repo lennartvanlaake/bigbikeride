@@ -1,17 +1,17 @@
 <script lang="ts">
  import * as api from '../javascript/api'
  import * as utils from '../javascript/utils'
- import { blogId } from "../javascript/storage";
+ import { blogId, loggedIn } from "../javascript/storage";
  import { nlCoordinates } from "../javascript/consts";
  import PlacePicker from "../components/PlacePicker.svelte";
  import MarkdownEditor from "../components/MarkdownEditor.svelte";
  import type { Blog, Coordinates, CreateImageRequest } from "../../../types/types.js";
  import { onMount } from 'svelte';
 
-    let simplemde: any;
-    let blog: Omit<Blog, "id" | "type" | "index">;
-    let dateElement;
-    let newImage: CreateImageRequest = { path: "", description: "", blogId: "" }
+ let simplemde: any;
+ let blog: Omit<Blog, "id" | "type" | "index">;
+ let dateElement;
+ let newImage: CreateImageRequest = { path: "", description: "", blogId: "" }
 
     async function fill(blogId: string) {
 	blog = await api.getBlog(blogId);
@@ -114,6 +114,12 @@
     }
 
     onMount(async () => {
+	setTimeout(() =>  {
+		if (!$loggedIn) {
+			location.replace("/login");
+		}
+	}, 500)
+
 	if ($blogId) {
 		if (!api.isId($blogId)) {
 		   blogId.set(undefined);

@@ -17,12 +17,12 @@
 	<Route path="/">
 		<BlogMap />
 	</Route>
-	<Route path="edit">
+	<Route path="/edit">
 		<div class="page-content">
 			<Edit />
 		</div>
 	</Route>
-	<Route path="login">
+	<Route path="/login">
 		<div class="page-content">
 			<Login />
 		</div>

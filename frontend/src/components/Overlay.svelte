@@ -5,8 +5,15 @@
 	import Contact from "../components/Contact.svelte";
 	import BlogText from "./BlogText.svelte";
 	import { showOverlay } from "../javascript/storage";
+	import { onMount, onDestroy } from "svelte";
 	type OverlayType = "AboutMe" | "Gear" | "Blog" | "Contact";
 	export let type: OverlayType;
+
+	onMount(() => history.pushState({}, "", "/overlay"));
+	onDestroy(() => {
+		history.pushState({}, "", "/");
+		location.reload();
+	});
 </script>
 <div id="overlay">
 	<div class="page-content">
