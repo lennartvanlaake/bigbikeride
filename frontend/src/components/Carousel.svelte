@@ -1,7 +1,7 @@
 <script lang="ts">
 	import ExpandButton from "../components/ExpandButton.svelte";
 	import { showImageOverlay, overlayImages } from "../javascript/storage";
-	import Swiper, { SwiperPluginLazyload } from "tiny-swiper";
+	import Swiper from "tiny-swiper";
 	import type { Image } from "../../../types/types";
 	import { onDestroy, onMount } from "svelte";
 
@@ -10,7 +10,6 @@
 	let swiper: any;
 	const swiperConfig = {
 		loop: true,
-		plugins: [SwiperPluginLazyload],
 	};
 
 	function expand() {

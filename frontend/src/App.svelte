@@ -80,6 +80,10 @@
 		box-sizing: border-box;
 	}
 
+	:global(p, h1, h2, h3, h4, h5) {
+		margin-bottom: 1rem;
+	}
+
 	:global(button) {
 		display: inline-block;
 		font-weight: 400;

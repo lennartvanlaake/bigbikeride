@@ -2,7 +2,7 @@
 	import { nlCoordinates } from "../javascript/consts";
 	import { blogList } from "../javascript/bloglist";
 	import createMap from "../javascript/maps";
-	import { blogId } from "../javascript/storage";
+	import { blogId, showOverlay } from "../javascript/storage";
 	import RoundButton from "../components/RoundButton.svelte";
 	import type { Blog, Coordinates } from "../../../types/types";
 	import * as L from "leaflet";
@@ -25,7 +25,6 @@
 		popupAnchor: [-3, -76], // point from which the popup should open relative to the iconAnchor
 	});
 
-	let overlayVisible = false;
 	let overlayType;
 
 	$: select($blogList.find((b) => b.id == $blogId));
@@ -84,7 +83,7 @@
 	}
 
 	function selectOverlay(type: string) {
-		overlayVisible = true;
+		$showOverlay = true;
 		overlayType = type;
 	}
 </script>
@@ -102,11 +101,14 @@
 >
 	<RoundButton icon="fa-comment-alt"></RoundButton>
 </div>
-<Overlay bind:isVisible="{overlayVisible}" bind:type="{overlayType}" />
+
+{ #if $showOverlay }
+<Overlay bind:type="{overlayType}" />
+{ /if }
 <ImageOverlay />
 <div id="map" use:mapInit></div>
 
-{ #if !overlayVisible }
+{ #if !$showOverlay }
 <BlogPreview blogId="{blogId}" blogList="{blogList}" />
 <div id="previewExpand" on:click="{() => selectOverlay('Blog')}">
 	<ExpandButton isPlus="{true}" />
@@ -118,10 +120,6 @@
 		bottom: 1vh;
 		left: 50%;
 		transform: translate(-50%, 0);
-	}
-
-	.invisible {
-		display: none;
 	}
 
 	#meIcon {

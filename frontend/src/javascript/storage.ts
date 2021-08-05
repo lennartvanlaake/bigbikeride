@@ -5,6 +5,7 @@ export const blogId = writable<string | null>(localStorage.blogId);
 export const loggedIn = writable<boolean>(false);
 export const firstVisit = writable<boolean>(localStorage.firstVisit);
 export const showImageOverlay = writable<boolean>(false);
+export const showOverlay = writable<boolean>(false);
 export const overlayImages = writable<
 	Array<Pick<Image, "path" | "description">>
 >([]);

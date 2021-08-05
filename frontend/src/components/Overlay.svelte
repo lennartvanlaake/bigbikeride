@@ -4,11 +4,11 @@
 	import Gear from "../components/Gear.svelte";
 	import Contact from "../components/Contact.svelte";
 	import BlogText from "./BlogText.svelte";
+	import { showOverlay } from "../javascript/storage";
 	type OverlayType = "AboutMe" | "Gear" | "Blog" | "Contact";
-	export let isVisible: boolean = false;
 	export let type: OverlayType;
 </script>
-<div id="overlay" class:invisible="{!isVisible}">
+<div id="overlay">
 	<div class="page-content">
 		{ #if type == "AboutMe" }
 		<AboutMe />
@@ -23,15 +23,14 @@
 		{ /if }
 	</div>
 	<div id="expand">
-		<ExpandButton bind:isEnabled="{isVisible}" isPlus="{false}" />
+		<ExpandButton
+			bind:isEnabled="{$showOverlay}"
+			isPlus="{false}"
+		/>
 	</div>
 </div>
 
 <style>
-	.invisible {
-		display: none;
-	}
-
 	#expand {
 		position: fixed;
 		right: 2rem;
