@@ -4,7 +4,6 @@
 	import Swiper from "tiny-swiper";
 	import type { Image } from "../../../types/types";
 	import { onDestroy, onMount } from "svelte";
-	import { navigate } from "svelte-routing";
 
 	export let images: Array<Pick<Image, "path" | "description">>;
 	let container: HTMLElement;
@@ -19,7 +18,6 @@
 	}
 
 	onMount(() => {
-		navigate("/carousel", { replace: true });
 		swiper = new Swiper(container, swiperConfig);
 	});
 
