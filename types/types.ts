@@ -51,6 +51,7 @@ export interface Coordinates {
 	lat: number;
 }
 
+// image stuff
 export const IMAGE_BLOG_TABLE_NAME = "blog_images";
 
 export const enum ImageBlogKeys {
@@ -89,8 +90,21 @@ export interface Image {
 	updated: Date;
 }
 
-export const UPLOAD_NAME = "filepond";
-export const PUBLIC_DIR = "public";
+// subscription stuff
+export const SUBSCRIBERS_TABLE_NAME = "subscribers";
+
+export const enum SubscriberKeys {
+	ID = "id",
+	EMAIL = "email",
+	NAME = "name",
+}
+
+export interface SubscriberEntity {
+	id: string;
+	name: string;
+	email: string;
+}
+
 // requests
 export interface CreateBlogRequest {
 	title: string;
@@ -124,6 +138,15 @@ export interface LoginResponse {
 export interface MailRequest {
 	message: string;
 	sender: string;
+}
+
+export interface SubscribeRequest {
+	name: string;
+	email: string;
+}
+
+export interface NotifyRequest {
+	message: string;
 }
 
 export interface MySession {
