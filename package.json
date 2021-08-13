@@ -1,6 +1,6 @@
 {
 	"name": "svelte-app",
-	"version": "0.4.53",
+	"version": "0.4.54",
 	"type": "commonjs",
 	"scripts": {
 		"deploy-be": "yarn version --patch && bash deploy-be.sh $npm_package_version",
@@ -73,6 +73,7 @@
 		"pg": "^8.5.1",
 		"pg-hstore": "^2.3.3",
 		"prettier-plugin-svelte": "^2.2.0",
+		"sharp": "^0.28.3",
 		"supertest": "^6.1.3",
 		"svelte-check": "^1.2.5",
 		"svelte-filepond": "^0.0.1",
