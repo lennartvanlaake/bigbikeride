@@ -2,11 +2,23 @@
 	import marked from "marked";
 	import type { Blog } from "../../../types/types";
 	import Carousel from "../components/Carousel.svelte";
-
+	import { blogId } from "../javascript/storage";
+	import { onMount } from "svelte";
 	export let data: Blog;
+	let element: HTMLElement;
+
+	let intersectionObserver = new IntersectionObserver((entries) => {
+		if (entries[0].isIntersecting) {
+			$blogId = data.id;
+		}
+	});
+
+	onMount(() => {
+		intersectionObserver.observe(element);
+	});
 </script>
 
-<div class="white-rounded">
+<div class="white-rounded" bind:this="{element}">
 	<div class="title-wrapper">
 		<h1 class="title">{data.title}</h1>
 	</div>
