@@ -3,6 +3,9 @@
 	let captchaCompleted = false;
 	let sender = "";
 	let message = "";
+	let name = "";
+	let email = "";
+
 	window.addEventListener(
 		"message",
 		function (e) {
@@ -22,6 +25,22 @@
 			alert("Message sent!");
 		} catch (_) {
 			alert("Sending message failed!");
+		} finally {
+			captchaCompleted = false;
+		}
+	}
+
+	async function subscribe() {
+		try {
+			api.subscribe({
+				name: name,
+				email: email,
+			});
+			alert("Subscription succesful!");
+		} catch (_) {
+			alert(
+				"Something went wrong. Maybe your are already subscribed to the blog?"
+			);
 		}
 	}
 </script>
@@ -52,6 +71,15 @@
 	<label for="message">The message you want to send to Lennart:</label>
 	<textarea cols="50" rows="6" bind:value="{message}" />
 	<button on:click="{sendForm}">Send!</button>
+	<br />
+
+	<h2>Subscribe for notifications!</h2>
+	<label for="name">Name:</label>
+	<input type="text" id="name" name="name" bind:value="{name}" />
+	<label for="email">Email:</label>
+	<input type="text" id="email" name="email" bind:value="{email}" />
+	<button on:click="{subscribe}">Subscribe!</button>
+
 	{ /if }
 </div>
 

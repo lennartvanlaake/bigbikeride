@@ -126,6 +126,14 @@
 	}
     }
 
+    async function notify() {
+    	if (!confirm("Are you sure you want to send an email to the mailing list?")) {
+		return;
+	}
+	await api.notify();
+	alert("Notification sent!");
+    }
+
     onMount(async () => {
 	setTimeout(() =>  {
 		if (!$loggedIn) {
@@ -233,7 +241,10 @@
     <button
         id="delete"
 	on:click={remove}>Delete blog</button
-    >
+>
+<button
+	   id="notify"
+	   on:click={notify}>Notify</button>
 </div>
 
 
