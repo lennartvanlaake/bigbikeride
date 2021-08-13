@@ -16,6 +16,12 @@
 		}
 	});
 
+	async function loginIfEnter(event: KeyboardEvent) {
+		if (event.charCode == 13) {
+			login();
+		}
+	}
+
 	function login() {
 		api.login({ password })
 			.then(function (_response) {
@@ -30,7 +36,11 @@
 </script>
 
 <div class="white-rounded">
-	<input type="password" bind:value="{password}" />
+	<input
+		type="password"
+		bind:value="{password}"
+		on:keypress="{loginIfEnter}"
+	/>
 	<button class="button" on:click="{login}">
 		Login
 	</button>

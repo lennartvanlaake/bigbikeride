@@ -4,13 +4,15 @@
 	import createMap from "../javascript/maps";
 	import { blogId, showOverlay } from "../javascript/storage";
 	import RoundButton from "../components/RoundButton.svelte";
-	import type { Blog, Coordinates } from "../../../types/types";
+	import type { Blog, Coordinates, OverlayType } from "../../../types/types";
 	import * as L from "leaflet";
 	import BlogPreview from "../components/BlogPreview.svelte";
-
+	import { onMount } from "svelte";
 	import Overlay from "../components/Overlay.svelte";
 	import ImageOverlay from "../components/ImageOverlay.svelte";
 	import ExpandButton from "../components/ExpandButton.svelte";
+
+	export let overlayType;
 
 	let selectedBlog = $blogList.find((b) => b.id == $blogId);
 	let map: any;
@@ -25,10 +27,14 @@
 		popupAnchor: [-3, -76], // point from which the popup should open relative to the iconAnchor
 	});
 
-	let overlayType;
-
 	$: select($blogList.find((b) => b.id == $blogId));
 	$: $blogList, reinitMap();
+
+	onMount(() => {
+		if (overlayType) {
+			selectOverlay(overlayType);
+		}
+	})
 
 	function select(blog: Blog) {
 		if (!blog) {
@@ -60,9 +66,17 @@
 		// this method can be called before the previous component has been destroyed
 		// that messes with the height set to the flexbox here
 		setTimeout(() => {
-			//@ts-ignore
-			map = createMap(element, getFirstCoordinates(), 8);
-			$blogList.forEach((b) => addPointer(b));
+			if ($blogList) {
+				//@ts-ignore
+				map = createMap(
+					element,
+					getFirstCoordinates(),
+					8
+				);
+				$blogList.forEach((b) => addPointer(b));
+			} else {
+				setTimeout(() => mapInit(element), 300);
+			}
 		}, 500);
 	}
 
@@ -82,7 +96,7 @@
 		);
 	}
 
-	function selectOverlay(type: string) {
+	function selectOverlay(type: OverlayType) {
 		$showOverlay = true;
 		overlayType = type;
 	}

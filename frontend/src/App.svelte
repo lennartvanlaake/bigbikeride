@@ -7,6 +7,7 @@
 	import * as api from "./javascript/api";
 	import { onMount } from "svelte";
 	import { fillBlogList } from "./javascript/bloglist";
+	import { overlayTypeUrls } from "./javascript/consts";
 	onMount(async () => {
 		let isLoggedIn = await api.isLoggedIn();
 		loggedIn.set(isLoggedIn);
@@ -16,6 +17,15 @@
 <Router url="">
 	<Route path="/">
 		<BlogMap />
+	</Route>
+	<Route path={overlayTypeUrls['AboutMe']}>
+		<BlogMap overlayType="AboutMe" />
+	</Route>
+	<Route path={overlayTypeUrls['Contact']}>
+		<BlogMap overlayType="Contact" />
+	</Route>
+	<Route path={overlayTypeUrls['Gear']}>
+		<BlogMap overlayType="Gear" />
 	</Route>
 	<Route path="/edit">
 		<div class="page-content">

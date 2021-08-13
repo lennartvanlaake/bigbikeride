@@ -44,9 +44,11 @@
 		images: [],
 		created: new Date()
 	}
+	simplemde?.value("");
+	setDateValue();
 	newImage = { path: "", description: "", blogId: "" }
-
 	blogId.set(undefined);
+	alert("Blog fields reset");
     }
 
     async function submit() {
@@ -73,7 +75,16 @@
 	alert("Post success!")
     }
 
+    async function submitIfEnter(event: KeyboardEvent) {
+	if (event.charCode == 13) {
+		await submit();
+	}
+    }
+
     async function remove() {
+    	if (!confirm("Are you really sure you want to delete this post?")) {
+		return;
+	}
 	await api.deleteBlog($blogId);
 	create();
 	alert("Blog deleted!")
@@ -94,12 +105,14 @@
 
 
     async function deleteImage(imageId: string) {
+    	if (!confirm("Are you really sure you want to delete this image?")) {
+		return;
+	}
 	try {
 	   await api.deleteImage(imageId);
 	   await fill($blogId);
 	   alert("Image deleted!");
 	} catch (e) {
-
 	   alert("Image deletion failed!");
 	}
 
@@ -214,7 +227,8 @@
     >
     <button
         id="submit"
-	on:click={submit}>Submit blog</button
+	on:click={submit}
+	on:keypress={submitIfEnter}>Submit blog</button
     >
     <button
         id="delete"

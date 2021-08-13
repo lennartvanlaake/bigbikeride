@@ -6,13 +6,25 @@
 	import BlogText from "./BlogText.svelte";
 	import { showOverlay } from "../javascript/storage";
 	import { onMount, onDestroy } from "svelte";
-	type OverlayType = "AboutMe" | "Gear" | "Blog" | "Contact";
+	import { overlayTypeUrls } from "../javascript/consts";
+	import type { OverlayType } from "../../../types/types";
 	export let type: OverlayType;
 
-	onMount(() => history.pushState({}, "", "/overlay"));
+	onMount(() => {
+		if (type) {
+			history.pushState({}, "", overlayTypeUrls[type]);
+		} else {
+			$showOverlay = false;
+			location.replace("/");
+			location.reload();
+		}
+
+		window.addEventListener("popstate", (ev: PopStateEvent) => {
+			$showOverlay = false;
+		});
+	});
 	onDestroy(() => {
 		history.pushState({}, "", "/");
-		location.reload();
 	});
 </script>
 <div id="overlay">

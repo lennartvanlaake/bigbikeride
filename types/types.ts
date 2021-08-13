@@ -141,3 +141,5 @@ declare module "koa" {
 		session: MySession;
 	}
 }
+
+export type OverlayType = "AboutMe" | "Gear" | "Blog" | "Contact";
