@@ -1,5 +1,11 @@
 Feature: Blog crud operations
 
+  Scenario: Subscribe
+    When I subscribe to notifications
+    And I am logged in
+    And I notify the subscribers
+    And I unsubscribe to notifications
+
   Scenario: Send mail
     Then I send an email
 	

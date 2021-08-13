@@ -5,8 +5,8 @@ import supertest from "supertest";
 import {
 	CreateBlogRequest,
 	Blog,
-	UPLOAD_NAME,
 	MailRequest,
+	SubscribeRequest,
 } from "../types/types";
 
 let cookie: string;
@@ -14,6 +14,7 @@ let server = app.listen();
 let request = supertest(server);
 let blogId: string;
 let imageId: string;
+let subscriptionId: string;
 let allBlogsResponse: Blog[];
 let oneBlogResponse: Blog;
 
@@ -68,6 +69,31 @@ When("I GET all blogs", async () => {
 		.set("Cookie", cookie)
 		.send();
 	allBlogsResponse = result.body;
+	expect(result.status).to.equal(200);
+});
+
+When("I subscribe to notifications", async () => {
+	const req: SubscribeRequest = {
+		name: "lennart",
+		email: "lennartvanlaake@gmail.com",
+	};
+	const result = await request.post("/api/mail/subscription").send(req);
+	subscriptionId = result.body.id;
+	expect(result.status).to.equal(200);
+});
+
+When("I notify the subscribers", async () => {
+	const result = await request
+		.post("/api/notify")
+		.set("Cookie", cookie)
+		.send();
+	expect(result.status).to.equal(200);
+});
+
+When("I unsubscribe to notifications", async () => {
+	const result = await request
+		.get(`/api/mail/${subscriptionId}/unsubscribe`)
+		.send();
 	expect(result.status).to.equal(200);
 });
 

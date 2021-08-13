@@ -58,7 +58,7 @@ mailRouter.post("/subscription", async (ctx, next) => {
 		Lennart
 		`
 	);
-	ctx.body = {};
+	ctx.body = { id: id };
 	await next();
 });
 
@@ -69,22 +69,3 @@ mailRouter.get("/:id/unsubscribe", async (ctx, next) => {
 	ctx.body = "You have been unsubscribed. Have a nice day!";
 	await next();
 });
-
-export async function notifySubscribers() {
-	const subscribers: SubscriberEntity[] = await connection(
-		SUBSCRIBERS_TABLE_NAME
-	).select();
-	subscribers.forEach(async (subscriber) => {
-		await sendMail(
-			subscriber.email,
-			"New content!",
-			`Hello ${subscriber.name}!
-		I have just updated https://lennartsbigbikeride.eu. I hope you enjoy the new story/stories! :)
-
-		If you no longer want to receive updates, please go to ${process.env.VITE_PUBLIC_BASE_URL}/mail/${subscriber.id}/unsubscribe.
-		Best,
-		Lennart
-		`
-		);
-	});
-}
