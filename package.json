@@ -1,6 +1,6 @@
 {
 	"name": "svelte-app",
-	"version": "0.4.64",
+	"version": "0.4.65",
 	"type": "commonjs",
 	"scripts": {
 		"deploy-be": "yarn version --patch && bash deploy-be.sh $npm_package_version",
@@ -57,6 +57,7 @@
 		"dotenv": "^8.2.0",
 		"filepond": "^4.25.1",
 		"filepond-plugin-image-preview": "^4.6.5",
+		"jimp": "^0.16.1",
 		"knex": "^0.95.4",
 		"koa": "^2.13.1",
 		"koa-bodyparser": "^4.3.0",
