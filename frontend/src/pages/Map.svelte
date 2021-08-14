@@ -66,9 +66,13 @@
 				if (!$blogId) {
 					$blogId = $blogList[0].id;
 				}
+				let selectedBlog = getSelectedBlog();
+				if (!selectedBlog) {
+					setTimeout(() => mapInit(element), 300);
+				}
 				map = createMap(
 					element,
-					getSelectedBlog().coordinates,
+					selectedBlog.coordinates,
 					8
 				);
 				$blogList.forEach((b) => addPointer(b));

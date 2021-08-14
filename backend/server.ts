@@ -39,6 +39,5 @@ app.use(router.allowedMethods());
 
 // Set upload dir
 app.listen(port, async () => {
-	await resizeAllImages();
 	console.log(`Server is up at port ${port}`);
 });

@@ -1,8 +1,8 @@
 import { DefaultState, Context } from "koa";
 import { connection } from "./db";
 import Router from "koa-router";
+import * as Jimp from "jimp";
 import axios from "axios";
-import sharp from "sharp";
 import {
 	Identity,
 	ImageBlogEntity,
@@ -22,16 +22,11 @@ function getResizeFilename(id: string, size: number) {
 	return `${__dirname}/public/api/uploads/${id}-${size}.jpeg`;
 }
 
-async function resizeSingle(url: string, id: string, size: number) {
+async function resizeSingle(buffer: Buffer, id: string, size: number) {
 	try {
-		const response = await axios.get(url, {
-			responseType: "arraybuffer",
-		});
-		debugger;
-		const buffer = Buffer.from(response.data, "binary");
-		await sharp(buffer)
-			.resize(size)
-			.toFile(getResizeFilename(id, size));
+		const image = await Jimp.read(buffer);
+		image.resize(Jimp.AUTO, size);
+		image.write(getResizeFilename(id, size));
 	} catch (e) {
 		console.debug(e);
 		return false;
@@ -40,11 +35,20 @@ async function resizeSingle(url: string, id: string, size: number) {
 
 async function resizeToAllSizes(url: string, id: string) {
 	let success = true;
-	sizes.forEach(async (size) => {
-		if (!(await resizeSingle(url, id, size))) {
-			success = false;
-		}
-	});
+	try {
+		const response = await axios.get(url, {
+			responseType: "arraybuffer",
+		});
+		const buffer = Buffer.from(response.data, "binary");
+		sizes.forEach(async (size) => {
+			if (!(await resizeSingle(buffer, id, size))) {
+				success = false;
+			}
+		});
+	} catch (e) {
+		console.debug(e);
+		success = false;
+	}
 	return success;
 }
 

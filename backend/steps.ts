@@ -139,7 +139,7 @@ When("I upload an image", async () => {
 		.post("/api/images")
 		.send({
 			path:
-				"https://avatars.githubusercontent.com/u/173595?s=88&v=4",
+				"https://blog-backup-lennart.s3.fr-par.scw.cloud/images/helder%20water.JPG",
 			blogId: blogId,
 		})
 		.set("Cookie", cookie)
