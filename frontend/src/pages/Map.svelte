@@ -1,14 +1,9 @@
 <script lang="ts">
-	import { nlCoordinates } from "../javascript/consts";
 	import { blogList } from "../javascript/bloglist";
 	import createMap from "../javascript/maps";
 	import { blogId, showOverlay } from "../javascript/storage";
 	import RoundButton from "../components/RoundButton.svelte";
-	import type {
-		Blog,
-		Coordinates,
-		OverlayType,
-	} from "../../../types/types";
+	import type { Blog, OverlayType } from "../../../types/types";
 	import * as L from "leaflet";
 	import BlogPreview from "../components/BlogPreview.svelte";
 	import { onMount } from "svelte";
@@ -61,7 +56,7 @@
 		pointers.forEach((p) => map?.removeLayer(p));
 		$blogList.forEach((b) => addPointer(b));
 	}
-	
+
 	function mapInit(element: HTMLElement) {
 		// hack to ensure height is set correctly
 		// this method can be called before the previous component has been destroyed
@@ -69,7 +64,7 @@
 		setTimeout(() => {
 			if ($blogList) {
 				if (!$blogId) {
-					$blogId = $blogList[0].id
+					$blogId = $blogList[0].id;
 				}
 				map = createMap(
 					element,
@@ -97,7 +92,7 @@
 					if ($blogId == blog.id) {
 						selectOverlay("Blog");
 					} else {
-					   $blogId = blog.id;
+						$blogId = blog.id;
 					}
 				})
 		);
