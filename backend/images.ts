@@ -18,6 +18,10 @@ export const imagesRouter = new Router<DefaultState, Context>();
 
 const sizes = [100, 200, 300, 500, 800];
 
+function getResizeFilename(id: string, size: number) {
+	return `${__dirname}/public/api/uploads/${id}-${size}.jpeg`;
+}
+
 async function resizeSingle(url: string, id: string, size: number) {
 	try {
 		const response = await axios.get(url, {
@@ -27,15 +31,29 @@ async function resizeSingle(url: string, id: string, size: number) {
 		const buffer = Buffer.from(response.data, "binary");
 		await sharp(buffer)
 			.resize(size)
-			.toFile(`${__dirname}/public/${id}-${size}.jpeg`);
+			.toFile(getResizeFilename(id, size));
 	} catch (e) {
 		console.debug(e);
+		return false;
 	}
 }
 
 async function resizeToAllSizes(url: string, id: string) {
+	let success = true;
 	sizes.forEach(async (size) => {
-		await resizeSingle(url, id, size);
+		if (!(await resizeSingle(url, id, size))) {
+			success = false;
+		}
+	});
+	return success;
+}
+
+export async function resizeAllImages() {
+	const images: ImageEntity[] = await connection(
+		IMAGE_TABLE_NAME
+	).select();
+	images.forEach((image) => {
+		resizeToAllSizes(image.path, image.id);
 	});
 }
 
@@ -59,7 +77,10 @@ imagesRouter.post("/", async (ctx, next) => {
 		image_id: id,
 	};
 	await connection(IMAGE_BLOG_TABLE_NAME).insert(entity);
-	await resizeToAllSizes(imageRequest.path, id);
+	let resizeSuccess = await resizeToAllSizes(imageRequest.path, id);
+	if (!resizeSuccess) {
+		throw new Error(`Resizing image failed`);
+	}
 	ctx.body = <Identity>{ id: id };
 	await next();
 });

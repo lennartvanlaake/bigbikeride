@@ -1,5 +1,5 @@
 import { blogsRouter } from "./blogs";
-import { imagesRouter } from "./images";
+import { imagesRouter, resizeAllImages } from "./images";
 import { mailRouter } from "./mail";
 import { notifyRouter } from "./notify";
 import { checkLogin, loginRouter } from "./login";
@@ -38,6 +38,7 @@ app.use(router.routes());
 app.use(router.allowedMethods());
 
 // Set upload dir
-app.listen(port, () => {
+app.listen(port, async () => {
+	await resizeAllImages();
 	console.log(`Server is up at port ${port}`);
 });
