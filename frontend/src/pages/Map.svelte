@@ -4,7 +4,11 @@
 	import createMap from "../javascript/maps";
 	import { blogId, showOverlay } from "../javascript/storage";
 	import RoundButton from "../components/RoundButton.svelte";
-	import type { Blog, Coordinates, OverlayType } from "../../../types/types";
+	import type {
+		Blog,
+		Coordinates,
+		OverlayType,
+	} from "../../../types/types";
 	import * as L from "leaflet";
 	import BlogPreview from "../components/BlogPreview.svelte";
 	import { onMount } from "svelte";
@@ -14,7 +18,6 @@
 
 	export let overlayType;
 
-	let selectedBlog = $blogList.find((b) => b.id == $blogId);
 	let map: any;
 	let pointers = [];
 	let bikeIcon = L.icon({
@@ -30,11 +33,15 @@
 	$: select($blogList.find((b) => b.id == $blogId));
 	$: $blogList, reinitMap();
 
+	function getSelectedBlog() {
+		return $blogList.find((b) => b.id == $blogId);
+	}
+
 	onMount(() => {
 		if (overlayType) {
 			selectOverlay(overlayType);
 		}
-	})
+	});
 
 	function select(blog: Blog) {
 		if (!blog) {
@@ -54,23 +61,19 @@
 		pointers.forEach((p) => map?.removeLayer(p));
 		$blogList.forEach((b) => addPointer(b));
 	}
-
-	function getFirstCoordinates(): Coordinates {
-		if (selectedBlog) return selectedBlog.coordinates;
-		if ($blogList.length > 0) return $blogList[0].coordinates;
-		return nlCoordinates;
-	}
-
+	
 	function mapInit(element: HTMLElement) {
 		// hack to ensure height is set correctly
 		// this method can be called before the previous component has been destroyed
 		// that messes with the height set to the flexbox here
 		setTimeout(() => {
 			if ($blogList) {
-				//@ts-ignore
+				if (!$blogId) {
+					$blogId = $blogList[0].id
+				}
 				map = createMap(
 					element,
-					getFirstCoordinates(),
+					getSelectedBlog().coordinates,
 					8
 				);
 				$blogList.forEach((b) => addPointer(b));
@@ -91,7 +94,11 @@
 			)
 				.addTo(map)
 				.on("click", (_e) => {
-					blogId.set(blog.id);
+					if ($blogId == blog.id) {
+						selectOverlay("Blog");
+					} else {
+					   $blogId = blog.id;
+					}
 				})
 		);
 	}
