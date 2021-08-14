@@ -137,7 +137,11 @@ Then("the blog is no longer returned", async () => {
 When("I upload an image", async () => {
 	const result = await request
 		.post("/api/images")
-		.send({ path: "https://someurl", blogId: blogId })
+		.send({
+			path:
+				"https://avatars.githubusercontent.com/u/173595?s=88&v=4",
+			blogId: blogId,
+		})
 		.set("Cookie", cookie)
 		.expect(200);
 	imageId = result.body.id;

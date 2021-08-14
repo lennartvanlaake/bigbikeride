@@ -1,6 +1,8 @@
 import { DefaultState, Context } from "koa";
 import { connection } from "./db";
 import Router from "koa-router";
+import axios from "axios";
+import sharp from "sharp";
 import {
 	Identity,
 	ImageBlogEntity,
@@ -13,6 +15,29 @@ import {
 } from "../types/types";
 import { v4 } from "uuid";
 export const imagesRouter = new Router<DefaultState, Context>();
+
+const sizes = [100, 200, 300, 500, 800];
+
+async function resizeSingle(url: string, id: string, size: number) {
+	try {
+		const response = await axios.get(url, {
+			responseType: "arraybuffer",
+		});
+		debugger;
+		const buffer = Buffer.from(response.data, "binary");
+		await sharp(buffer)
+			.resize(size)
+			.toFile(`${__dirname}/public/${id}-${size}.jpeg`);
+	} catch (e) {
+		console.debug(e);
+	}
+}
+
+async function resizeToAllSizes(url: string, id: string) {
+	sizes.forEach(async (size) => {
+		await resizeSingle(url, id, size);
+	});
+}
 
 imagesRouter.post("/", async (ctx, next) => {
 	const imageRequest: CreateImageRequest = ctx.request.body;
@@ -34,6 +59,7 @@ imagesRouter.post("/", async (ctx, next) => {
 		image_id: id,
 	};
 	await connection(IMAGE_BLOG_TABLE_NAME).insert(entity);
+	await resizeToAllSizes(imageRequest.path, id);
 	ctx.body = <Identity>{ id: id };
 	await next();
 });
