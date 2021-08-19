@@ -3,6 +3,7 @@ import { connection } from "./db";
 import Router from "koa-router";
 import * as Jimp from "jimp";
 import axios from "axios";
+import * as fs from "fs";
 import {
 	Identity,
 	ImageBlogEntity,
@@ -23,28 +24,40 @@ function getResizeFilename(id: string, size: number) {
 }
 
 async function resizeSingle(buffer: Buffer, id: string, size: number) {
+	const filename = getResizeFilename(id, size);
+	if (fs.existsSync(filename)) {
+		console.log(`${filename} exists`);
+		return;
+	}
 	const image = await Jimp.read(buffer);
 	image.resize(Jimp.AUTO, size);
-	image.write(getResizeFilename(id, size));
-	console.log(`Completed writing to ${getResizeFilename(id, size)}`);
+	image.write(filename);
+	console.log(`Completed writing to ${filename}`);
 }
 
 async function resizeToAllSizes(url: string, id: string) {
-	const response = await axios.get(url, {
-		responseType: "arraybuffer",
-	});
-	const buffer = Buffer.from(response.data, "binary");
-	sizes.forEach(async (size) => {
-		await resizeSingle(buffer, id, size);
-	});
+	try {
+		const response = await axios.get(url, {
+			responseType: "arraybuffer",
+		});
+		const buffer = Buffer.from(response.data, "binary");
+		sizes.forEach(async (size) => {
+			await resizeSingle(buffer, id, size);
+		});
+	} catch (e) {
+		console.error(`Failed resizing image ${id}`);
+		console.error(e);
+	}
 }
 
-export async function resizeAllImages() {
-	const images: ImageEntity[] = await connection(
-		IMAGE_TABLE_NAME
-	).select();
-	images.forEach((image) => {
-		resizeToAllSizes(image.path, image.id);
+export async function resizeAllImages(): Promise<any> {
+	return new Promise(async () => {
+		const images: ImageEntity[] = await connection(
+			IMAGE_TABLE_NAME
+		).select();
+		images.forEach((image) => {
+			resizeToAllSizes(image.path, image.id);
+		});
 	});
 }
 
