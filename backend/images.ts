@@ -23,33 +23,20 @@ function getResizeFilename(id: string, size: number) {
 }
 
 async function resizeSingle(buffer: Buffer, id: string, size: number) {
-	try {
-		const image = await Jimp.read(buffer);
-		image.resize(Jimp.AUTO, size);
-		image.write(getResizeFilename(id, size));
-	} catch (e) {
-		console.debug(e);
-		return false;
-	}
+	const image = await Jimp.read(buffer);
+	image.resize(Jimp.AUTO, size);
+	image.write(getResizeFilename(id, size));
+	console.log(`Completed writing to ${getResizeFilename(id, size)}`);
 }
 
 async function resizeToAllSizes(url: string, id: string) {
-	let success = true;
-	try {
-		const response = await axios.get(url, {
-			responseType: "arraybuffer",
-		});
-		const buffer = Buffer.from(response.data, "binary");
-		sizes.forEach(async (size) => {
-			if (!(await resizeSingle(buffer, id, size))) {
-				success = false;
-			}
-		});
-	} catch (e) {
-		console.debug(e);
-		success = false;
-	}
-	return success;
+	const response = await axios.get(url, {
+		responseType: "arraybuffer",
+	});
+	const buffer = Buffer.from(response.data, "binary");
+	sizes.forEach(async (size) => {
+		await resizeSingle(buffer, id, size);
+	});
 }
 
 export async function resizeAllImages() {
@@ -81,10 +68,7 @@ imagesRouter.post("/", async (ctx, next) => {
 		image_id: id,
 	};
 	await connection(IMAGE_BLOG_TABLE_NAME).insert(entity);
-	let resizeSuccess = await resizeToAllSizes(imageRequest.path, id);
-	if (!resizeSuccess) {
-		throw new Error(`Resizing image failed`);
-	}
+	await resizeToAllSizes(imageRequest.path, id);
 	ctx.body = <Identity>{ id: id };
 	await next();
 });
