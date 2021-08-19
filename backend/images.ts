@@ -6,6 +6,8 @@ import axios from "axios";
 import * as fs from "fs";
 import {
 	Identity,
+	imageSizes,
+	getResizeFileName,
 	ImageBlogEntity,
 	ImageEntity,
 	ImageKeys,
@@ -17,14 +19,12 @@ import {
 import { v4 } from "uuid";
 export const imagesRouter = new Router<DefaultState, Context>();
 
-const sizes = [100, 200, 300, 500, 800];
-
-function getResizeFilename(id: string, size: number) {
-	return `${__dirname}/public/api/uploads/${id}-${size}.jpeg`;
+function getResizeFilePath(id: string, size: number) {
+	return `${__dirname}/public${getResizeFileName(id, size)}`;
 }
 
 async function resizeSingle(buffer: Buffer, id: string, size: number) {
-	const filename = getResizeFilename(id, size);
+	const filename = getResizeFilePath(id, size);
 	if (fs.existsSync(filename)) {
 		console.log(`${filename} exists`);
 		return;
@@ -41,7 +41,7 @@ async function resizeToAllSizes(url: string, id: string) {
 			responseType: "arraybuffer",
 		});
 		const buffer = Buffer.from(response.data, "binary");
-		sizes.forEach(async (size) => {
+		imageSizes.forEach(async (size) => {
 			await resizeSingle(buffer, id, size);
 		});
 	} catch (e) {

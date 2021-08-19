@@ -90,6 +90,12 @@ export interface Image {
 	updated: Date;
 }
 
+// resize stuff
+export const imageSizes = [100, 200, 300, 500, 800];
+
+export function getResizeFileName(id: string, size: number) {
+	return `/api/uploads/${id}-${size}.jpeg`;
+}
 // subscription stuff
 export const SUBSCRIBERS_TABLE_NAME = "subscribers";
 

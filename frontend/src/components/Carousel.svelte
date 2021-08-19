@@ -1,11 +1,13 @@
 <script lang="ts">
+	import { getLink } from "../javascript/imagesize";
 	import ExpandButton from "../components/ExpandButton.svelte";
 	import { showImageOverlay, overlayImages } from "../javascript/storage";
 	import Swiper from "tiny-swiper";
 	import type { Image } from "../../../types/types";
 	import { onDestroy, onMount } from "svelte";
 
-	export let images: Array<Pick<Image, "path" | "description">>;
+	export let images: Image[];
+	export let elements = {};
 	let container: HTMLElement;
 	let swiper: any;
 	const swiperConfig = {
@@ -19,6 +21,10 @@
 
 	onMount(() => {
 		swiper = new Swiper(container, swiperConfig);
+		images.forEach((image) => {
+			const element: HTMLImageElement = elements[image.id];
+			element.src = getLink(element.height, image);
+		});
 	});
 
 	onDestroy(() => {
@@ -36,7 +42,8 @@
 				class:full-length-image="{!currentImage.description}"
 				class:description-cropped-image="{currentImage.description}"
 			>
-				<img class="image" src={currentImage.path}
+				<img class="image"
+				bind:this={elements[currentImage.id]} src=""
 				alt={currentImage.description ?? ""}/>
 			</div>
 			{ #if currentImage.description }
