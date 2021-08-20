@@ -6,9 +6,7 @@ export const loggedIn = writable<boolean>(false);
 export const firstVisit = writable<boolean>(localStorage.firstVisit);
 export const showImageOverlay = writable<boolean>(false);
 export const showOverlay = writable<boolean>(false);
-export const overlayImages = writable<
-	Array<Pick<Image, "path" | "description">>
->([]);
+export const overlayImages = writable<Image[]>([]);
 
 firstVisit.subscribe((visit) => (localStorage.firstVisit = visit));
 blogId.subscribe((id) => (localStorage.blogId = id));

@@ -2,9 +2,11 @@
 	import ExpandButton from "./ExpandButton.svelte";
 	import { tick, onDestroy } from "svelte";
 	import { showImageOverlay, overlayImages } from "../javascript/storage";
+	import { getLink } from "../javascript/imagesize";
 	import Swiper, { SwiperPluginLazyload } from "tiny-swiper";
 
 	$: $showImageOverlay, init();
+	let elements = {};
 	let container: HTMLElement;
 	let swiper: any;
 	const swiperConfig = { plugins: [SwiperPluginLazyload], loop: true };
@@ -12,9 +14,15 @@
 	async function init() {
 		if ($showImageOverlay && $overlayImages) {
 			await tick();
+			$overlayImages.forEach((image) => {
+				const element: HTMLImageElement =
+					elements[image.id];
+				element.src = getLink(element.height, image);
+			});
 			swiper = new Swiper(container, swiperConfig);
 		}
 	}
+
 	onDestroy(() => {
 		swiper?.destroy();
 	});
@@ -34,7 +42,8 @@
 				class:full-length-image="{!currentImage.description}"
 				class:description-cropped-image="{currentImage.description}"
 			>
-				<img class="image" src={currentImage.path}
+				<img class="image" src=""
+				bind:this={elements[currentImage.id]}
 				alt={currentImage.description ?? ""}/>
 			</div>
 		</div>

@@ -6,8 +6,10 @@ import axios from "axios";
 import * as fs from "fs";
 import {
 	Identity,
+	staticImages,
 	imageSizes,
 	getResizeFileName,
+	Image,
 	ImageBlogEntity,
 	ImageEntity,
 	ImageKeys,
@@ -25,39 +27,57 @@ function getResizeFilePath(id: string, size: number) {
 
 async function resizeSingle(buffer: Buffer, id: string, size: number) {
 	const filename = getResizeFilePath(id, size);
-	if (fs.existsSync(filename)) {
-		console.log(`${filename} exists`);
-		return;
-	}
 	const image = await Jimp.read(buffer);
 	image.resize(Jimp.AUTO, size);
 	image.write(filename);
 	console.log(`Completed writing to ${filename}`);
 }
 
-async function resizeToAllSizes(url: string, id: string) {
+function resizedFilesExist(image: Image): boolean {
+	return imageSizes.every((size) => {
+		const path = getResizeFilePath(image.id, size);
+		console.log(`checking existence of ${path}`);
+		return fs.existsSync(path);
+	});
+}
+
+async function resizeToAllSizes(image: Image) {
 	try {
-		const response = await axios.get(url, {
+		if (resizedFilesExist(image)) {
+			console.log(`All sizes exist for image ${image.id}`);
+			return;
+		}
+		const response = await axios.get(image.path, {
 			responseType: "arraybuffer",
 		});
 		const buffer = Buffer.from(response.data, "binary");
 		imageSizes.forEach(async (size) => {
-			await resizeSingle(buffer, id, size);
+			await resizeSingle(buffer, image.id, size);
 		});
 	} catch (e) {
-		console.error(`Failed resizing image ${id}`);
+		console.error(`Failed resizing image ${image.id}`);
 		console.error(e);
 	}
 }
 
-export async function resizeAllImages(): Promise<any> {
+export async function resizeImages(images: Image[]) {
+	images.forEach((image) => {
+		resizeToAllSizes(image);
+	});
+}
+
+export async function resizeDatabaseImages(): Promise<void> {
 	return new Promise(async () => {
-		const images: ImageEntity[] = await connection(
+		const images: Image[] = await connection(
 			IMAGE_TABLE_NAME
 		).select();
-		images.forEach((image) => {
-			resizeToAllSizes(image.path, image.id);
-		});
+		await resizeImages(images);
+	});
+}
+
+export async function resizeStaticImages(): Promise<void> {
+	return new Promise(async () => {
+		await resizeImages(staticImages);
 	});
 }
 
@@ -81,7 +101,7 @@ imagesRouter.post("/", async (ctx, next) => {
 		image_id: id,
 	};
 	await connection(IMAGE_BLOG_TABLE_NAME).insert(entity);
-	await resizeToAllSizes(imageRequest.path, id);
+	await resizeToAllSizes(imageEntity);
 	ctx.body = <Identity>{ id: id };
 	await next();
 });

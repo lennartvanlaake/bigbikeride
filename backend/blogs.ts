@@ -9,7 +9,7 @@ import {
 	CONTENT_BLOG_TABLE_NAME,
 	CreateBlogRequest,
 	Identity,
-	Image,
+	ImageResponse,
 	ImageBlogKeys,
 	ImageEntity,
 	ImageKeys,
@@ -62,7 +62,7 @@ function toBlog(queryResult: BlogQueryResult, index: number): Blog {
 	};
 }
 
-function toImage(imageEntity: ImageEntity): Image {
+function toImage(imageEntity: ImageEntity): ImageResponse {
 	return {
 		...imageEntity,
 		created: imageEntity.created_at,

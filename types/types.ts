@@ -82,13 +82,36 @@ export interface ImageEntity {
 	updated_at: Date;
 }
 
-export interface Image {
+export interface ImageResponse {
 	id: string;
 	path: string;
 	description: string | null;
 	created: Date;
 	updated: Date;
 }
+
+export interface Image {
+	id: string;
+	path: string;
+	description: string | null;
+}
+
+export const aboutMeImages: Image[] = [
+	{
+		id: "6bed70f5-60d5-40d5-99f7-93e1cc6d3136",
+		path:
+			"https://blog-backup-lennart.s3.fr-par.scw.cloud/images/me-working.jpeg",
+		description: null,
+	},
+	{
+		id: "62d0f9a1-ddb3-460a-9ce2-9b9b5123a8b7",
+		path:
+			"https://blog-backup-lennart.s3.fr-par.scw.cloud/images/me-climbing.jpeg",
+		description: null,
+	},
+];
+
+export const staticImages = aboutMeImages;
 
 // resize stuff
 export const imageSizes = [100, 200, 300, 500, 800];

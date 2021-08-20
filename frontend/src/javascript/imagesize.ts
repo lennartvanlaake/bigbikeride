@@ -10,5 +10,4 @@ export function getLink(elementSize: number, image: Image) {
 		(a, b) => Math.min(a, b)
 	)
 	return getResizeFileName(image.id, closestSize); 
-
 }

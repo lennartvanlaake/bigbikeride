@@ -1,18 +1,6 @@
 <script lang="ts">
-	import type { Image } from "../../../types/types";
-
+	import { aboutMeImages } from "../../../types/types";
 	import Carousel from "../components/Carousel.svelte";
-
-	const images = [
-		{
-			path: "api/assets/me-working.jpg",
-			description: null,
-		},
-		{
-			path: "api/assets/me-climbing.jpeg",
-			description: null,
-		},
-	];
 </script>
 
 <div class="white-rounded">
@@ -91,7 +79,7 @@
 			repository.
 		</p>
 	</div>
-	<Carousel images="{images}" />
+	<Carousel images="{aboutMeImages}" />
 </div>
 <style>
 	.github {
