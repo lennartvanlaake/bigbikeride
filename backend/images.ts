@@ -29,8 +29,11 @@ async function resizeSingle(buffer: Buffer, id: string, size: number) {
 	const filename = getResizeFilePath(id, size);
 	const image = await Jimp.read(buffer);
 	image.resize(Jimp.AUTO, size);
+	if (image.bitmap.width < size) {
+		image.rotate(90);
+	}
+	console.log(image.bitmap.width);
 	image.write(filename);
-	await new Promise((resolve) => setTimeout(resolve, 100));
 	console.log(`Completed writing to ${filename}`);
 }
 
@@ -57,7 +60,6 @@ async function resizeToAllSizes(image: Image) {
 		});
 	} catch (e) {
 		console.error(`Failed resizing image ${image.id}`);
-		console.error(e);
 	}
 }
 

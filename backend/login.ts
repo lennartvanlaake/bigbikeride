@@ -22,7 +22,11 @@ loginRouter.get("/", async (ctx, next) => {
 });
 
 export const checkLogin: Middleware = async (ctx, next) => {
-	if (ctx.method == "GET") {
+	if (
+		ctx.method == "GET" ||
+		ctx.request.url.includes("login") ||
+		ctx.request.url.includes("mail")
+	) {
 		await next();
 	} else {
 		if (!ctx?.session?.loggedIn) {

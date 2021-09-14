@@ -114,7 +114,7 @@ export const aboutMeImages: Image[] = [
 export const staticImages = aboutMeImages;
 
 // resize stuff
-export const imageSizes = [100, 200, 300, 500, 800];
+export const imageSizes = [100, 200, 300, 500];
 
 export function getResizeFileName(id: string, size: number) {
 	return `/api/uploads/${id}-${size}.jpeg`;

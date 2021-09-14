@@ -3,6 +3,7 @@
 	import Swiper from "tiny-swiper";
 	import type { Image } from "../../../types/types";
 	import { onDestroy, onMount } from "svelte";
+	import { v4 } from "uuid";
 
 	export let height = "40vw";
 	export let maxHeight = "30rem";
@@ -10,15 +11,21 @@
 	export let container: HTMLElement;
 	export let images: Image[];
 
+	const id = v4();
 	let elements = {};
 	let swiper: any;
+
+	const slideClass = `${id}-slide`;
+	const activeClass = `${id}-active`;
 	const swiperConfig = {
 		loop: true,
+		slideClass: slideClass,
+		slideActiveClass: activeClass,
 	};
 
 	function init() {
 		setTimeout(() => {
-			if (container) {
+			if (container && elements) {
 				swiper = new Swiper(container, swiperConfig);
 				images.forEach(async (image) => {
 					const element: HTMLImageElement =
@@ -48,7 +55,7 @@
 <div class="swiper-wrapper">
 	{ #each images as currentImage }
 	<div
-		class="swiper-slide"
+		class="swiper-slide {slideClass}"
 		style="--max-slide-height: {maxHeight}; --slide-height: {height}; --slide-width: {width}"
 	>
 		<div

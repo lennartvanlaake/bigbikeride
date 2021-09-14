@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { aboutMeImages } from "../../../types/types";
-	import Carousel from "../components/Carousel.svelte";
+	import ThumbnailCarousel from "../components/ThumbnailCarousel.svelte";
 </script>
 
 <div class="white-rounded">
@@ -79,7 +79,7 @@
 			repository.
 		</p>
 	</div>
-	<Carousel images="{aboutMeImages}" />
+	<ThumbnailCarousel images="{aboutMeImages}" />
 </div>
 <style>
 	.github {
