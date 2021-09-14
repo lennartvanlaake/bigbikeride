@@ -1,4 +1,18 @@
 apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: assets-pv-claim
+  labels:
+    app: backend 
+spec:
+  storageClassName: "do-block-storage"
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+---
+apiVersion: v1
 kind: Service
 metadata:
   name: be-service 
@@ -36,5 +50,10 @@ spec:
             name: config
         - secretRef:
             name: node-env 
-      imagePullSecrets:
-        - name: regcred
+        volumeMounts:
+            - mountPath: /usr/src/app/build/backend/public/api/uploads
+              name: assets-volume 
+      volumes:
+      - name: assets-volume
+        persistentVolumeClaim:
+          claimName: assets-pv-claim 

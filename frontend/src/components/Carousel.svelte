@@ -1,30 +1,42 @@
 <script lang="ts">
 	import { getLink } from "../javascript/imagesize";
-	import ExpandButton from "../components/ExpandButton.svelte";
-	import { showImageOverlay, overlayImages } from "../javascript/storage";
 	import Swiper from "tiny-swiper";
 	import type { Image } from "../../../types/types";
 	import { onDestroy, onMount } from "svelte";
 
+	export let height = "40vw";
+	export let maxHeight = "30rem";
+	export let width = "100%";
+	export let container: HTMLElement;
 	export let images: Image[];
-	export let elements = {};
-	let container: HTMLElement;
+
+	let elements = {};
 	let swiper: any;
 	const swiperConfig = {
 		loop: true,
 	};
 
-	function expand() {
-		$showImageOverlay = true;
-		$overlayImages = images;
+	function init() {
+		setTimeout(() => {
+			if (container) {
+				swiper = new Swiper(container, swiperConfig);
+				images.forEach(async (image) => {
+					const element: HTMLImageElement =
+						elements[image.id];
+					const link = await getLink(
+						element.height,
+						image
+					);
+					element.src = link;
+				});
+			} else {
+				init();
+			}
+		}, 200);
 	}
 
 	onMount(() => {
-		swiper = new Swiper(container, swiperConfig);
-		images.forEach((image) => {
-			const element: HTMLImageElement = elements[image.id];
-			element.src = getLink(element.height, image);
-		});
+		init();
 	});
 
 	onDestroy(() => {
@@ -33,48 +45,31 @@
 </script>
 
 { #if images }
-<div class="swiper-container" bind:this="{container}">
-	<div class="swiper-wrapper">
-		{ #each images as currentImage }
-		<div class="swiper-slide">
-			<div
-				class="swiper-img-container"
-				class:full-length-image="{!currentImage.description}"
-				class:description-cropped-image="{currentImage.description}"
-			>
-				<img class="image"
-				bind:this={elements[currentImage.id]} src=""
-				alt={currentImage.description ?? ""}/>
-			</div>
-			{ #if currentImage.description }
-			<div class="description">
-				<em>{currentImage.description}</em>
-			</div>
-			{ /if }
+<div class="swiper-wrapper">
+	{ #each images as currentImage }
+	<div
+		class="swiper-slide"
+		style="--max-slide-height: {maxHeight}; --slide-height: {height}; --slide-width: {width}"
+	>
+		<div
+			class="swiper-img-container"
+			class:full-length-image="{!currentImage.description}"
+			class:description-cropped-image="{currentImage.description}"
+		>
+			<img class="image" bind:this={elements[currentImage.id]}
+			src="" alt={currentImage.description ?? ""}/>
 		</div>
-		{ /each }
+		{ #if currentImage.description }
+		<div class="description">
+			<em>{currentImage.description}</em>
+		</div>
+		{ /if }
 	</div>
-
-	<div id="expand" on:click="{expand}">
-		<ExpandButton isPlus="{true}" />
-	</div>
+	{ /each }
 </div>
 { /if }
 
 <style>
-	#expand {
-		position: absolute;
-		top: 2vh;
-		right: 2vh;
-	}
-
-	.swiper-container {
-		border-radius: 1rem;
-		position: relative;
-		overflow: hidden;
-	}
-
-	.swiper-container,
 	.swiper-wrapper {
 		padding: 0;
 		margin: 0;
@@ -88,8 +83,9 @@
 		display: flex;
 		flex-shrink: 0;
 		justify-content: center;
-		height: 40vw;
-		max-height: 30rem;
+		height: var(--slide-height);
+		max-height: var(--max-slide-height);
+		width: var(--slide-width);
 		font-size: 0.75rem;
 		align-items: center;
 		cursor: grab;

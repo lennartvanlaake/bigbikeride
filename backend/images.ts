@@ -30,6 +30,7 @@ async function resizeSingle(buffer: Buffer, id: string, size: number) {
 	const image = await Jimp.read(buffer);
 	image.resize(Jimp.AUTO, size);
 	image.write(filename);
+	await new Promise((resolve) => setTimeout(resolve, 100));
 	console.log(`Completed writing to ${filename}`);
 }
 

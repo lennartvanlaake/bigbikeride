@@ -1,7 +1,7 @@
 <script lang="ts">
 	import marked from "marked";
 	import type { Blog } from "../../../types/types";
-	import Carousel from "../components/Carousel.svelte";
+	import ThumbnailCarousel from "../components/ThumbnailCarousel.svelte";
 	import { blogId } from "../javascript/storage";
 	import { onMount } from "svelte";
 	export let data: Blog;
@@ -27,7 +27,7 @@
 			{@html marked(data.content ?? "")}
 		</div>
 		{ #if data.images }
-		<Carousel images="{data.images}" />
+		<ThumbnailCarousel images="{data.images}" />
 		{ /if }
 	</div>
 </div>
