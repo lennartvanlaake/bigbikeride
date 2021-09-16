@@ -1,9 +1,16 @@
 <script lang="ts">
 	import { getLink } from "../javascript/imagesize";
-	import Swiper from "tiny-swiper";
+	import { Swiper, SwiperSlide } from "swiper/svelte";
 	import type { Image } from "../../../types/types";
 	import { onDestroy, onMount } from "svelte";
-	import { v4 } from "uuid";
+	import SwiperCore, { Navigation, Pagination } from "swiper";
+
+	// install Swiper modules
+	SwiperCore.use([Navigation, Pagination]);
+	import "swiper/css/navigation";
+	import "swiper/css/pagination";
+	import "swiper/css/scrollbar";
+	import "swiper/css";
 
 	export let height = "40vw";
 	export let maxHeight = "30rem";
@@ -11,22 +18,21 @@
 	export let container: HTMLElement;
 	export let images: Image[];
 
-	const id = v4();
 	let elements = {};
-	let swiper: any;
 
-	const slideClass = `${id}-slide`;
-	const activeClass = `${id}-active`;
-	const swiperConfig = {
-		loop: true,
-		slideClass: slideClass,
-		slideActiveClass: activeClass,
-	};
+	function isWrongWayUp(element: HTMLImageElement) {
+		return (
+			element.clientHeight < element.height &&
+			element.clientHeight < element.clientWidth
+		);
+	}
 
 	function init() {
 		setTimeout(() => {
-			if (container && elements) {
-				swiper = new Swiper(container, swiperConfig);
+			if (
+				container &&
+				images.every((image) => elements[image.id])
+			) {
 				images.forEach(async (image) => {
 					const element: HTMLImageElement =
 						elements[image.id];
@@ -35,6 +41,11 @@
 						image
 					);
 					element.src = link;
+					if (isWrongWayUp(element)) {
+						element.classList.add(
+							"rotated"
+						);
+					}
 				});
 			} else {
 				init();
@@ -45,50 +56,42 @@
 	onMount(() => {
 		init();
 	});
-
-	onDestroy(() => {
-		swiper?.destroy();
-	});
 </script>
 
 { #if images }
-<div class="swiper-wrapper">
+<Swiper class="swiper-wrapper" navigation="{true}" pagination="{true}" style="--swiper-theme-color: orange">
 	{ #each images as currentImage }
-	<div
-		class="swiper-slide {slideClass}"
-		style="--max-slide-height: {maxHeight}; --slide-height: {height}; --slide-width: {width}"
-	>
+	<SwiperSlide>
 		<div
-			class="swiper-img-container"
-			class:full-length-image="{!currentImage.description}"
-			class:description-cropped-image="{currentImage.description}"
+			class="slide"
+			style="--max-slide-height: {maxHeight}; --slide-height: {height}; --slide-width: {width}"
 		>
-			<img class="image" bind:this={elements[currentImage.id]}
-			src="" alt={currentImage.description ?? ""}/>
+			<div
+				class="swiper-img-container"
+				class:full-length-image="{!currentImage.description}"
+				class:description-cropped-image="{currentImage.description}"
+			>
+				<img class="image"
+				bind:this={elements[currentImage.id]} src=""
+				alt={currentImage.description ?? ""}/>
+			</div>
+			{ #if currentImage.description }
+			<div class="description">
+				<em>{currentImage.description}</em>
+			</div>
+			{ /if }
 		</div>
-		{ #if currentImage.description }
-		<div class="description">
-			<em>{currentImage.description}</em>
-		</div>
-		{ /if }
-	</div>
+	</SwiperSlide>
 	{ /each }
-</div>
+</Swiper>
 { /if }
 
 <style>
-	.swiper-wrapper {
-		padding: 0;
-		margin: 0;
-		width: 100%;
-		height: 100%;
-		background-color: white;
+	.rotated {
+		transform: rotate(90deg);
 	}
 
-	.swiper-slide {
-		position: relative;
-		display: flex;
-		flex-shrink: 0;
+	.slide {
 		justify-content: center;
 		height: var(--slide-height);
 		max-height: var(--max-slide-height);
@@ -103,7 +106,7 @@
 		width: 100%;
 		background-color: lightgrey;
 	}
-	.swiper-slide img {
+	.image {
 		position: absolute;
 		top: 0;
 		width: 100%;

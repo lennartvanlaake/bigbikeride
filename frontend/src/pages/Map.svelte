@@ -68,7 +68,8 @@
 				}
 				let selectedBlog = getSelectedBlog();
 				if (!selectedBlog) {
-					setTimeout(() => mapInit(element), 300);
+					mapInit(element);
+					return;
 				}
 				map = createMap(
 					element,
@@ -77,7 +78,7 @@
 				);
 				$blogList.forEach((b) => addPointer(b));
 			} else {
-				setTimeout(() => mapInit(element), 300);
+				mapInit(element);
 			}
 		}, 500);
 	}
@@ -136,6 +137,7 @@
 { /if }
 <style>
 	#previewExpand {
+		z-index: 500;
 		position: absolute;
 		bottom: 1vh;
 		left: 50%;

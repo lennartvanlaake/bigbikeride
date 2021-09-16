@@ -25,12 +25,12 @@
 
 <style>
 	#expand {
+		z-index: 600;
 		position: absolute;
 		right: 2rem;
 		top: 2rem;
-
 	}
-	
+
 	.swiper-container {
 		border-radius: 2rem;
 		position: relative;

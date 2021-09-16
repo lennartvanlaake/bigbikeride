@@ -23,6 +23,7 @@
 
 <style>
 	#expand {
+		z-index: 600;
 		position: fixed;
 		right: 2rem;
 		top: 2rem;

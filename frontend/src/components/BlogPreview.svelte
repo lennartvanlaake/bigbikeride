@@ -143,7 +143,7 @@
 	.swiper-text {
 		flex-direction: column;
 		overflow: hidden;
-		margin: 1rem;
+		argin: 1rem;
 		max-width: 30rem;
 		max-height: 6rem;
 		padding-left: 3rem;

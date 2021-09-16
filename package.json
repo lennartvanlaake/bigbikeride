@@ -80,6 +80,7 @@
 		"svelte-navigator": "^3.1.5",
 		"svelte-preprocess": "^4.7.3",
 		"svelte-routing": "^1.6.0",
+		"swiper": "^7.0.5",
 		"tiny-swiper": "^2.1.1",
 		"ts-node": "^9.1.1",
 		"tsconfig-paths": "^3.9.0",
