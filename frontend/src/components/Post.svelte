@@ -21,6 +21,7 @@
 <div class="white-rounded" bind:this="{element}">
 	<div class="title-wrapper">
 		<h1 class="title">{data.title}</h1>
+		<em class="date">{new Date(data.created).toDateString()}</em>
 	</div>
 	<div class="text blog-content">
 		<div class="actual-content">
@@ -32,10 +33,17 @@
 	</div>
 </div>
 <style>
+	.date {
+		color: #574f4e;
+		font-size: 0.9em;
+	}
+
+	.title {
+		margin-bottom: 0.5rem;
+	}
 	.blog-content {
 		position: relative;
 	}
-
 	.actual-content {
 		margin-bottom: 1rem;
 	}
