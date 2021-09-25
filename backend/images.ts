@@ -93,6 +93,7 @@ imagesRouter.post("/", async (ctx, next) => {
 		path: imageRequest.path,
 		created_at: timestamp,
 		updated_at: timestamp,
+		turn: null,
 	};
 	await connection(IMAGE_TABLE_NAME).insert(imageEntity);
 	const entity: ImageBlogEntity = {
@@ -110,6 +111,7 @@ imagesRouter.patch("/:id/description", async (ctx, next) => {
 	const now = new Date();
 	await connection(IMAGE_TABLE_NAME)
 		.update(ImageKeys.DESCRIPTION, request.description)
+		.update(ImageKeys.TURN, request.turn)
 		.update(ImageKeys.UPDATED_AT, now)
 		.where(ImageKeys.ID, ctx.params.id);
 	ctx.body = "success!";

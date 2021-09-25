@@ -11,12 +11,7 @@
 	}
 </script>
 <div class="swiper-container" bind:this="{container}">
-	<Carousel
-		height="100vh"
-		width="100vw"
-		images="{images}"
-		container="{container}"
-	></Carousel>
+	<Carousel images="{images}"></Carousel>
 
 	<div id="expand" on:click="{expand}">
 		<ExpandButton isPlus="{true}" />

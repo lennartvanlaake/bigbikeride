@@ -3,6 +3,7 @@
  import * as utils from '../javascript/utils'
  import { blogId, loggedIn } from "../javascript/storage";
  import { nlCoordinates } from "../javascript/consts";
+ import Carousel from "../components/Carousel.svelte";
  import PlacePicker from "../components/PlacePicker.svelte";
  import MarkdownEditor from "../components/MarkdownEditor.svelte";
  import type { Blog, Coordinates, CreateImageRequest } from "../../../types/types.js";
@@ -67,7 +68,7 @@
 	}
 	if (blog.images) {
 	    blog.images.forEach( img => api.changeImageDescription(
-		    img.id, { description: img.description } 
+		    img.id, { description: img.description, turn: img.turn } 
 	    ))
 	}
 	newImage = { path: "", description: "", blogId: "" }
@@ -221,12 +222,24 @@
                         bind:value={image.description}
                         id={"content_" + image.id}
                     />
+		    <br/>
+                    <label for={"turn_" + image.id}>Turn:</label><br>
+                    <select
+                        bind:value={image.turn}
+			    >
+			<option value="">none</option>
+			<option value="left">left</option>
+			<option value="right">right</option>
+		    </select>  
+
 		    <button
 			    on:click={() => deleteImage(image.id)}>Delete</button
 		    >
+
 		    <br/>
                 </span>
             {/each}
+	    <Carousel images={blog.images}></Carousel>
         {/if}
     {/if}
     <button

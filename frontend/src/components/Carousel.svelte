@@ -2,7 +2,7 @@
 	import { getLink } from "../javascript/imagesize";
 	import { Swiper, SwiperSlide } from "swiper/svelte";
 	import type { Image } from "../../../types/types";
-	import { onDestroy, onMount } from "svelte";
+	import { onMount, afterUpdate } from "svelte";
 	import SwiperCore, { Navigation, Pagination } from "swiper";
 
 	// install Swiper modules
@@ -15,51 +15,40 @@
 	export let height = "40vw";
 	export let maxHeight = "30rem";
 	export let width = "100%";
-	export let container: HTMLElement;
 	export let images: Image[];
 
 	let elements = {};
-
-	function isWrongWayUp(element: HTMLImageElement) {
-		return (
-			element.clientHeight < element.height &&
-			element.clientHeight < element.clientWidth
-		);
-	}
-
-	function init() {
-		setTimeout(() => {
-			if (
-				container &&
-				images.every((image) => elements[image.id])
-			) {
-				images.forEach(async (image) => {
-					const element: HTMLImageElement =
-						elements[image.id];
-					const link = await getLink(
-						element.height,
-						image
-					);
-					element.src = link;
-					if (isWrongWayUp(element)) {
-						element.classList.add(
-							"rotated"
-						);
-					}
-				});
-			} else {
-				init();
-			}
-		}, 200);
-	}
+	let links = {};
+	images.forEach((image) => (links[image.id] = ""));
 
 	onMount(() => {
-		init();
+		images.forEach(async (image) => {
+			const element = elements[image.id];
+			links[image.id] = await getLink(element.height, image);
+			element.onload = function () {
+				if (links[image.id] == image.path) {
+					return;
+				} else if (image.turn == "right") {
+					element.style.transform =
+						"rotate(90deg)";
+				} else if (image.turn == "left") {
+					element.style.transform =
+						"rotate(270deg)";
+				} else {
+					return;
+				}
+			};
+		});
 	});
 </script>
 
 { #if images }
-<Swiper class="swiper-wrapper" navigation="{true}" pagination="{true}" style="--swiper-theme-color: orange">
+<Swiper
+	class="swiper-wrapper"
+	navigation="{true}"
+	pagination="{true}"
+	style="--swiper-theme-color: orange;"
+>
 	{ #each images as currentImage }
 	<SwiperSlide>
 		<div
@@ -72,7 +61,8 @@
 				class:description-cropped-image="{currentImage.description}"
 			>
 				<img class="image"
-				bind:this={elements[currentImage.id]} src=""
+				bind:this={elements[currentImage.id]}
+				src={links[currentImage.id]}
 				alt={currentImage.description ?? ""}/>
 			</div>
 			{ #if currentImage.description }

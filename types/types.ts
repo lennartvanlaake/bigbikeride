@@ -72,7 +72,10 @@ export const enum ImageKeys {
 	DESCRIPTION = "description",
 	CREATED_AT = "created_at",
 	UPDATED_AT = "updated_at",
+	TURN = "turn"
 }
+
+export type TurnOrientation = "left" | "right"
 
 export interface ImageEntity {
 	id: string;
@@ -80,6 +83,7 @@ export interface ImageEntity {
 	description: string | null;
 	created_at: Date;
 	updated_at: Date;
+	turn: TurnOrientation | null;
 }
 
 export interface ImageResponse {
@@ -88,12 +92,14 @@ export interface ImageResponse {
 	description: string | null;
 	created: Date;
 	updated: Date;
+	turn: TurnOrientation | null;
 }
 
 export interface Image {
 	id: string;
 	path: string;
 	description: string | null;
+	turn: TurnOrientation | null;
 }
 
 export const aboutMeImages: Image[] = [
@@ -102,12 +108,14 @@ export const aboutMeImages: Image[] = [
 		path:
 			"https://blog-backup-lennart.s3.fr-par.scw.cloud/images/me-working.jpeg",
 		description: null,
+		turn: null
 	},
 	{
 		id: "62d0f9a1-ddb3-460a-9ce2-9b9b5123a8b7",
 		path:
 			"https://blog-backup-lennart.s3.fr-par.scw.cloud/images/me-climbing.jpeg",
 		description: null,
+		turn: null
 	},
 ];
 
@@ -116,8 +124,8 @@ export const staticImages = aboutMeImages;
 // resize stuff
 export const imageSizes = [100, 200, 300, 500];
 
-export function getResizeFileName(id: string, size: number) {
-	return `/api/uploads/${id}-${size}.jpeg`;
+export function getResizeFileName(id: string, size: number, base: string = "") {
+	return `${base ? base : ""}/api/uploads/${id}-${size}.jpeg`;
 }
 // subscription stuff
 export const SUBSCRIBERS_TABLE_NAME = "subscribers";
@@ -144,6 +152,7 @@ export interface CreateBlogRequest {
 
 export interface UpdateImageDescriptionRequest {
 	description: string | null;
+	turn: TurnOrientation | null;
 }
 
 export interface CreateImageRequest {

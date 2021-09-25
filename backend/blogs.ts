@@ -147,9 +147,12 @@ blogsRouter.put("/:id", async (ctx, next) => {
 		.update(BlogKeys.TITLE, blogRequest.title)
 		.update(BlogKeys.UPDATED, now)
 		.where(BlogKeys.ID, ctx.params.id);
-	await connection(CONTENT_BLOG_TABLE_NAME)
-		.update(BlogContentKeys.CONTENT, blogRequest.content!!)
-		.where(BlogContentKeys.ID, ctx.params.id);
+
+	if (blogRequest.content) {
+		await connection(CONTENT_BLOG_TABLE_NAME)
+			.update(BlogContentKeys.CONTENT, blogRequest.content!!)
+			.where(BlogContentKeys.ID, ctx.params.id);
+	}
 	ctx.body = "success!";
 	await next();
 });
