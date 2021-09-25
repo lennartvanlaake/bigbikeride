@@ -77,10 +77,6 @@
 { /if }
 
 <style>
-	.rotated {
-		transform: rotate(90deg);
-	}
-
 	.slide {
 		justify-content: center;
 		height: var(--slide-height);
@@ -102,7 +98,6 @@
 		width: 100%;
 		height: 100%;
 		object-fit: scale-down;
-		object-position: top;
 	}
 
 	.full-length-image {
