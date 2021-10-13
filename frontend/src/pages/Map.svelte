@@ -14,7 +14,6 @@
 	export let overlayType;
 
 	let map: any;
-	let pointers = [];
 	let bikeIcon = L.icon({
 		iconUrl: "api/assets/orange-bike.png",
 		shadowUrl: "api/assets/marker-shadow.png",
@@ -26,7 +25,6 @@
 	});
 
 	$: select($blogList.find((b) => b.id == $blogId));
-	$: $blogList, reinitMap();
 
 	function getSelectedBlog() {
 		return $blogList.find((b) => b.id == $blogId);
@@ -52,11 +50,6 @@
 		}
 	}
 
-	function reinitMap() {
-		pointers.forEach((p) => map?.removeLayer(p));
-		$blogList.forEach((b) => addPointer(b));
-	}
-
 	function mapInit(element: HTMLElement) {
 		// hack to ensure height is set correctly
 		// this method can be called before the previous component has been destroyed
@@ -76,31 +69,52 @@
 					selectedBlog.coordinates,
 					8
 				);
-				$blogList.forEach((b) => addPointer(b));
+				$blogList.forEach((b) => addPointer(b, map));
+				drawLine($blogList, map);
 			} else {
 				mapInit(element);
 			}
 		}, 500);
 	}
 
-	function addPointer(blog: Blog) {
-		if (!map) {
-			return;
-		}
-		pointers.push(
-			L.marker(
-				[blog.coordinates.lat, blog.coordinates.long],
-				{ icon: bikeIcon }
-			)
-				.addTo(map)
-				.on("click", (_e) => {
-					if ($blogId == blog.id) {
-						selectOverlay("Blog");
-					} else {
-						$blogId = blog.id;
-					}
-				})
-		);
+	function addPointer(blog: Blog, map: any) {
+		const originalStyle = {
+			color: "orange",
+			fillColor: "orange",
+			fillOpacity: 0.8,
+		};
+		L.circleMarker(
+			[blog.coordinates.lat, blog.coordinates.long],
+			originalStyle
+		)
+			.addTo(map)
+			.on("click", (_e) => {
+				if ($blogId == blog.id) {
+					selectOverlay("Blog");
+				} else {
+					$blogId = blog.id;
+				}
+			})
+			.on("mouseover", (e) => {
+				e.target.setStyle({
+					fillColor: "white",
+				});
+			})
+			.on("mouseout", (e) => {
+				e.target.setStyle(originalStyle);
+			});
+	}
+
+	function drawLine(blogList: Blog[], map: any) {
+		const coordinates: [number, number][] = blogList.map((b) => [
+			b.coordinates.lat,
+			b.coordinates.long,
+		]);
+		L.polyline(coordinates, {
+			color: "orange",
+			smoothFactor: 0.5,
+			dashArray: [4, 8],
+		}).addTo(map);
 	}
 
 	function selectOverlay(type: OverlayType) {
