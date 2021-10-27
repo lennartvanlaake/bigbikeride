@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { getLink } from "../javascript/imagesize";
-	import { Swiper, SwiperSlide } from "swiper/svelte";
 	import type { Image } from "../../../types/types";
-	import { onMount, afterUpdate } from "svelte";
+	import { onMount } from "svelte";
 	import SwiperCore, { Navigation, Pagination } from "swiper";
+	import { Swiper, SwiperSlide } from "swiper/svelte";
 
 	// install Swiper modules
 	SwiperCore.use([Navigation, Pagination]);

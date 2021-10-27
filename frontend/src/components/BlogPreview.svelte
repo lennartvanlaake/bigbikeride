@@ -1,81 +1,58 @@
 <script lang="ts">
-	import Swiper, {
-		SwiperPluginLazyload,
-		SwiperPluginNavigation,
-	} from "tiny-swiper";
 	import { navigate } from "svelte-routing";
 	import type { Blog } from "../../../types/types";
-	import { onDestroy, onMount, afterUpdate } from "svelte";
 	import marked from "marked";
 	import type { Writable } from "svelte/store";
 	export let blogId: Writable<string>;
 	export let blogList: Writable<Blog[]>;
 
-	const plugins = [SwiperPluginLazyload, SwiperPluginNavigation];
-	let container: HTMLElement;
-	let swiper: any;
+	import SwiperCore, { Navigation, Pagination } from "swiper";
+	import { Swiper, SwiperSlide } from "swiper/svelte";
+	let swiper;
 
-	const swiperConfig = {
-		navigation: {
-			prevEl: ".swiper-preview-navigation-prevEl",
-			nextEl: ".swiper-preview-navigation-nextEl",
-		},
-		loop: true,
-		plugins: plugins,
-	};
-
+	// install Swiper modules
+	SwiperCore.use([Navigation, Pagination]);
 	function slideToSelected() {
 		if (swiper) {
-			swiper.update();
 			let newIndex = $blogList.findIndex(
 				(b) => b.id == $blogId
 			);
 			if (newIndex >= 0) {
-				swiper.slideTo(newIndex);
+				swiper.slideTo(newIndex, 1000, false);
 			}
 		} else {
 			setTimeout(() => slideToSelected(), 300);
 		}
 	}
 
-	function setBlogId() {
-		setTimeout(() => {
-			$blogId = document.getElementsByClassName(
-				"swiper-slide-active preview-slide"
-			)[0]?.id;
-		}, 300);
+	function swiperInit(e: any) {
+		swiper = e.detail[0];
+	}
+
+	function setBlogIdAfterSlide(e: any) {
+		console.log(e);
+		const selectedIndex = e.detail[0][0].activeIndex;
+		const selectedBlog = $blogList.find(
+			(b) => b.index == selectedIndex
+		);
+		$blogId = selectedBlog.id;
 	}
 
 	$: $blogId, $blogList, slideToSelected();
-
-	function configureSlider() {
-		if (container) {
-			swiper = new Swiper(container, swiperConfig);
-			slideToSelected();
-			swiper.on("after-slide", () => {
-				setBlogId();
-			});
-		} else {
-			setTimeout(configureSlider, 300);
-		}
-	}
-
-	onMount(() => {
-		setTimeout(configureSlider, 300);
-	});
-
-	onDestroy(() => {
-		if (swiper) {
-			swiper.destroy();
-		}
-	});
-
-	afterUpdate(() => swiper?.update());
 </script>
 
-<div class="swiper-container" bind:this="{container}">
-	<div class="swiper-wrapper">
-		{ #each $blogList as blog }
+<Swiper
+	class="swiper-wrapper"
+	on:slideChange="{setBlogIdAfterSlide}"
+	on:swiper="{swiperInit}"
+	navigation="{true}"
+	pagination='{{
+  "type": "progressbar"
+}}'
+	style="--swiper-theme-color: orange;"
+>
+	{ #each $blogList as blog }
+	<SwiperSlide>
 		<div class="swiper-slide preview-slide" id="{blog.id}">
 			<div class="fadeout-overlay" />
 			<div class="swiper-text">
@@ -86,17 +63,9 @@
 				{@html marked(blog.content ?? "")}
 			</div>
 		</div>
-		{ /each }
-	</div>
-
-	<button class="swiper-preview-navigation-prevEl">
-		&lt;
-	</button>
-
-	<button class="swiper-preview-navigation-nextEl">
-		&gt;
-	</button>
-</div>
+	</SwiperSlide>
+	{ /each }
+</Swiper>
 
 <style>
 	.fadeout-overlay {
@@ -143,7 +112,7 @@
 	.swiper-text {
 		flex-direction: column;
 		overflow: hidden;
-		argin: 1rem;
+		margin: 1rem;
 		max-width: 30rem;
 		max-height: 6rem;
 		padding-left: 3rem;
